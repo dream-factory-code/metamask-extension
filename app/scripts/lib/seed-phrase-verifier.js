@@ -1,5 +1,7 @@
 import KeyringController from 'eth-keyring-controller'
 import log from 'loglevel'
+import { TolarKeyringController } from '../controllers/tolar-keyring/tolar-keyring-controller'
+import TolarKeyring  from '../tolar-keyring/tolar-keyring'
 
 const seedPhraseVerifier = {
 
@@ -21,8 +23,14 @@ const seedPhraseVerifier = {
       throw new Error('No created accounts defined.')
     }
 
-    const keyringController = new KeyringController({})
-    const Keyring = keyringController.getKeyringClassForType('HD Key Tree')
+    // const keyringController = new KeyringController({})
+    const additionalKeyrings = [/*TrezorKeyring, LedgerBridgeKeyring,*/ TolarKeyring]
+
+     const keyringController = new TolarKeyringController({      keyringTypes: additionalKeyrings,
+     })
+     //const Keyring = keyringController.getKeyringClassForType('HD Key Tree')
+    const Keyring = keyringController.getKeyringClassForType('Tolar Keyring')
+
     const opts = {
       mnemonic: seedWords,
       numberOfAccounts: createdAccounts.length,

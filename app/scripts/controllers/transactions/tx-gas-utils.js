@@ -29,7 +29,8 @@ export default class TxGasUtil {
     @returns {GasAnalysisResult} The result of the gas analysis
   */
   async analyzeGasUsage (txMeta) {
-    const block = await this.query.getBlockByNumber('latest', false)
+    console.log('TONI analyze gas usage', txMeta)
+    const block = await this.query.getBlockByIndex('latest', false)
 
     // fallback to block gasLimit
     const blockGasLimitBN = hexToBn(block.gasLimit)

@@ -189,7 +189,7 @@ AccountList.propTypes = {
   onAccountChange: PropTypes.func.isRequired,
   onForgetDevice: PropTypes.func.isRequired,
   getPage: PropTypes.func.isRequired,
-  network: PropTypes.string,
+  // network: PropTypes.string,
   selectedAccount: PropTypes.string,
   onUnlockAccount: PropTypes.func,
   onCancel: PropTypes.func,

@@ -2,10 +2,12 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Button from '../../../components/ui/button'
 import MetaFoxLogo from '../../../components/ui/metafox-logo'
-import {
-  INITIALIZE_METAMETRICS_OPT_IN_ROUTE,
-} from '../../../helpers/constants/routes'
 
+import {
+  INITIALIZE_CREATE_PASSWORD_ROUTE,
+  INITIALIZE_IMPORT_WITH_SEED_PHRASE_ROUTE,
+  DEFAULT_ROUTE,
+} from '../../../helpers/constants/routes'
 export default class SelectAction extends PureComponent {
   static propTypes = {
     history: PropTypes.object,
@@ -27,13 +29,18 @@ export default class SelectAction extends PureComponent {
   }
 
   handleCreate = () => {
+
     this.props.setFirstTimeFlowType('create')
-    this.props.history.push(INITIALIZE_METAMETRICS_OPT_IN_ROUTE)
+
+    // Skipped metrics setup
+    this.props.history.push(INITIALIZE_CREATE_PASSWORD_ROUTE)
   }
 
   handleImport = () => {
     this.props.setFirstTimeFlowType('import')
-    this.props.history.push(INITIALIZE_METAMETRICS_OPT_IN_ROUTE)
+
+        // Skipped metrics setup
+    this.props.history.push(INITIALIZE_IMPORT_WITH_SEED_PHRASE_ROUTE)
   }
 
   render () {

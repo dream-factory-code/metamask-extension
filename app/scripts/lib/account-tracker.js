@@ -12,7 +12,9 @@ import EthQuery from 'eth-query'
 import ObservableStore from 'obs-store'
 import log from 'loglevel'
 import pify from 'pify'
-import Web3 from 'web3'
+//import Web3 from 'web3'
+import Web3 from '@dreamfactoryhr/web3t'
+
 import SINGLE_CALL_BALANCES_ABI from 'single-call-balance-checker-abi'
 import { MAINNET_NETWORK_ID, RINKEBY_NETWORK_ID, ROPSTEN_NETWORK_ID, KOVAN_NETWORK_ID } from '../controllers/network/enums'
 
@@ -172,7 +174,9 @@ export default class AccountTracker {
     this._currentBlockNumber = blockNumber
 
     // block gasLimit polling shouldn't be in account-tracker shouldn't be here...
-    const currentBlock = await this._query.getBlockByNumber(blockNumber, false)
+    // const currentBlock = await this._query.getBlockByNumber(blockNumber, false)
+    const currentBlock = await this.web3.tolar.getBlockByIndex(blockNumber)
+    console.log('TONI web3.tolar.getBlockByIndex', blockNumber, currentBlock)
     if (!currentBlock) {
       return
     }
@@ -197,27 +201,27 @@ export default class AccountTracker {
     const { accounts } = this.store.getState()
     const addresses = Object.keys(accounts)
     const currentNetwork = this.network.getNetworkState()
+console.log('TONI this.network.getNetworkState()', currentNetwork)
+    // switch (currentNetwork) {
+    //   case MAINNET_NETWORK_ID.toString():
+    //     await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS)
+    //     break
 
-    switch (currentNetwork) {
-      case MAINNET_NETWORK_ID.toString():
-        await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS)
-        break
+    //   case RINKEBY_NETWORK_ID.toString():
+    //     await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_RINKEBY)
+    //     break
 
-      case RINKEBY_NETWORK_ID.toString():
-        await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_RINKEBY)
-        break
+    //   case ROPSTEN_NETWORK_ID.toString():
+    //     await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_ROPSTEN)
+    //     break
 
-      case ROPSTEN_NETWORK_ID.toString():
-        await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_ROPSTEN)
-        break
+    //   case KOVAN_NETWORK_ID.toString():
+    //     await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_KOVAN)
+    //     break
 
-      case KOVAN_NETWORK_ID.toString():
-        await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_KOVAN)
-        break
-
-      default:
-        await Promise.all(addresses.map(this._updateAccount.bind(this)))
-    }
+    //   default:
+    //     await Promise.all(addresses.map(this._updateAccount.bind(this)))
+    // }
   }
 
   /**
@@ -250,21 +254,22 @@ export default class AccountTracker {
   async _updateAccountsViaBalanceChecker (addresses, deployedContractAddress) {
     const { accounts } = this.store.getState()
     this.web3.setProvider(this._provider)
-    const ethContract = this.web3.eth.contract(SINGLE_CALL_BALANCES_ABI).at(deployedContractAddress)
-    const ethBalance = ['0x0']
 
-    ethContract.balances(addresses, ethBalance, (error, result) => {
-      if (error) {
-        log.warn(`MetaMask - Account Tracker single call balance fetch failed`, error)
-        Promise.all(addresses.map(this._updateAccount.bind(this)))
-        return
-      }
-      addresses.forEach((address, index) => {
-        const balance = bnToHex(result[index])
-        accounts[address] = { address, balance }
-      })
-      this.store.updateState({ accounts })
-    })
+    // const ethContract = this.web3.eth.contract(SINGLE_CALL_BALANCES_ABI).at(deployedContractAddress)
+    // const ethBalance = ['0x0']
+
+    // ethContract.balances(addresses, ethBalance, (error, result) => {
+    //   if (error) {
+    //     log.warn(`MetaMask - Account Tracker single call balance fetch failed`, error)
+    //     Promise.all(addresses.map(this._updateAccount.bind(this)))
+    //     return
+    //   }
+    //   addresses.forEach((address, index) => {
+    //     const balance = bnToHex(result[index])
+    //     accounts[address] = { address, balance }
+    //   })
+    //   this.store.updateState({ accounts })
+    // })
   }
 
 }

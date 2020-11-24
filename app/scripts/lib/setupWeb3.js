@@ -4,7 +4,7 @@
 // Delete this file
 
 import 'web3/dist/web3.min'
-
+console.log('imported web3.min')
 const shouldLogUsage = !([
   'docs.metamask.io',
   'metamask.github.io',

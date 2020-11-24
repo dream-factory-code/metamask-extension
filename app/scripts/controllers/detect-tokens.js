@@ -1,4 +1,5 @@
-import Web3 from 'web3'
+//import Web3 from 'web3'
+ import Web3 from '@dreamfactoryhr/web3t'
 import contracts from 'eth-contract-metadata'
 import { warn } from 'loglevel'
 import SINGLE_CALL_BALANCES_ABI from 'single-call-balance-checker-abi'
@@ -39,6 +40,7 @@ export default class DetectTokensController {
 
     const tokensToDetect = []
     this.web3.setProvider(this._network._provider)
+
     for (const contractAddress in contracts) {
       if (contracts[contractAddress].erc20 && !(this.tokenAddresses.includes(contractAddress.toLowerCase()))) {
         tokensToDetect.push(contractAddress)

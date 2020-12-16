@@ -30,7 +30,7 @@
     "message": "Ajoute Token Yo Sikjere W"
   },
   "addAcquiredTokens": {
-    "message": "Ajoute tokens yo ou te achte lè l sèvi avèk MetaMask"
+    "message": "Ajoute tokens yo ou te achte lè l sèvi avèk Taquin"
   },
   "amount": {
     "message": "Kantite lajan"
@@ -40,7 +40,7 @@
     "description": "The description of the application"
   },
   "appName": {
-    "message": "MetaMask",
+    "message": "Taquin",
     "description": "The name of the application"
   },
   "approve": {
@@ -74,7 +74,7 @@
     "message": "Navigatè ou a pa sipòte..."
   },
   "builtInCalifornia": {
-    "message": "MetaMask fèt e bati nan California."
+    "message": "Taquin fèt e bati nan California."
   },
   "buyCoinSwitch": {
     "message": "Achte sou CoinSwitch"
@@ -98,7 +98,7 @@
     "message": "Fèmen"
   },
   "chromeRequiredForHardwareWallets": {
-    "message": "Ou bezwen sèvi ak MetaMask sou Google Chrome yo nan lòd yo konekte sou Hardware Wallet."
+    "message": "Ou bezwen sèvi ak Taquin sou Google Chrome yo nan lòd yo konekte sou Hardware Wallet."
   },
   "confirm": {
     "message": "Konfime"
@@ -272,7 +272,7 @@
     "message": "Materyèl Wallet konekte"
   },
   "hardwareWalletsMsg": {
-    "message": "Chwazi yon Materyèl Wallet ou ta renmen itilize ak MetaMask"
+    "message": "Chwazi yon Materyèl Wallet ou ta renmen itilize ak Taquin"
   },
   "havingTroubleConnecting": {
     "message": "Èske w gen pwoblèm pou konekte?"
@@ -298,7 +298,7 @@
     "message": "Pòte Kont"
   },
   "importAccountMsg": {
-    "message": " Kont pòte pa pral asosye avèk orijinal ou te kreye nan kont MetaMask seed fraz. Aprann plis sou kont enpòte "
+    "message": " Kont pòte pa pral asosye avèk orijinal ou te kreye nan kont Taquin seed fraz. Aprann plis sou kont enpòte "
   },
   "imported": {
     "message": "Pòte",
@@ -374,11 +374,11 @@
   "message": {
     "message": "Mesaje"
   },
-  "metamaskDescription": {
-    "message": "MetaMask sekirize idantite pou Ethereum."
+  "TaquinDescription": {
+    "message": "Taquin sekirize idantite pou Ethereum."
   },
-  "metamaskVersion": {
-    "message": "MetaMask Vèsyon"
+  "TaquinVersion": {
+    "message": "Taquin Vèsyon"
   },
   "myAccounts": {
     "message": "Kont mwen"
@@ -387,7 +387,7 @@
     "message": "Ou dwe chwazi omwen 1 token."
   },
   "needEtherInWallet": {
-    "message": "Pou kominike avèk aplikasyon desantralize ou dwe itilize MetaMask, ou pral bezwen Ether nan Wallet ou."
+    "message": "Pou kominike avèk aplikasyon desantralize ou dwe itilize Taquin, ou pral bezwen Ether nan Wallet ou."
   },
   "needImportFile": {
     "message": "Ou dwe chwazi yon dosye pou enpòte.",
@@ -616,7 +616,7 @@
     "message": "Chwazi yon kont"
   },
   "selectAnAccountHelp": {
-    "message": "Chwazi kont pou wè nan MetaMask"
+    "message": "Chwazi kont pou wè nan Taquin"
   },
   "selectHdPath": {
     "message": "Chwazi chemen HD"
@@ -788,7 +788,7 @@
     "message": "Bon Retou!"
   },
   "welcome": {
-    "message": "Byenveni nan MetaMask"
+    "message": "Byenveni nan Taquin"
   },
   "yesLetsTry": {
     "message": "Wi, ann eseye"

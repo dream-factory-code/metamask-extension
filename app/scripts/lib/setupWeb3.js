@@ -3,123 +3,127 @@
 // TODO:deprecate:2020
 // Delete this file
 
-import 'web3/dist/web3.min'
+// import "web3/dist/web3.min";
+import Web3 from "@dreamfactoryhr/web3t/dist/web3.min";
 
-const shouldLogUsage = !([
-  'docs.metamask.io',
-  'metamask.github.io',
-  'metamask.io',
-].includes(window.location.hostname))
+console.log("imported web3.min");
+const shouldLogUsage = ![
+  "docs.metamask.io",
+  "metamask.github.io",
+  "metamask.io",
+].includes(window.location.hostname);
 
-export default function setupWeb3 (log) {
+export default function setupWeb3(log) {
   // export web3 as a global, checking for usage
-  let reloadInProgress = false
-  let lastTimeUsed
-  let lastSeenNetwork
-  let hasBeenWarned = false
+  let reloadInProgress = false;
+  let lastTimeUsed;
+  let lastSeenNetwork;
+  let hasBeenWarned = false;
 
-  const web3 = new Web3(window.ethereum)
+  const web3 = new Web3(window.ethereum);
   web3.setProvider = function () {
-    log.debug('MetaMask - overrode web3.setProvider')
-  }
-  log.debug('MetaMask - injected web3')
+    log.debug("MetaMask - overrode web3.setProvider");
+  };
+  log.debug("MetaMask - injected web3");
 
-  Object.defineProperty(window.ethereum, '_web3Ref', {
+  Object.defineProperty(window.ethereum, "_web3Ref", {
     enumerable: false,
     writable: true,
     configurable: true,
     value: web3.eth,
-  })
+  });
 
   const web3Proxy = new Proxy(web3, {
     get: (_web3, key) => {
-
       // get the time of use
-      lastTimeUsed = Date.now()
+      lastTimeUsed = Date.now();
 
       // show warning once on web3 access
       if (!hasBeenWarned) {
-        console.warn(`MetaMask: We will stop injecting web3 in Q4 2020.\nPlease see this article for more information: https://medium.com/metamask/no-longer-injecting-web3-js-4a899ad6e59e`)
-        hasBeenWarned = true
+        console.warn(
+          `MetaMask: We will stop injecting web3 in Q4 2020.\nPlease see this article for more information: https://medium.com/metamask/no-longer-injecting-web3-js-4a899ad6e59e`
+        );
+        hasBeenWarned = true;
       }
 
-      if (shouldLogUsage) {
-        const name = stringifyKey(key)
-        window.ethereum.request({
-          method: 'metamask_logInjectedWeb3Usage',
-          params: [{ action: 'window.web3 get', name }],
-        })
-      }
+      // if (shouldLogUsage) {
+      //   const name = stringifyKey(key)
+      //   window.ethereum.request({
+      //     method: 'metamask_logInjectedWeb3Usage',
+      //     params: [{ action: 'window.web3 get', name }],
+      //   })
+      // }
 
       // return value normally
-      return _web3[key]
+      return _web3[key];
     },
     set: (_web3, key, value) => {
-      const name = stringifyKey(key)
-      if (shouldLogUsage) {
-        window.ethereum.request({
-          method: 'metamask_logInjectedWeb3Usage',
-          params: [{ action: 'window.web3 set', name }],
-        })
-      }
+      console.log("TONI debug web3", { _web3, key, value });
+      const name = stringifyKey(key);
+      // if (shouldLogUsage) {
+      //   window.ethereum.request({
+      //     method: 'metamask_logInjectedWeb3Usage',
+      //     params: [{ action: 'window.web3 set', name }],
+      //   })
+      // }
 
       // set value normally
-      _web3[key] = value
+      _web3[key] = value;
     },
-  })
+  });
 
-  Object.defineProperty(global, 'web3', {
+  Object.defineProperty(global, "web3", {
     enumerable: false,
     writable: true,
     configurable: true,
     value: web3Proxy,
-  })
+  });
 
   window.ethereum._publicConfigStore.subscribe((state) => {
     // if the auto refresh on network change is false do not
     // do anything
     if (!window.ethereum.autoRefreshOnNetworkChange) {
-      return
+      return;
     }
 
     // if reload in progress, no need to check reload logic
     if (reloadInProgress) {
-      return
+      return;
     }
 
-    const currentNetwork = state.networkVersion
+    const currentNetwork = state.networkVersion;
 
     // set the initial network
     if (!lastSeenNetwork) {
-      lastSeenNetwork = currentNetwork
-      return
+      lastSeenNetwork = currentNetwork;
+      return;
     }
 
     // skip reload logic if web3 not used
     if (!lastTimeUsed) {
-      return
+      return;
     }
 
     // if network did not change, exit
     if (currentNetwork === lastSeenNetwork) {
-      return
+      return;
     }
 
     // initiate page reload
-    reloadInProgress = true
-    const timeSinceUse = Date.now() - lastTimeUsed
+    reloadInProgress = true;
+    const timeSinceUse = Date.now() - lastTimeUsed;
     // if web3 was recently used then delay the reloading of the page
     if (timeSinceUse > 500) {
-      triggerReset()
+      triggerReset();
     } else {
-      setTimeout(triggerReset, 500)
+      setTimeout(triggerReset, 500);
     }
-  })
+  });
 }
 
 // reload the page
-function triggerReset () {
-  global.location.reload()
+function triggerReset() {
+  global.location.reload();
 }
 
 /**
@@ -128,8 +132,6 @@ function triggerReset () {
  *
  * @param {any} key - The key to stringify
  */
-function stringifyKey (key) {
-  return typeof key === 'string'
-    ? key
-    : `typeof ${typeof key}`
+function stringifyKey(key) {
+  return typeof key === "string" ? key : `typeof ${typeof key}`;
 }

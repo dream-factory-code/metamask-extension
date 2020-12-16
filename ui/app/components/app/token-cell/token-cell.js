@@ -1,13 +1,13 @@
-import classnames from 'classnames'
-import PropTypes from 'prop-types'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import AssetListItem from '../asset-list-item'
-import { getSelectedAddress } from '../../../selectors'
-import { useI18nContext } from '../../../hooks/useI18nContext'
-import { useTokenFiatAmount } from '../../../hooks/useTokenFiatAmount'
+import classnames from "classnames";
+import PropTypes from "prop-types";
+import React from "react";
+import { useSelector } from "react-redux";
+import AssetListItem from "../asset-list-item";
+import { getSelectedAddress } from "../../../selectors";
+import { useI18nContext } from "../../../hooks/useI18nContext";
+import { useTokenFiatAmount } from "../../../hooks/useTokenFiatAmount";
 
-export default function TokenCell ({
+export default function TokenCell({
   address,
   decimals,
   outdatedBalance,
@@ -16,30 +16,30 @@ export default function TokenCell ({
   image,
   onClick,
 }) {
-  const userAddress = useSelector(getSelectedAddress)
-  const t = useI18nContext()
+  const userAddress = useSelector(getSelectedAddress);
+  const t = useI18nContext();
 
-  const formattedFiat = useTokenFiatAmount(address, string, symbol)
+  const formattedFiat = useTokenFiatAmount(address, string, symbol);
 
-  const warning = outdatedBalance
-    ? (
-      <span>
-        { t('troubleTokenBalances') }
-        <a
-          href={`https://ethplorer.io/address/${userAddress}`}
-          rel="noopener noreferrer"
-          target="_blank"
-          style={{ color: '#F7861C' }}
-        >
-          { t('here') }
-        </a>
-      </span>
-    )
-    : null
+  const warning = outdatedBalance ? (
+    <span>
+      {t("troubleTokenBalances")}
+      <a
+        href={`https://ethplorer.io/address/${userAddress}`}
+        rel="noopener noreferrer"
+        target="_blank"
+        style={{ color: "#13ceef" }}
+      >
+        {t("here")}
+      </a>
+    </span>
+  ) : null;
 
   return (
     <AssetListItem
-      className={classnames('token-cell', { 'token-cell--outdated': outdatedBalance })}
+      className={classnames("token-cell", {
+        "token-cell--outdated": outdatedBalance,
+      })}
       iconClassName="token-cell__icon"
       onClick={onClick.bind(null, address)}
       tokenAddress={address}
@@ -50,8 +50,7 @@ export default function TokenCell ({
       primary={`${string || 0} ${symbol}`}
       secondary={formattedFiat}
     />
-
-  )
+  );
 }
 
 TokenCell.propTypes = {
@@ -62,8 +61,8 @@ TokenCell.propTypes = {
   string: PropTypes.string,
   image: PropTypes.string,
   onClick: PropTypes.func.isRequired,
-}
+};
 
 TokenCell.defaultProps = {
   outdatedBalance: false,
-}
+};

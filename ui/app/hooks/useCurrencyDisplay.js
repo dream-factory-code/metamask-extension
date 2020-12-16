@@ -1,7 +1,14 @@
-import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { formatCurrency, getValueFromWeiHex } from '../helpers/utils/confirm-tx.util'
-import { getCurrentCurrency, getConversionRate, getNativeCurrency } from '../selectors'
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import {
+  formatCurrency,
+  getValueFromWeiHex,
+} from "../helpers/utils/confirm-tx.util";
+import {
+  getCurrentCurrency,
+  getConversionRate,
+  getNativeCurrency,
+} from "../selectors";
 
 /**
  * Defines the shape of the options parameter for useCurrencyDisplay
@@ -31,35 +38,51 @@ import { getCurrentCurrency, getConversionRate, getNativeCurrency } from '../sel
  * @param {UseCurrencyOptions} opts    - An object for options to format the inputValue
  * @return {[string, CurrencyDisplayParts]}
  */
-export function useCurrencyDisplay (inputValue, { displayValue, prefix, numberOfDecimals, denomination, currency, ...opts }) {
-  const currentCurrency = useSelector(getCurrentCurrency)
-  const nativeCurrency = useSelector(getNativeCurrency)
-  const conversionRate = useSelector(getConversionRate)
+export function useCurrencyDisplay(
+  inputValue,
+  { displayValue, prefix, numberOfDecimals, denomination, currency, ...opts }
+) {
+  const currentCurrency = useSelector(getCurrentCurrency);
+  const nativeCurrency = useSelector(getNativeCurrency);
+  const conversionRate = useSelector(getConversionRate);
 
-  const toCurrency = currency || currentCurrency
+  const toCurrency = currency || currentCurrency;
 
   const value = useMemo(() => {
     if (displayValue) {
-      return displayValue
+      return displayValue;
     }
-    return formatCurrency(
-      getValueFromWeiHex({
-        value: inputValue,
-        fromCurrency: nativeCurrency,
-        toCurrency,
-        conversionRate,
-        numberOfDecimals: numberOfDecimals || 2,
-        toDenomination: denomination,
-      }),
-      toCurrency,
-    )
-  }, [inputValue, nativeCurrency, conversionRate, displayValue, numberOfDecimals, denomination, toCurrency])
 
-  let suffix
+    return formatCurrency(
+      inputValue,
+      // getValueFromWeiHex({
+      //   value: inputValue.balance,
+      //   fromCurrency: nativeCurrency,
+      //   toCurrency,
+      //   conversionRate,
+      //   numberOfDecimals: numberOfDecimals || 2,
+      //   toDenomination: denomination,
+      // }),
+      toCurrency
+    );
+  }, [
+    (inputValue && inputValue.balance) || inputValue || 0,
+    nativeCurrency,
+    conversionRate,
+    displayValue,
+    numberOfDecimals,
+    denomination,
+    toCurrency,
+  ]);
+
+  let suffix;
 
   if (!opts.hideLabel) {
-    suffix = opts.suffix || toCurrency.toUpperCase()
+    suffix = opts.suffix || (toCurrency && toCurrency.toUpperCase()) || "";
   }
 
-  return [`${prefix || ''}${value}${suffix ? ` ${suffix}` : ''}`, { prefix, value, suffix }]
+  return [
+    `${prefix || ""}${value}${suffix ? ` ${suffix}` : ""}`,
+    { prefix, value, suffix },
+  ];
 }

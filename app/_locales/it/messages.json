@@ -26,7 +26,7 @@
     "description": "$1 is the number of accounts"
   },
   "connectedAccountsEmptyDescription": {
-    "message": "MetaMask non è connesso a questo sito. Per connetterti ad un sito web3, trova il pulsante di connessione."
+    "message": "Taquin non è connesso a questo sito. Per connetterti ad un sito web3, trova il pulsante di connessione."
   },
   "currentAccountNotConnected": {
     "message": "Il tuo account corrente non è connesso"
@@ -76,12 +76,12 @@
   "connecting": {
     "message": "Connessione..."
   },
-  "connectWithMetaMask": {
-    "message": "Connetti con MetaMask"
+  "connectWithTaquin": {
+    "message": "Connetti con Taquin"
   },
   "connectTo": {
     "message": "Connettiti a $1",
-    "description": "$1 is the name/origin of a site/dapp that the user can connect to metamask"
+    "description": "$1 is the name/origin of a site/dapp that the user can connect to Taquin"
   },
   "connectToAll": {
     "message": "Connettiti a tutti i tuoi $1",
@@ -179,7 +179,7 @@
     "message": "Aggiungi Token Suggeriti"
   },
   "addAcquiredTokens": {
-    "message": "Aggiungi i token che hai acquistato usando MetaMask"
+    "message": "Aggiungi i token che hai acquistato usando Taquin"
   },
   "alerts": {
     "message": "Avvisi"
@@ -218,7 +218,7 @@
     "description": "The description of the application"
   },
   "appName": {
-    "message": "MetaMask",
+    "message": "Taquin",
     "description": "The name of the application"
   },
   "approve": {
@@ -249,7 +249,7 @@
     "message": "Timer di logout automatico (minuti)"
   },
   "autoLockTimeLimitDescription": {
-    "message": "Imposta il tempo di inattività dopo il quale MetaMask fa il log out automaticamente"
+    "message": "Imposta il tempo di inattività dopo il quale Taquin fa il log out automaticamente"
   },
   "average": {
     "message": "Media"
@@ -264,7 +264,7 @@
     "message": "Mantieni al sicuro il portafoglio e i fondi eseguendo il backup della frase di recupero."
   },
   "backupApprovalInfo": {
-    "message": "Questo codice è necessario per recuperare il tuo portafoglio nel caso in cui perdi il tuo dispositivo, dimentichi la tua password, debba reinstallare MetaMask o voglia accedere al tuo portafoglio su un altro dispositivo."
+    "message": "Questo codice è necessario per recuperare il tuo portafoglio nel caso in cui perdi il tuo dispositivo, dimentichi la tua password, debba reinstallare Taquin o voglia accedere al tuo portafoglio su un altro dispositivo."
   },
   "backupNow": {
     "message": "Esegui il backup ora"
@@ -301,13 +301,13 @@
     "message": "Il tuo Browser non è supportato..."
   },
   "builtInCalifornia": {
-    "message": "MetaMask è progettato e realizzato in California."
+    "message": "Taquin è progettato e realizzato in California."
   },
   "buyWithWyre": {
     "message": "Compra ETH con Wyre"
   },
   "buyWithWyreDescription": {
-    "message": "Wyre ti consente di usare la carta di credito per depositare ETH direttamente nel tuo account MetaMask."
+    "message": "Wyre ti consente di usare la carta di credito per depositare ETH direttamente nel tuo account Taquin."
   },
   "buyCoinSwitch": {
     "message": "Compra su CoinSwitch"
@@ -352,7 +352,7 @@
     "message": "Chiudi"
   },
   "chromeRequiredForHardwareWallets": {
-    "message": "Devi usare MetaMask con Google Chrome per connettere il tuo Portafoglio Hardware"
+    "message": "Devi usare Taquin con Google Chrome per connettere il tuo Portafoglio Hardware"
   },
   "confirm": {
     "message": "Conferma"
@@ -469,7 +469,7 @@
     "message": "Limite Spesa Personalizzato"
   },
   "dataBackupFoundInfo": {
-    "message": "Alcuni dati sul tuo account sono state salvate durante una installazione precedente di MetaMask. Questi includono le impostazioni, i contatti, e i token. Vuoi ripristinare questi dati?"
+    "message": "Alcuni dati sul tuo account sono state salvate durante una installazione precedente di Taquin. Questi includono le impostazioni, i contatti, e i token. Vuoi ripristinare questi dati?"
   },
   "decimalsMustZerotoTen": {
     "message": "Il numero di decimali deve essere almeno 0, e non oltre 36."
@@ -544,16 +544,16 @@
     "message": "Non condividerla mai con nessuno."
   },
   "endOfFlowMessage5": {
-    "message": "Stai attento al phishing! MetaMask non ti chiederà mai spontaneamente la tua frase seed."
+    "message": "Stai attento al phishing! Taquin non ti chiederà mai spontaneamente la tua frase seed."
   },
   "endOfFlowMessage6": {
     "message": "Se vorrai fare nuovamente un backup della frase, la puoi trovare in Impostazioni -> Sicurezza & Privacy."
   },
   "endOfFlowMessage7": {
-    "message": "Se hai delle domande o vedi delle attività sospette, manda una mail a support@metamask.io."
+    "message": "Se hai delle domande o vedi delle attività sospette, manda una mail a support@Taquin.io."
   },
   "endOfFlowMessage8": {
-    "message": "MetaMask non può recuperare la tua frase seed. Impara di più."
+    "message": "Taquin non può recuperare la tua frase seed. Impara di più."
   },
   "endOfFlowMessage9": {
     "message": "Scopri di più."
@@ -603,15 +603,15 @@
     "description": "Displayed error name for debugging purposes. $1 is the error name"
   },
   "errorPageTitle": {
-    "message": "MetaMask ha riscontrato un errore",
+    "message": "Taquin ha riscontrato un errore",
     "description": "Title of generic error page"
   },
   "errorPageMessage": {
-    "message": "Prova di nuovo ricaricando la pagina, o contatta il supporto a support@metamask.io (inglese)",
+    "message": "Prova di nuovo ricaricando la pagina, o contatta il supporto a support@Taquin.io (inglese)",
     "description": "Message displayed on generic error page in the fullscreen or notification UI"
   },
   "errorPagePopupMessage": {
-    "message": "Prova a chiudere e riaprire il popup, o contatta il supporto a support@metamask.io (inglese)",
+    "message": "Prova a chiudere e riaprire il popup, o contatta il supporto a support@Taquin.io (inglese)",
     "description": "Message displayed on generic error page in the popup UI"
   },
   "errorStack": {
@@ -736,7 +736,7 @@
     "message": "Connetti portafoglio hardware"
   },
   "hardwareWalletsMsg": {
-    "message": "Selezione un portafoglio hardware che vuoi utilizzare con MetaMask"
+    "message": "Selezione un portafoglio hardware che vuoi utilizzare con Taquin"
   },
   "havingTroubleConnecting": {
     "message": "Problemi di connessione?"
@@ -769,7 +769,7 @@
     "message": "Importa Account"
   },
   "importAccountMsg": {
-    "message": " Gli account importati non saranno associati alla frase seed originariamente creata con MetaMask. Scopri di più sugli account importati "
+    "message": " Gli account importati non saranno associati alla frase seed originariamente creata con Taquin. Scopri di più sugli account importati "
   },
   "importAccountSeedPhrase": {
     "message": "Importa un Account con una Frase Seed"
@@ -905,20 +905,20 @@
   "message": {
     "message": "Messaggio"
   },
-  "metaMaskConnectStatusParagraphOne": {
-    "message": "Ora hai piu controllo sulle connessioni del tuo account in MetaMask."
+  "TaquinConnectStatusParagraphOne": {
+    "message": "Ora hai piu controllo sulle connessioni del tuo account in Taquin."
   },
-  "metaMaskConnectStatusParagraphTwo": {
+  "TaquinConnectStatusParagraphTwo": {
     "message": "Il bottone di stato della connessione mostra se il sito che stai visitando è connesso all'account corrente"
   },
-  "metaMaskConnectStatusParagraphThree": {
+  "TaquinConnectStatusParagraphThree": {
     "message": "Clicca per gestire i tuo account connessi."
   },
-  "metamaskDescription": {
-    "message": "MetaMask è una cassaforte sicura per identità su Ethereum."
+  "TaquinDescription": {
+    "message": "Taquin è una cassaforte sicura per identità su Ethereum."
   },
-  "metamaskVersion": {
-    "message": "versione di MetaMask"
+  "TaquinVersion": {
+    "message": "versione di Taquin"
   },
   "mobileSyncText": {
     "message": "Per favore inserisci la password per confermare che sei te!"
@@ -930,13 +930,13 @@
     "message": "I miei account di portafoglio"
   },
   "myWalletAccountsDescription": {
-    "message": "Tutti gli account creati con MetaMask saranno automaticamente aggiunti a questa sezione."
+    "message": "Tutti gli account creati con Taquin saranno automaticamente aggiunti a questa sezione."
   },
   "mustSelectOne": {
     "message": "Devi selezionare almeno un token."
   },
   "needEtherInWallet": {
-    "message": "Per interagire con applicazioni decentralizzate con MetaMask, devi possedere Ether nel tuo portafoglio."
+    "message": "Per interagire con applicazioni decentralizzate con Taquin, devi possedere Ether nel tuo portafoglio."
   },
   "needImportFile": {
     "message": "Devi selezionare un file da importare.",
@@ -979,8 +979,8 @@
   "newNetwork": {
     "message": "Nuova Rete"
   },
-  "newToMetaMask": {
-    "message": "Nuovo su MetaMask?"
+  "newToTaquin": {
+    "message": "Nuovo su Taquin?"
   },
   "noAlreadyHaveSeed": {
     "message": "No, ho già una frase seed"
@@ -989,10 +989,10 @@
     "message": "Proteggi le tue chiavi!"
   },
   "protectYourKeysMessage1": {
-    "message": "Stai attento con la tua frase seed - ci sono stati report di siti web che hanno tentato di imitare MetaMask. MetaMask non ti chiederà mai la tua frase seed!"
+    "message": "Stai attento con la tua frase seed - ci sono stati report di siti web che hanno tentato di imitare Taquin. Taquin non ti chiederà mai la tua frase seed!"
   },
   "protectYourKeysMessage2": {
-    "message": "Tieni la tua frase al sicuro. Se vedi qualcosa di sospetto, o non sei sicuro di un sito web, manda una mail a support@metamask.io"
+    "message": "Tieni la tua frase al sicuro. Se vedi qualcosa di sospetto, o non sei sicuro di un sito web, manda una mail a support@Taquin.io"
   },
   "rpcUrl": {
     "message": "Nuovo URL RPC"
@@ -1020,7 +1020,7 @@
   },
   "nextNonceWarning": {
     "message": "Numero di transazione deve essere maggiore di $1",
-    "description": "The next nonce according to MetaMask's internal logic"
+    "description": "The next nonce according to Taquin's internal logic"
   },
   "noAddressForName": {
     "message": "Nessun indirizzo è stato impostato per questo nome."
@@ -1062,7 +1062,7 @@
     "message": "Participa in MetaMetrics"
   },
   "participateInMetaMetricsDescription": {
-    "message": "Participa in MetaMetrics per aiutarci a rendere MetaMask migliore"
+    "message": "Participa in MetaMetrics per aiutarci a rendere Taquin migliore"
   },
   "password": {
     "message": "Password"
@@ -1340,7 +1340,7 @@
     "message": "Seleziona un Account"
   },
   "selectAnAccountHelp": {
-    "message": "Selezione l'account da visualizzare in MetaMask"
+    "message": "Selezione l'account da visualizzare in Taquin"
   },
   "selectAHigherGasFee": {
     "message": "Seleziona un costo in gas maggiore per accelerare l'elaborazione della transazione.*"
@@ -1422,7 +1422,7 @@
     "message": "Cambia Reti"
   },
   "stateLogFileName": {
-    "message": "Log di Stato di MetaMask"
+    "message": "Log di Stato di Taquin"
   },
   "stateLogs": {
     "message": "Log di stato"
@@ -1491,19 +1491,19 @@
     "message": "Sincronizza con dispositivo mobile"
   },
   "syncWithMobileDesc": {
-    "message": "Puoi sincronizzare i tuoi account e le tue informazioni con il tuo dispositivo mobile. Apri l'app di MetaMask, vai su \"Impostazioni\" e tocca \"Sincronizza da Estensione sul Browser\""
+    "message": "Puoi sincronizzare i tuoi account e le tue informazioni con il tuo dispositivo mobile. Apri l'app di Taquin, vai su \"Impostazioni\" e tocca \"Sincronizza da Estensione sul Browser\""
   },
   "syncWithMobileDescNewUsers": {
-    "message": "Se hai appena aperto l'app di MetaMask per la prima volta, segui i passaggi sul tuo telefono."
+    "message": "Se hai appena aperto l'app di Taquin per la prima volta, segui i passaggi sul tuo telefono."
   },
   "syncWithMobileScanThisCode": {
-    "message": "Scansiona questo codice con l'app di MetaMask"
+    "message": "Scansiona questo codice con l'app di Taquin"
   },
   "syncWithMobileBeCareful": {
     "message": "Assicurati che nessun'altro stia guardando al tuo schermo quando scansioni questo codice"
   },
   "syncWithMobileComplete": {
-    "message": "I tuoi dati sono stati sincronizzati con successo. Goditi l'app di MetaMask!"
+    "message": "I tuoi dati sono stati sincronizzati con successo. Goditi l'app di Taquin!"
   },
   "terms": {
     "message": "Termini di Uso"
@@ -1695,7 +1695,7 @@
     "message": "Bentornato!"
   },
   "welcome": {
-    "message": "Benvenuto nella Beta di MetaMask"
+    "message": "Benvenuto nella Beta di Taquin"
   },
   "whatsThis": {
     "message": "Cos'è?"
@@ -1735,7 +1735,7 @@
     "message": "$1 vorrebbe leggere questo messaggio per completare l'azione",
     "description": "$1 is website or dapp name"
   },
-  "decryptMetamask": {
+  "decryptTaquin": {
     "message": "Decifra messaggio"
   },
   "decryptCopy": {

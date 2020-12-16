@@ -1,59 +1,69 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Button from '../../components/ui/button'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Button from "../../components/ui/button";
 
 export default class NewAccountCreateForm extends Component {
   static defaultProps = {
     newAccountNumber: 0,
-  }
+  };
 
   state = {
-    newAccountName: '',
-    defaultAccountName: this.context.t('newAccountNumberName', [
+    newAccountName: "",
+    defaultAccountName: this.context.t("newAccountNumberName", [
       this.props.newAccountNumber,
     ]),
-  }
+  };
 
-  render () {
-    const { newAccountName, defaultAccountName } = this.state
-    const { history, createAccount, mostRecentOverviewPage } = this.props
+  render() {
+    const { newAccountName, defaultAccountName } = this.state;
+    const { history, createAccount, mostRecentOverviewPage } = this.props;
+    console.log("TONI DEBUG account create", { state });
+
     const createClick = (_) => {
+      console.log(
+        "TONI DEBUG account create",
+        newAccountName || defaultAccountName
+      );
+
       createAccount(newAccountName || defaultAccountName)
         .then(() => {
           this.context.metricsEvent({
             eventOpts: {
-              category: 'Accounts',
-              action: 'Add New Account',
-              name: 'Added New Account',
+              category: "Accounts",
+              action: "Add New Account",
+              name: "Added New Account",
             },
-          })
-          history.push(mostRecentOverviewPage)
+          });
+          history.push(mostRecentOverviewPage);
         })
         .catch((e) => {
+          console.log("TONI DEBUG account create", e);
           this.context.metricsEvent({
             eventOpts: {
-              category: 'Accounts',
-              action: 'Add New Account',
-              name: 'Error',
+              category: "Accounts",
+              action: "Add New Account",
+              name: "Error",
             },
             customVariables: {
               errorMessage: e.message,
             },
-          })
-        })
-    }
+          });
+        });
+    };
 
     return (
       <div className="new-account-create-form">
         <div className="new-account-create-form__input-label">
-          {this.context.t('accountName')}
+          {this.context.t("accountName")}
         </div>
         <div>
           <input
             className="new-account-create-form__input"
             value={newAccountName}
             placeholder={defaultAccountName}
-            onChange={(event) => this.setState({ newAccountName: event.target.value })}
+            onChange={(event) =>
+              this.setState({ newAccountName: event.target.value })
+            }
           />
           <div className="new-account-create-form__buttons">
             <Button
@@ -62,7 +72,7 @@ export default class NewAccountCreateForm extends Component {
               className="new-account-create-form__button"
               onClick={() => history.push(mostRecentOverviewPage)}
             >
-              {this.context.t('cancel')}
+              {this.context.t("cancel")}
             </Button>
             <Button
               type="secondary"
@@ -70,12 +80,12 @@ export default class NewAccountCreateForm extends Component {
               className="new-account-create-form__button"
               onClick={createClick}
             >
-              {this.context.t('create')}
+              {this.context.t("create")}
             </Button>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -84,9 +94,9 @@ NewAccountCreateForm.propTypes = {
   newAccountNumber: PropTypes.number,
   history: PropTypes.object,
   mostRecentOverviewPage: PropTypes.string.isRequired,
-}
+};
 
 NewAccountCreateForm.contextTypes = {
   t: PropTypes.func,
   metricsEvent: PropTypes.func,
-}
+};

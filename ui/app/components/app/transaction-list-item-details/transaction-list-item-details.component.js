@@ -1,27 +1,25 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import copyToClipboard from 'copy-to-clipboard'
-import {
-  getBlockExplorerUrlForTx,
-} from '../../../helpers/utils/transactions.util'
-import SenderToRecipient from '../../ui/sender-to-recipient'
-import { FLAT_VARIANT } from '../../ui/sender-to-recipient/sender-to-recipient.constants'
-import TransactionActivityLog from '../transaction-activity-log'
-import TransactionBreakdown from '../transaction-breakdown'
-import Button from '../../ui/button'
-import Tooltip from '../../ui/tooltip'
-import Copy from '../../ui/icon/copy-icon.component'
-import Popover from '../../ui/popover'
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import copyToClipboard from "copy-to-clipboard";
+import { getBlockExplorerUrlForTx } from "../../../helpers/utils/transactions.util";
+import SenderToRecipient from "../../ui/sender-to-recipient";
+import { FLAT_VARIANT } from "../../ui/sender-to-recipient/sender-to-recipient.constants";
+import TransactionActivityLog from "../transaction-activity-log";
+import TransactionBreakdown from "../transaction-breakdown";
+import Button from "../../ui/button";
+import Tooltip from "../../ui/tooltip";
+import Copy from "../../ui/icon/copy-icon.component";
+import Popover from "../../ui/popover";
 
 export default class TransactionListItemDetails extends PureComponent {
   static contextTypes = {
     t: PropTypes.func,
     metricsEvent: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     recipientEns: null,
-  }
+  };
 
   static propTypes = {
     onCancel: PropTypes.func,
@@ -41,106 +39,106 @@ export default class TransactionListItemDetails extends PureComponent {
     tryReverseResolveAddress: PropTypes.func.isRequired,
     senderNickname: PropTypes.string.isRequired,
     recipientNickname: PropTypes.string,
-  }
+  };
 
   state = {
     justCopied: false,
-  }
+  };
 
   handleEtherscanClick = () => {
-    const { transactionGroup: { primaryTransaction }, rpcPrefs } = this.props
-    const { hash, metamaskNetworkId } = primaryTransaction
+    const {
+      transactionGroup: { primaryTransaction },
+      rpcPrefs,
+    } = this.props;
+    const { hash, metamaskNetworkId } = primaryTransaction;
 
     this.context.metricsEvent({
       eventOpts: {
-        category: 'Navigation',
-        action: 'Activity Log',
+        category: "Navigation",
+        action: "Activity Log",
         name: 'Clicked "View on Etherscan"',
       },
-    })
+    });
 
-    global.platform.openTab({ url: getBlockExplorerUrlForTx(metamaskNetworkId, hash, rpcPrefs) })
-  }
+    global.platform.openTab({
+      url: getBlockExplorerUrlForTx(metamaskNetworkId, hash, rpcPrefs),
+    });
+  };
 
   handleCancel = (event) => {
-    const { onCancel, onClose } = this.props
-    onCancel(event)
-    onClose()
-  }
+    const { onCancel, onClose } = this.props;
+    onCancel(event);
+    onClose();
+  };
 
   handleRetry = (event) => {
-    const { onClose, onRetry } = this.props
-    onRetry(event)
-    onClose()
-  }
+    const { onClose, onRetry } = this.props;
+    onRetry(event);
+    onClose();
+  };
 
   handleCopyTxId = () => {
-    const { transactionGroup } = this.props
-    const { primaryTransaction: transaction } = transactionGroup
-    const { hash } = transaction
+    const { transactionGroup } = this.props;
+    const { primaryTransaction: transaction } = transactionGroup;
+    const { hash } = transaction;
 
     this.context.metricsEvent({
       eventOpts: {
-        category: 'Navigation',
-        action: 'Activity Log',
-        name: 'Copied Transaction ID',
+        category: "Navigation",
+        action: "Activity Log",
+        name: "Copied Transaction ID",
       },
-    })
+    });
 
     this.setState({ justCopied: true }, () => {
-      copyToClipboard(hash)
-      setTimeout(() => this.setState({ justCopied: false }), 1000)
-    })
-  }
+      copyToClipboard(hash);
+      setTimeout(() => this.setState({ justCopied: false }), 1000);
+    });
+  };
 
-  componentDidMount () {
-    const { recipientAddress, tryReverseResolveAddress } = this.props
+  componentDidMount() {
+    const { recipientAddress, tryReverseResolveAddress } = this.props;
 
     if (recipientAddress) {
-      tryReverseResolveAddress(recipientAddress)
+      tryReverseResolveAddress(recipientAddress);
     }
   }
 
-  renderCancel () {
-    const { t } = this.context
-    const {
-      showCancel,
-      cancelDisabled,
-    } = this.props
+  renderCancel() {
+    const { t } = this.context;
+    const { showCancel, cancelDisabled } = this.props;
 
     if (!showCancel) {
-      return null
+      return null;
     }
 
-    return cancelDisabled
-      ? (
-        <Tooltip title={t('notEnoughGas')} position="bottom">
-          <div>
-            <Button
-              type="raised"
-              onClick={this.handleCancel}
-              className="transaction-list-item-details__header-button"
-              disabled
-            >
-              { t('cancel') }
-            </Button>
-          </div>
-        </Tooltip>
-      )
-      : (
-        <Button
-          type="raised"
-          onClick={this.handleCancel}
-          className="transaction-list-item-details__header-button"
-        >
-          { t('cancel') }
-        </Button>
-      )
+    return cancelDisabled ? (
+      <Tooltip title={t("notEnoughGas")} position="bottom">
+        <div>
+          <Button
+            type="raised"
+            onClick={this.handleCancel}
+            className="transaction-list-item-details__header-button"
+            disabled
+          >
+            {t("cancel")}
+          </Button>
+        </div>
+      </Tooltip>
+    ) : (
+      <Button
+        type="raised"
+        onClick={this.handleCancel}
+        className="transaction-list-item-details__header-button"
+      >
+        {t("cancel")}
+      </Button>
+    );
   }
 
-  render () {
-    const { t } = this.context
-    const { justCopied } = this.state
+  render() {
+    const { t } = this.context;
+    const { justCopied } = this.state;
     const {
       transactionGroup,
       showSpeedUp,
@@ -154,29 +152,45 @@ export default class TransactionListItemDetails extends PureComponent {
       title,
       onClose,
       recipientNickname,
-    } = this.props
-    const { primaryTransaction: transaction } = transactionGroup
-    const { hash } = transaction
-
+    } = this.props;
+    const { primaryTransaction: transaction } = transactionGroup;
+    const { hash } = transaction;
+    console.log(
+      "toni data",
+      transactionGroup,
+      showSpeedUp,
+      showRetry,
+      recipientEns,
+      recipientAddress,
+      rpcPrefs,
+      senderAddress,
+      isEarliestNonce,
+      senderNickname,
+      title,
+      onClose,
+      recipientNickname
+    );
     return (
       <Popover title={title} onClose={onClose}>
         <div className="transaction-list-item-details">
           <div className="transaction-list-item-details__header">
-            <div>{ t('details') }</div>
+            <div>{t("details")}</div>
             <div className="transaction-list-item-details__header-buttons">
-              {
-                showSpeedUp && (
-                  <Button
-                    type="raised"
-                    onClick={this.handleRetry}
-                    className="transaction-list-item-details__header-button"
-                  >
-                    { t('speedUp') }
-                  </Button>
-                )
-              }
-              { this.renderCancel() }
-              <Tooltip title={justCopied ? t('copiedTransactionId') : t('copyTransactionId')}>
+              {showSpeedUp && (
+                <Button
+                  type="raised"
+                  onClick={this.handleRetry}
+                  className="transaction-list-item-details__header-button"
+                >
+                  {t("speedUp")}
+                </Button>
+              )}
+              {this.renderCancel()}
+              <Tooltip
+                title={
+                  justCopied ? t("copiedTransactionId") : t("copyTransactionId")
+                }
+              >
                 <Button
                   type="raised"
                   onClick={this.handleCopyTxId}
@@ -186,7 +200,13 @@ export default class TransactionListItemDetails extends PureComponent {
                   <Copy size={10} color="#3098DC" />
                 </Button>
               </Tooltip>
-              <Tooltip title={blockExplorerUrl ? t('viewOnCustomBlockExplorer', [blockExplorerUrl]) : t('viewOnEtherscan')}>
+              <Tooltip
+                title={
+                  blockExplorerUrl
+                    ? t("viewOnCustomBlockExplorer", [blockExplorerUrl])
+                    : t("viewOnEtherscan")
+                }
+              >
                 <Button
                   type="raised"
                   onClick={this.handleEtherscanClick}
@@ -196,19 +216,23 @@ export default class TransactionListItemDetails extends PureComponent {
                   <img src="/images/arrow-popout.svg" />
                 </Button>
               </Tooltip>
-              {
-                showRetry && (
-                  <Tooltip title={blockExplorerUrl ? t('viewOnCustomBlockExplorer', [blockExplorerUrl]) : t('retryTransaction')}>
-                    <Button
-                      type="raised"
-                      onClick={this.handleRetry}
-                      className="transaction-list-item-details__header-button"
-                    >
-                      <i className="fa fa-sync"></i>
-                    </Button>
-                  </Tooltip>
-                )
-              }
+              {showRetry && (
+                <Tooltip
+                  title={
+                    blockExplorerUrl
+                      ? t("viewOnCustomBlockExplorer", [blockExplorerUrl])
+                      : t("retryTransaction")
+                  }
+                >
+                  <Button
+                    type="raised"
+                    onClick={this.handleRetry}
+                    className="transaction-list-item-details__header-button"
+                  >
+                    <i className="fa fa-sync"></i>
+                  </Button>
+                </Tooltip>
+              )}
             </div>
           </div>
           <div className="transaction-list-item-details__body">
@@ -225,20 +249,20 @@ export default class TransactionListItemDetails extends PureComponent {
                 onRecipientClick={() => {
                   this.context.metricsEvent({
                     eventOpts: {
-                      category: 'Navigation',
-                      action: 'Activity Log',
+                      category: "Navigation",
+                      action: "Activity Log",
                       name: 'Copied "To" Address',
                     },
-                  })
+                  });
                 }}
                 onSenderClick={() => {
                   this.context.metricsEvent({
                     eventOpts: {
-                      category: 'Navigation',
-                      action: 'Activity Log',
+                      category: "Navigation",
+                      action: "Activity Log",
                       name: 'Copied "From" Address',
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -259,6 +283,6 @@ export default class TransactionListItemDetails extends PureComponent {
           </div>
         </div>
       </Popover>
-    )
+    );
   }
 }

@@ -1,4 +1,4 @@
-import ObservableStore from 'obs-store'
+import ObservableStore from "obs-store";
 
 /**
  * @typedef {Object} CachedBalancesOptions
@@ -12,22 +12,21 @@ import ObservableStore from 'obs-store'
  * a cache of account balances in local storage
  */
 export default class CachedBalancesController {
-
   /**
    * Creates a new controller instance
    *
    * @param {CachedBalancesOptions} [opts] Controller configuration parameters
    */
-  constructor (opts = {}) {
-    const { accountTracker, getNetwork } = opts
+  constructor(opts = {}) {
+    const { accountTracker, getNetwork } = opts;
 
-    this.accountTracker = accountTracker
-    this.getNetwork = getNetwork
+    this.accountTracker = accountTracker;
+    this.getNetwork = getNetwork;
 
-    const initState = { cachedBalances: {}, ...opts.initState }
-    this.store = new ObservableStore(initState)
+    const initState = { cachedBalances: {}, ...opts.initState };
+    this.store = new ObservableStore(initState);
 
-    this._registerUpdates()
+    this._registerUpdates();
   }
 
   /**
@@ -37,39 +36,43 @@ export default class CachedBalancesController {
    * @param {Object} obj - The the recently updated accounts object for the current network
    * @returns {Promise<void>}
    */
-  async updateCachedBalances ({ accounts }) {
-    const network = await this.getNetwork()
-    const balancesToCache = await this._generateBalancesToCache(accounts, network)
+  async updateCachedBalances({ accounts }) {
+    const network = await this.getNetwork();
+    const balancesToCache = await this._generateBalancesToCache(
+      accounts,
+      network
+    );
+
     this.store.updateState({
       cachedBalances: balancesToCache,
-    })
+    });
   }
 
-  _generateBalancesToCache (newAccounts, currentNetwork) {
-    const { cachedBalances } = this.store.getState()
-    const currentNetworkBalancesToCache = { ...cachedBalances[currentNetwork] }
+  _generateBalancesToCache(newAccounts, currentNetwork) {
+    const { cachedBalances } = this.store.getState();
+    const currentNetworkBalancesToCache = { ...cachedBalances[currentNetwork] };
 
     Object.keys(newAccounts).forEach((accountID) => {
-      const account = newAccounts[accountID]
+      const account = newAccounts[accountID];
 
       if (account.balance) {
-        currentNetworkBalancesToCache[accountID] = account.balance
+        currentNetworkBalancesToCache[accountID] = account.balance;
       }
-    })
+    });
     const balancesToCache = {
       ...cachedBalances,
       [currentNetwork]: currentNetworkBalancesToCache,
-    }
+    };
 
-    return balancesToCache
+    return balancesToCache;
   }
 
   /**
    * Removes cachedBalances
    */
 
-  clearCachedBalances () {
-    this.store.updateState({ cachedBalances: {} })
+  clearCachedBalances() {
+    this.store.updateState({ cachedBalances: {} });
   }
 
   /**
@@ -80,8 +83,8 @@ export default class CachedBalancesController {
    * @private
    *
    */
-  _registerUpdates () {
-    const update = this.updateCachedBalances.bind(this)
-    this.accountTracker.store.subscribe(update)
+  _registerUpdates() {
+    const update = this.updateCachedBalances.bind(this);
+    this.accountTracker.store.subscribe(update);
   }
 }

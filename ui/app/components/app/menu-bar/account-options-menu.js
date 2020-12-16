@@ -52,7 +52,7 @@ export default function AccountOptionsMenu ({ anchorElement, onClose }) {
   const selectedIdentity = useSelector(getSelectedIdentity)
 
   const { address } = selectedIdentity
-  const isRemovable = keyring.type !== 'HD Key Tree'
+  const isRemovable = keyring.type !== 'Tolar Keyring'
 
   return (
     <Menu

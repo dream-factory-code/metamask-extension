@@ -1,48 +1,52 @@
-import { createSelector } from 'reselect'
+import { createSelector } from "reselect";
 import {
   SUBMITTED_STATUS,
   CONFIRMED_STATUS,
   PRIORITY_STATUS_HASH,
   PENDING_STATUS_HASH,
-} from '../helpers/constants/transactions'
+} from "../helpers/constants/transactions";
 import {
   TRANSACTION_TYPE_CANCEL,
   TRANSACTION_TYPE_RETRY,
-} from '../../../app/scripts/controllers/transactions/enums'
-import { hexToDecimal } from '../helpers/utils/conversions.util'
-import txHelper from '../../lib/tx-helper'
-import {
-  getSelectedAddress,
-} from '.'
+} from "../../../app/scripts/controllers/transactions/enums";
+import { hexToDecimal } from "../helpers/utils/conversions.util";
+import txHelper from "../../lib/tx-helper";
+import { getSelectedAddress } from ".";
 
 export const incomingTxListSelector = (state) => {
-  const { showIncomingTransactions } = state.metamask.featureFlags
-  if (!showIncomingTransactions) {
-    return []
-  }
-
-  const { network } = state.metamask
-  const selectedAddress = getSelectedAddress(state)
-  return Object.values(state.metamask.incomingTransactions)
-    .filter(({ metamaskNetworkId, txParams }) => (
-      txParams.to === selectedAddress && metamaskNetworkId === network
-    ))
-}
-export const unapprovedMsgsSelector = (state) => state.metamask.unapprovedMsgs
-export const currentNetworkTxListSelector = (state) => state.metamask.currentNetworkTxList
-export const unapprovedPersonalMsgsSelector = (state) => state.metamask.unapprovedPersonalMsgs
-export const unapprovedDecryptMsgsSelector = (state) => state.metamask.unapprovedDecryptMsgs
-export const unapprovedEncryptionPublicKeyMsgsSelector = (state) => state.metamask.unapprovedEncryptionPublicKeyMsgs
-export const unapprovedTypedMessagesSelector = (state) => state.metamask.unapprovedTypedMessages
-export const networkSelector = (state) => state.metamask.network
+  // const { showIncomingTransactions } = state.metamask.featureFlags
+  // if (!showIncomingTransactions) {
+  //   return []
+  // }
+  // const { network } = state.metamask
+  // const selectedAddress = getSelectedAddress(state)
+  // return Object.values(state.metamask.incomingTransactions)
+  //   .filter(({ metamaskNetworkId, txParams }) => (
+  //     txParams.to === selectedAddress && metamaskNetworkId === network
+  //   ))
+};
+export const unapprovedMsgsSelector = (state) => state.metamask.unapprovedMsgs;
+export const currentNetworkTxListSelector = (state) =>
+  state.metamask.currentNetworkTxList;
+export const unapprovedPersonalMsgsSelector = (state) =>
+  state.metamask.unapprovedPersonalMsgs;
+export const unapprovedDecryptMsgsSelector = (state) =>
+  state.metamask.unapprovedDecryptMsgs;
+export const unapprovedEncryptionPublicKeyMsgsSelector = (state) =>
+  state.metamask.unapprovedEncryptionPublicKeyMsgs;
+export const unapprovedTypedMessagesSelector = (state) =>
+  state.metamask.unapprovedTypedMessages;
+export const networkSelector = (state) => state.metamask.network;
 
 export const selectedAddressTxListSelector = createSelector(
   getSelectedAddress,
   currentNetworkTxListSelector,
   (selectedAddress, transactions = []) => {
-    return transactions.filter(({ txParams }) => txParams.from === selectedAddress)
-  },
-)
+    return transactions.filter(
+      ({ txParams }) => txParams.from === selectedAddress
+    );
+  }
+);
 
 export const unapprovedMessagesSelector = createSelector(
   unapprovedMsgsSelector,
@@ -57,36 +61,36 @@ export const unapprovedMessagesSelector = createSelector(
     unapprovedDecryptMsgs = {},
     unapprovedEncryptionPublicKeyMsgs = {},
     unapprovedTypedMessages = {},
-    network,
-  ) => txHelper(
-    {},
-    unapprovedMsgs,
-    unapprovedPersonalMsgs,
-    unapprovedDecryptMsgs,
-    unapprovedEncryptionPublicKeyMsgs,
-    unapprovedTypedMessages,
-    network,
-  ) || [],
-)
+    network
+  ) =>
+    txHelper(
+      {},
+      unapprovedMsgs,
+      unapprovedPersonalMsgs,
+      unapprovedDecryptMsgs,
+      unapprovedEncryptionPublicKeyMsgs,
+      unapprovedTypedMessages,
+      network
+    ) || []
+);
 
 export const transactionSubSelector = createSelector(
   unapprovedMessagesSelector,
   incomingTxListSelector,
   (unapprovedMessages = [], incomingTxList = []) => {
-    return unapprovedMessages.concat(incomingTxList)
-  },
-)
+    return unapprovedMessages.concat(incomingTxList);
+  }
+);
 
 export const transactionsSelector = createSelector(
   transactionSubSelector,
   selectedAddressTxListSelector,
   (subSelectorTxList = [], selectedAddressTxList = []) => {
-    const txsToRender = selectedAddressTxList.concat(subSelectorTxList)
+    const txsToRender = selectedAddressTxList.concat(subSelectorTxList);
 
-    return txsToRender
-      .sort((a, b) => b.time - a.time)
-  },
-)
+    return txsToRender.sort((a, b) => b.time - a.time);
+  }
+);
 
 /**
  * @name insertOrderedNonce
@@ -98,19 +102,19 @@ export const transactionsSelector = createSelector(
  * @returns {string[]}
  */
 const insertOrderedNonce = (nonces, nonceToInsert) => {
-  let insertIndex = nonces.length
+  let insertIndex = nonces.length;
 
   for (let i = 0; i < nonces.length; i++) {
-    const nonce = nonces[i]
+    const nonce = nonces[i];
 
     if (Number(hexToDecimal(nonce)) > Number(hexToDecimal(nonceToInsert))) {
-      insertIndex = i
-      break
+      insertIndex = i;
+      break;
     }
   }
 
-  nonces.splice(insertIndex, 0, nonceToInsert)
-}
+  nonces.splice(insertIndex, 0, nonceToInsert);
+};
 
 /**
  * @name insertTransactionByTime
@@ -122,21 +126,21 @@ const insertOrderedNonce = (nonces, nonceToInsert) => {
  * @returns {Object[]}
  */
 const insertTransactionByTime = (transactions, transaction) => {
-  const { time } = transaction
+  const { time } = transaction;
 
-  let insertIndex = transactions.length
+  let insertIndex = transactions.length;
 
   for (let i = 0; i < transactions.length; i++) {
-    const tx = transactions[i]
+    const tx = transactions[i];
 
     if (tx.time > time) {
-      insertIndex = i
-      break
+      insertIndex = i;
+      break;
     }
   }
 
-  transactions.splice(insertIndex, 0, transaction)
-}
+  transactions.splice(insertIndex, 0, transaction);
+};
 
 /**
  * Contains transactions and properties associated with those transactions of the same nonce.
@@ -160,22 +164,24 @@ const insertTransactionByTime = (transactions, transaction) => {
  * array of transactionGroups.
  */
 const insertTransactionGroupByTime = (transactionGroups, transactionGroup) => {
-  const { primaryTransaction: { time: groupToInsertTime } = {} } = transactionGroup
+  const {
+    primaryTransaction: { time: groupToInsertTime } = {},
+  } = transactionGroup;
 
-  let insertIndex = transactionGroups.length
+  let insertIndex = transactionGroups.length;
 
   for (let i = 0; i < transactionGroups.length; i++) {
-    const txGroup = transactionGroups[i]
-    const { primaryTransaction: { time } = {} } = txGroup
+    const txGroup = transactionGroups[i];
+    const { primaryTransaction: { time } = {} } = txGroup;
 
     if (time > groupToInsertTime) {
-      insertIndex = i
-      break
+      insertIndex = i;
+      break;
     }
   }
 
-  transactionGroups.splice(insertIndex, 0, transactionGroup)
-}
+  transactionGroups.splice(insertIndex, 0, transactionGroup);
+};
 
 /**
  * @name mergeNonNonceTransactionGroups
@@ -187,11 +193,14 @@ const insertTransactionGroupByTime = (transactionGroups, transactionGroup) => {
  * @param {transactionGroup[]} nonNonceTransactionGroups - Array of transactionGroups not intended to be ordered by nonce,
  * but intended to be ordered by timestamp
  */
-const mergeNonNonceTransactionGroups = (orderedTransactionGroups, nonNonceTransactionGroups) => {
+const mergeNonNonceTransactionGroups = (
+  orderedTransactionGroups,
+  nonNonceTransactionGroups
+) => {
   nonNonceTransactionGroups.forEach((transactionGroup) => {
-    insertTransactionGroupByTime(orderedTransactionGroups, transactionGroup)
-  })
-}
+    insertTransactionGroupByTime(orderedTransactionGroups, transactionGroup);
+  });
+};
 
 /**
  * @name nonceSortedTransactionsSelector
@@ -201,54 +210,67 @@ const mergeNonNonceTransactionGroups = (orderedTransactionGroups, nonNonceTransa
 export const nonceSortedTransactionsSelector = createSelector(
   transactionsSelector,
   (transactions = []) => {
-    const unapprovedTransactionGroups = []
-    const incomingTransactionGroups = []
-    const orderedNonces = []
-    const nonceToTransactionsMap = {}
+    const unapprovedTransactionGroups = [];
+    const incomingTransactionGroups = [];
+    const orderedNonces = [];
+    const nonceToTransactionsMap = {};
 
     transactions.forEach((transaction) => {
-      const { txParams: { nonce } = {}, status, type, time: txTime, transactionCategory } = transaction
+      const {
+        txParams: { nonce } = {},
+        status,
+        type,
+        time: txTime,
+        transactionCategory,
+      } = transaction;
 
-      if (typeof nonce === 'undefined' || transactionCategory === 'incoming') {
+      if (typeof nonce === "undefined" || transactionCategory === "incoming") {
         const transactionGroup = {
           transactions: [transaction],
           initialTransaction: transaction,
           primaryTransaction: transaction,
           hasRetried: false,
           hasCancelled: false,
-        }
+        };
 
-        if (transactionCategory === 'incoming') {
-          incomingTransactionGroups.push(transactionGroup)
+        if (transactionCategory === "incoming") {
+          incomingTransactionGroups.push(transactionGroup);
         } else {
-          insertTransactionGroupByTime(unapprovedTransactionGroups, transactionGroup)
+          insertTransactionGroupByTime(
+            unapprovedTransactionGroups,
+            transactionGroup
+          );
         }
       } else if (nonce in nonceToTransactionsMap) {
-        const nonceProps = nonceToTransactionsMap[nonce]
-        insertTransactionByTime(nonceProps.transactions, transaction)
+        const nonceProps = nonceToTransactionsMap[nonce];
+        insertTransactionByTime(nonceProps.transactions, transaction);
 
         if (status in PRIORITY_STATUS_HASH) {
-          const { primaryTransaction: { time: primaryTxTime = 0 } = {} } = nonceProps
+          const {
+            primaryTransaction: { time: primaryTxTime = 0 } = {},
+          } = nonceProps;
 
           if (status === CONFIRMED_STATUS || txTime > primaryTxTime) {
-            nonceProps.primaryTransaction = transaction
+            nonceProps.primaryTransaction = transaction;
           }
         }
 
-        const { initialTransaction: { time: initialTxTime = 0 } = {} } = nonceProps
+        const {
+          initialTransaction: { time: initialTxTime = 0 } = {},
+        } = nonceProps;
 
         // Used to display the transaction action, since we don't want to overwrite the action if
         // it was replaced with a cancel attempt transaction.
         if (txTime < initialTxTime) {
-          nonceProps.initialTransaction = transaction
+          nonceProps.initialTransaction = transaction;
         }
 
         if (type === TRANSACTION_TYPE_RETRY) {
-          nonceProps.hasRetried = true
+          nonceProps.hasRetried = true;
         }
 
         if (type === TRANSACTION_TYPE_CANCEL) {
-          nonceProps.hasCancelled = true
+          nonceProps.hasCancelled = true;
         }
       } else {
         nonceToTransactionsMap[nonce] = {
@@ -258,17 +280,22 @@ export const nonceSortedTransactionsSelector = createSelector(
           primaryTransaction: transaction,
           hasRetried: transaction.type === TRANSACTION_TYPE_RETRY,
           hasCancelled: transaction.type === TRANSACTION_TYPE_CANCEL,
-        }
+        };
 
-        insertOrderedNonce(orderedNonces, nonce)
+        insertOrderedNonce(orderedNonces, nonce);
       }
-    })
+    });
 
-    const orderedTransactionGroups = orderedNonces.map((nonce) => nonceToTransactionsMap[nonce])
-    mergeNonNonceTransactionGroups(orderedTransactionGroups, incomingTransactionGroups)
-    return unapprovedTransactionGroups.concat(orderedTransactionGroups)
-  },
-)
+    const orderedTransactionGroups = orderedNonces.map(
+      (nonce) => nonceToTransactionsMap[nonce]
+    );
+    mergeNonNonceTransactionGroups(
+      orderedTransactionGroups,
+      incomingTransactionGroups
+    );
+    return unapprovedTransactionGroups.concat(orderedTransactionGroups);
+  }
+);
 
 /**
  * @name nonceSortedPendingTransactionsSelector
@@ -278,10 +305,12 @@ export const nonceSortedTransactionsSelector = createSelector(
  */
 export const nonceSortedPendingTransactionsSelector = createSelector(
   nonceSortedTransactionsSelector,
-  (transactions = []) => (
-    transactions.filter(({ primaryTransaction }) => primaryTransaction.status in PENDING_STATUS_HASH)
-  ),
-)
+  (transactions = []) =>
+    transactions.filter(
+      ({ primaryTransaction }) =>
+        primaryTransaction.status in PENDING_STATUS_HASH
+    )
+);
 
 /**
  * @name nonceSortedCompletedTransactionsSelector
@@ -291,16 +320,19 @@ export const nonceSortedPendingTransactionsSelector = createSelector(
  */
 export const nonceSortedCompletedTransactionsSelector = createSelector(
   nonceSortedTransactionsSelector,
-  (transactions = []) => (
+  (transactions = []) =>
     transactions
-      .filter(({ primaryTransaction }) => !(primaryTransaction.status in PENDING_STATUS_HASH))
+      .filter(
+        ({ primaryTransaction }) =>
+          !(primaryTransaction.status in PENDING_STATUS_HASH)
+      )
       .reverse()
-  ),
-)
+);
 
 export const submittedPendingTransactionsSelector = createSelector(
   transactionsSelector,
-  (transactions = []) => (
-    transactions.filter((transaction) => transaction.status === SUBMITTED_STATUS)
-  ),
-)
+  (transactions = []) =>
+    transactions.filter(
+      (transaction) => transaction.status === SUBMITTED_STATUS
+    )
+);

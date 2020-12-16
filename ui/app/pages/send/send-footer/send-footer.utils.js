@@ -1,31 +1,54 @@
-import ethAbi from 'ethereumjs-abi'
-import ethUtil from 'ethereumjs-util'
-import { TOKEN_TRANSFER_FUNCTION_SIGNATURE } from '../send.constants'
+import ethAbi from "ethereumjs-abi";
+import ethUtil from "ethereumjs-util";
+import { TOKEN_TRANSFER_FUNCTION_SIGNATURE } from "../send.constants";
 
-export function addHexPrefixToObjectValues (obj) {
+export function addHexPrefixToObjectValues(obj) {
   return Object.keys(obj).reduce((newObj, key) => {
-    return { ...newObj, [key]: ethUtil.addHexPrefix(obj[key]) }
-  }, {})
+    return { ...newObj, [key]: ethUtil.addHexPrefix(obj[key]) };
+  }, {});
 }
-
-export function constructTxParams ({ sendToken, data, to, amount, from, gas, gasPrice }) {
+export function constructTolarTxParams(opts) {
+  let { from, to, gas, gasPrice, data = "", amount } = opts;
+  // TODO toni fix gas Price;
+  gasPrice = 1;
+  const tx = {
+    sender_address: from,
+    receiver_address: to,
+    amount: Number(amount),
+    password: "",
+    gas: Number(gas),
+    gas_price: gasPrice,
+    data,
+  };
+  console.log("TONI debug amount", { tx, amount });
+  return tx;
+}
+export function constructTxParams({
+  sendToken,
+  data,
+  to,
+  amount,
+  from,
+  gas,
+  gasPrice,
+}) {
   const txParams = {
     data,
     from,
-    value: '0',
+    value: "0",
     gas,
     gasPrice,
-  }
+  };
 
   if (!sendToken) {
-    txParams.value = amount
-    txParams.to = to
+    txParams.value = amount;
+    txParams.to = to;
   }
 
-  return addHexPrefixToObjectValues(txParams)
+  return addHexPrefixToObjectValues(txParams);
 }
 
-export function constructUpdatedTx ({
+export function constructUpdatedTx({
   amount,
   data,
   editingTransactionId,
@@ -36,8 +59,10 @@ export function constructUpdatedTx ({
   to,
   unapprovedTxs,
 }) {
-  const unapprovedTx = unapprovedTxs[editingTransactionId]
-  const txParamsData = unapprovedTx.txParams.data ? unapprovedTx.txParams.data : data
+  const unapprovedTx = unapprovedTxs[editingTransactionId];
+  const txParamsData = unapprovedTx.txParams.data
+    ? unapprovedTx.txParams.data
+    : data;
 
   const editingTx = {
     ...unapprovedTx,
@@ -50,32 +75,42 @@ export function constructUpdatedTx ({
         gas,
         gasPrice,
         value: amount,
-      }),
+      })
     ),
-  }
+  };
 
   if (sendToken) {
-    Object.assign(editingTx.txParams, addHexPrefixToObjectValues({
-      value: '0',
-      to: sendToken.address,
-      data: (
-        TOKEN_TRANSFER_FUNCTION_SIGNATURE + Array.prototype.map.call(
-          ethAbi.rawEncode(['address', 'uint256'], [to, ethUtil.addHexPrefix(amount)]),
-          (x) => (`00${x.toString(16)}`).slice(-2),
-        ).join('')
-      ),
-    }))
+    Object.assign(
+      editingTx.txParams,
+      addHexPrefixToObjectValues({
+        value: "0",
+        to: sendToken.address,
+        data:
+          TOKEN_TRANSFER_FUNCTION_SIGNATURE +
+          Array.prototype.map
+            .call(
+              ethAbi.rawEncode(
+                ["address", "uint256"],
+                [to, ethUtil.addHexPrefix(amount)]
+              ),
+              (x) => `00${x.toString(16)}`.slice(-2)
+            )
+            .join(""),
+      })
+    );
   }
 
-  if (typeof editingTx.txParams.data === 'undefined') {
-    delete editingTx.txParams.data
+  if (typeof editingTx.txParams.data === "undefined") {
+    delete editingTx.txParams.data;
   }
-
-  return editingTx
+  console.log("TONI debug amount tx update tx", editingTx);
+  return editingTx;
 }
 
-export function addressIsNew (toAccounts, newAddress) {
-  const newAddressNormalized = newAddress.toLowerCase()
-  const foundMatching = toAccounts.some(({ address }) => address.toLowerCase() === newAddressNormalized)
-  return !foundMatching
+export function addressIsNew(toAccounts, newAddress) {
+  const newAddressNormalized = newAddress.toLowerCase();
+  const foundMatching = toAccounts.some(
+    ({ address }) => address.toLowerCase() === newAddressNormalized
+  );
+  return !foundMatching;
 }

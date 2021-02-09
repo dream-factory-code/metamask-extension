@@ -1,1 +1,1 @@
-export { default } from './transaction-list-item.component'
+export { default } from "./tolar-transaction-list-item.component"; //'./transaction-list-item.component'

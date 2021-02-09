@@ -86,7 +86,7 @@ const EthOverview = ({ className }) => {
       }
       buttons={
         <>
-          <Button
+          {/* <Button
             type="primary"
             className="eth-overview__button"
             rounded
@@ -96,7 +96,7 @@ const EthOverview = ({ className }) => {
             }}
           >
             {t("buy")}
-          </Button>
+          </Button> */}
           <Button
             type="secondary"
             className="eth-overview__button"

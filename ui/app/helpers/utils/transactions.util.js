@@ -247,11 +247,11 @@ export function getStatusKey(transaction) {
  * @param {string} hash
  * @param {Object} rpcPrefs
  */
-export function getBlockExplorerUrlForTx(networkId, hash, rpcPrefs = {}) {
+export function getBlockExplorerUrlForTx(networkId, hash = "", rpcPrefs = {}) {
   if (rpcPrefs.blockExplorerUrl) {
     return `${rpcPrefs.blockExplorerUrl.replace(/\/+$/u, "")}/tx/${hash}`;
   }
   const prefix = getEtherscanNetworkPrefix(networkId);
   console.log("TONI TODO this should boint to some transaction", prefix);
-  return `https://${prefix}dream-factory.hr`;
+  return `https://${prefix}.dream-factory.hr/transaction/${hash}`;
 }

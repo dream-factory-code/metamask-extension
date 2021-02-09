@@ -10,7 +10,7 @@ import Web3 from "@dreamfactoryhr/web3t";
 export class TolarSimpleKeyring extends SimpleKeyring {
   constructor(opts) {
     super(opts);
-    this.web3 = new Web3("https://tolar-staging.dream-factory.hr");
+    this.web3 = new Web3("https://tolar-test.dream-factory.hr");
     // const fromPrivateFn = Account.fromPrivate;
     // const recoverFn = Account.recover;
     // Object.assign(Account, {

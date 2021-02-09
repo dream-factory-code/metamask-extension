@@ -82,7 +82,7 @@ export function useCurrencyDisplay(
   }
 
   return [
-    `${prefix || ""}${value}${suffix ? ` ${suffix}` : ""}`,
+    `${prefix || ""}${value || 0}${suffix ? ` ${suffix}` : ""}`,
     { prefix, value, suffix },
   ];
 }

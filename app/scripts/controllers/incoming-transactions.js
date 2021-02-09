@@ -28,10 +28,23 @@ const fetch = fetchWithTimeout({
 
 export default class IncomingTransactionsController {
   constructor(opts = {}) {
-    const { blockTracker, networkController, preferencesController } = opts;
+    const {
+      blockTracker,
+      networkController,
+      preferencesController,
+      web3,
+    } = opts;
     this.blockTracker = blockTracker;
     this.networkController = networkController;
     this.preferencesController = preferencesController;
+    this.web3 = web3;
+    this.pagination = {
+      page: 1,
+      pageSize: 5,
+      isLoading: false,
+    };
+    this.selectedAddress = null;
+
     this.getCurrentNetwork = () => networkController.getProviderConfig().type;
 
     this._onLatestBlock = async (latestBlock) => {
@@ -40,11 +53,15 @@ export default class IncomingTransactionsController {
       console.log(
         "TONI getSelectedAddress ",
         selectedAddress,
+        this.selectedAddress,
         "add early exit on undefined"
       );
       if (!selectedAddress) return;
       //const newBlockNumberDec = parseInt(latestBlock, 16);
       const { newBlockNumberDec } = latestBlock;
+      console.log(
+        "toni debug update, receive signal here from ui, on latest block"
+      );
       await this._update({
         address: selectedAddress,
         newBlockNumberDec,
@@ -100,7 +117,14 @@ export default class IncomingTransactionsController {
         if (currSelectedAddress === prevSelectedAddress) {
           return;
         }
-
+        console.log(
+          "toni debug update, receive signal here from ui, preferences store update"
+        );
+        this.pagination = {
+          page: 1,
+          pageSize: 5,
+          isLoading: false,
+        };
         await this._update({
           address: currSelectedAddress,
         });
@@ -108,6 +132,14 @@ export default class IncomingTransactionsController {
     );
 
     this.networkController.on("networkDidChange", async (newType) => {
+      console.log(
+        "toni debug update, receive signal here from ui, network did change"
+      );
+      this.pagination = {
+        page: 1,
+        pageSize: 5,
+        isLoading: false,
+      };
       const address = this.preferencesController.getSelectedAddress();
       await this._update({
         address,
@@ -169,14 +201,13 @@ export default class IncomingTransactionsController {
       blockToFetchFrom = parseInt(this.blockTracker.getCurrentBlock(), 16);
     }
 
-    const { latestIncomingTxBlockNumber, txs: newTxs } = await this._fetchAll(
+    const { txs: newTxs } = await this._fetchAll(
       address,
       blockToFetchFrom,
       network
     );
 
     console.log("TONI data for update", {
-      latestIncomingTxBlockNumber,
       newTxs,
       currentIncomingTxs,
       currentBlocksByNetwork,
@@ -184,7 +215,6 @@ export default class IncomingTransactionsController {
       network,
     });
     return {
-      latestIncomingTxBlockNumber,
       newTxs,
       currentIncomingTxs,
       currentBlocksByNetwork,
@@ -194,29 +224,38 @@ export default class IncomingTransactionsController {
   }
 
   async _updateStateWithNewTxData({
-    latestIncomingTxBlockNumber,
     newTxs,
     currentIncomingTxs,
     currentBlocksByNetwork,
     fetchedBlockNumber,
     network,
   }) {
-    const newLatestBlockHashByNetwork = latestIncomingTxBlockNumber
-      ? parseInt(latestIncomingTxBlockNumber, 10) + 1
-      : fetchedBlockNumber + 1;
-    const newIncomingTransactions = {
-      ...currentIncomingTxs,
-    };
-    newTxs.forEach((tx) => {
-      newIncomingTransactions[tx.hash] = tx;
+    console.log("TONI update state with new Tx data", {
+      newTxs,
+      currentIncomingTxs,
+      currentBlocksByNetwork,
+      fetchedBlockNumber,
+      network,
     });
 
+    const newFetchedTransactions = {
+      // ...currentIncomingTxs,
+    };
+    newTxs.forEach((tx) => {
+      newFetchedTransactions[tx.hash] = {
+        ...tx,
+        network,
+        page: this.pagination.page,
+      };
+    });
+
+    console.log("TONI update state with new Tx data state data", {
+      fetchedTransactions: newFetchedTransactions,
+    });
+    this.pagination.isLoading = false;
     this.store.updateState({
-      incomingTxLastFetchedBlocksByNetwork: {
-        ...currentBlocksByNetwork,
-        [network]: newLatestBlockHashByNetwork,
-      },
-      incomingTransactions: newIncomingTransactions,
+      incomingTransactions: newFetchedTransactions,
+      incomingTransactionsPagination: this.pagination,
     });
   }
 
@@ -230,8 +269,8 @@ export default class IncomingTransactionsController {
   }
 
   async _fetchTxs(address, fromBlock, networkType) {
-    // TODO TONI EARLY EXIT FOR DISABLE
-    return {};
+    // // TODO TONI EARLY EXIT FOR DISABLE
+    // return {};
     // let etherscanSubdomain = 'api'
     let subdomain = NETWORK_TYPE_TO_SUBDOMAIN_MAP[MAINNET]?.subdomain;
     // const currentNetworkID = NETWORK_TYPE_TO_ID_MAP[networkType]?.networkId
@@ -255,69 +294,65 @@ export default class IncomingTransactionsController {
       address
     );
     // const apiUrl = `https://${etherscanSubdomain}.etherscan.io`
-    const apiUrl = `https://${subdomain}.dream-factory.hr`;
-    let _web3 = new Web3(apiUrl);
-    const tolarAddress = ethAddressToTolarAddress(address);
-
-    const result = await _web3.tolar.getTransactionList(
-      (tolarAddress && [
-        tolarAddress,
-        "5493b8597964a2a7f0c93c49f9e4c4a170e0c42a5eb3beda0d", // TODO TONI: remove this address from here
-      ]) ||
-        [],
-      10,
-      0
+    // const apiUrl = `https://${subdomain}.dream-factory.hr`;
+    // let _web3 = new Web3(apiUrl);
+    // const tolarAddress = ethAddressToTolarAddress(address);
+    console.log("TONI get data for pagination here", this.pagination.page);
+    const result = await this.web3.tolar.getTransactionList(
+      [address],
+      this.pagination.pageSize,
+      (this.pagination.page - 1) * this.pagination.pageSize
     );
 
-    console.log(
-      "TONI TODO replace url with get transaction list for address",
-      result
-    );
-    let url = `${apiUrl}/api?module=account&action=txlist&address=${address}&tag=latest&page=1`;
+    // console.log(
+    //   "TONI TODO replace url with get transaction list for address",
+    //   result
+    // );
+    // let url = `${apiUrl}/api?module=account&action=txlist&address=${address}&tag=latest&page=1`;
 
-    if (fromBlock) {
-      url += `&startBlock=${parseInt(fromBlock, 10)}`;
-    }
+    // if (fromBlock) {
+    //   url += `&startBlock=${parseInt(fromBlock, 10)}`;
+    // }
     //TONI TODO removed api call, replace it with right one
     // const response = await fetch(url)
-    const response = {}; //await fetch(apiUrl)
+    // const response = {}; //await fetch(apiUrl)
     const parsedResponse = {
       status: "1",
       result: result.transactions,
       address,
-      tolarAddress,
     }; //await response.json()
 
     return {
       ...parsedResponse,
       address,
-      tolarAddress,
+      address,
       // currentNetworkID,
-      currentNetworkSubdomain,
+      //currentNetworkSubdomain,
     };
   }
 
   _processTxFetchResponse({ status, result = [], address, currentNetworkID }) {
-    console.log("incomingTx", status, result);
+    console.log("incomingTx", status, result, address);
     if (status === "1" && Array.isArray(result) && result.length > 0) {
       const remoteTxList = {};
       const remoteTxs = [];
       result.forEach((tx) => {
         if (!remoteTxList[tx.transaction_hash]) {
-          remoteTxs.push(this._normalizeTxFromEtherscan(tx, currentNetworkID));
+          remoteTxs.push(this._normalizeTxFromTolar(tx, currentNetworkID));
           remoteTxList[tx.transaction_hash] = 1;
         }
       });
-      console.log("incomingTx remoteTxs", remoteTxs);
-      const incomingTxs = remoteTxs.filter(
-        (tx) =>
-          (tx.receiver_address &&
-            tx.receiver_address.toLowerCase() === address.toLowerCase()) ||
-          tx.sender_address.toLowerCase() ===
-            "5493b8597964a2a7f0c93c49f9e4c4a170e0c42a5eb3beda0d".toLowerCase() // TODO TONI remove second part of filter cb
-      );
+      console.log("incomingTx remoteTxs", remoteTxs, address);
+      const incomingTxs = remoteTxs;
+      // .filter(
+      //   (tx) =>
+      //     (tx.receiver_address &&
+      //       tx.receiver_address.toLowerCase() === address.toLowerCase()) ||
+      //     (tx.sender_address &&
+      //       tx.sender_address.toLowerCase() === address.toLowerCase())
+      // );
       incomingTxs.sort((a, b) =>
-        a.confirmation_timestamp < b.confirmation_timestamp ? -1 : 1
+        a.confirmation_timestamp < b.confirmation_timestamp ? 1 : -1
       );
 
       let latestIncomingTxBlockNumber = null;
@@ -344,11 +379,25 @@ export default class IncomingTransactionsController {
     };
   }
 
-  _normalizeTxFromEtherscan(txMeta, currentNetworkID) {
+  async paginate(page) {
+    this.pagination.page = page;
+    console.log("TODO toni call pagination on page", this.pagination);
+    const address = this.preferencesController.getSelectedAddress();
+    this.pagination.isLoading = true;
+    this.store.updateState({
+      incomingTransactionsPagination: this.pagination,
+    });
+    await this._update({
+      address,
+    });
+  }
+
+  _normalizeTxFromTolar(txMeta, currentNetworkID) {
     console.log("incomingTx normalize", txMeta, currentNetworkID);
 
     const time = txMeta.confirmation_timestamp;
-    const status = txMeta.isError === "0" ? "confirmed" : "failed";
+    // const status = txMeta.isError === "0" ? "confirmed" : "failed";
+    const status = txMeta.transaction_hash ? "confirmed" : "failed";
     return {
       ...txMeta,
       blockNumber: txMeta.block_hash, // TONI TODO txMeta.blockNumber,

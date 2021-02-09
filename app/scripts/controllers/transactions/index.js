@@ -72,9 +72,15 @@ export default class TransactionController extends EventEmitter {
     this.getPermittedAccounts = opts.getPermittedAccounts;
     this.blockTracker = opts.blockTracker;
     this.signEthTx = async (...args) => {
-      const result = await opts.signTransaction(...args);
-      await this.addUnapprovedTransaction(result);
-      return result;
+      console.log("toni debug signEtxTx", ...args);
+      try {
+        const result = await opts.signTransaction(...args);
+        console.log("toni debug sign tx", result);
+        await this.addUnapprovedTransaction(result);
+        return result;
+      } catch (e) {
+        console.log("toni debug sign tx error", e);
+      }
     };
     this.inProcessOfSigning = new Set();
 
@@ -153,7 +159,6 @@ export default class TransactionController extends EventEmitter {
   @emits ${txMeta.id}:unapproved
   */
   addTx(txMeta) {
-    console.log("toni debug tx", txMeta);
     this.txStateManager.addTx(txMeta);
     this.emit(`${txMeta.id}:unapproved`, txMeta);
   }
@@ -177,7 +182,6 @@ export default class TransactionController extends EventEmitter {
     log.debug(
       `MetaMaskController newUnapprovedTransaction ${JSON.stringify(txParams)}`
     );
-    console.log("toni debug tx newUnapprovedTransaction", { txParams, opts });
     const initialTxMeta = await this.addUnapprovedTransaction(
       txParams,
       opts.origin
@@ -228,7 +232,6 @@ export default class TransactionController extends EventEmitter {
    * @returns {txMeta}
    */
   async addUnapprovedTransaction(txParams, origin) {
-    console.log("toni debug tx txparams", txParams);
     // validate
     // const normalizedTxParams = txUtils.normalizeTxParams(txParams);
 
@@ -568,32 +571,24 @@ export default class TransactionController extends EventEmitter {
       const txMeta = this.txStateManager.getTx(txId);
       const fromAddress = txMeta.txParams.body.sender_address; //txMeta.txParams.from;
       // wait for a nonce
-      let { customNonceValue } = txMeta;
-      customNonceValue = Number(customNonceValue);
+      // let { customNonceValue } = txMeta;
+      // customNonceValue = Number(customNonceValue);
       console.log("TONI debug send signed tx", txMeta);
-      nonceLock = await this.nonceTracker.getNonceLock(fromAddress);
+      // nonceLock = await this.nonceTracker.getNonceLock(fromAddress);
       // add nonce to txParams
       // if txMeta has lastGasPrice then it is a retry at same nonce with higher
       // gas price transaction and their for the nonce should not be calculated
-      const nonce = txMeta.lastGasPrice
-        ? txMeta.txParams.nonce
-        : nonceLock.nextNonce;
-      const customOrNonce =
-        customNonceValue === 0 ? customNonceValue : customNonceValue || nonce;
-
-      txMeta.txParams.nonce = customOrNonce; //ethUtil.addHexPrefix(customOrNonce.toString(16));
-      // add nonce debugging information to txMeta
-      txMeta.nonceDetails = nonceLock.nonceDetails;
-      if (customNonceValue) {
-        Object.assign(txMeta.nonceDetails, { customNonceValue });
-      }
-      this.txStateManager.updateTx(txMeta, "transactions#approveTransaction");
+      const nonce = await this.web3.tolar.getNonce(fromAddress);
+      this.txStateManager.updateTx(
+        { ...txMeta, nonce },
+        "transactions#approveTransaction"
+      );
       await this.web3.tolar.sendSignedTransaction(txMeta.txParams);
       // sign transaction
       // const rawTx = await this.signTransaction(txId);
       // await this.publishTransaction(txId, rawTx);
       // must set transaction to submitted/failed before releasing lock
-      nonceLock.releaseLock();
+      // nonceLock.releaseLock();
     } catch (err) {
       // this is try-catch wrapped so that we can guarantee that the nonceLock is released
       try {
@@ -609,6 +604,7 @@ export default class TransactionController extends EventEmitter {
       throw err;
     } finally {
       this.inProcessOfSigning.delete(txId);
+      this.txStateManager.setTxStatusConfirmed(txId);
     }
   }
 

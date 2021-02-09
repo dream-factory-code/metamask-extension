@@ -19,7 +19,7 @@ export default class TolarKeyring extends HdKeyring {
 
   constructor(opts) {
     super(opts);
-    this.web3 = new Web3("https://tolar-staging.dream-factory.hr");
+    this.web3 = new Web3("https://tolar-test.dream-factory.hr");
 
     this.type = type;
     console.log("TONI consturcted tolar keyring");

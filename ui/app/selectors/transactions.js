@@ -18,12 +18,19 @@ export const incomingTxListSelector = (state) => {
   // if (!showIncomingTransactions) {
   //   return []
   // }
-  // const { network } = state.metamask
-  // const selectedAddress = getSelectedAddress(state)
-  // return Object.values(state.metamask.incomingTransactions)
-  //   .filter(({ metamaskNetworkId, txParams }) => (
-  //     txParams.to === selectedAddress && metamaskNetworkId === network
-  //   ))
+  const { network } = state.metamask;
+  const selectedAddress = getSelectedAddress(state);
+
+  return Object.values(state.metamask.incomingTransactions).filter(
+    (txStateObject) =>
+      (txStateObject.sender_address === selectedAddress ||
+        txStateObject.receiver_address === selectedAddress) &&
+      txStateObject.network === network
+  );
+};
+
+export const incomingTxPaginationSelector = (state) => {
+  return state.metamask.incomingTransactionsPagination;
 };
 export const unapprovedMsgsSelector = (state) => state.metamask.unapprovedMsgs;
 export const currentNetworkTxListSelector = (state) =>

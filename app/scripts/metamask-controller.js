@@ -145,6 +145,7 @@ export default class MetamaskController extends EventEmitter {
       networkController: this.networkController,
       preferencesController: this.preferencesController,
       initState: initState.IncomingTransactionsController,
+      web3: this.web3,
     });
 
     // account tracker watches balances, nonces, and any code at their address
@@ -274,6 +275,7 @@ export default class MetamaskController extends EventEmitter {
     this.txController.on("newUnapprovedTx", () => opts.showUnapprovedTx());
 
     this.txController.on(`tx:status-update`, async (txId, status) => {
+      console.log("txstatus update: do i have id?", txId, status);
       if (status === "confirmed" || status === "failed") {
         const txMeta = this.txController.txStateManager.getTx(txId);
         this.platform.showTransactionNotification(txMeta);
@@ -473,6 +475,7 @@ export default class MetamaskController extends EventEmitter {
       preferencesController,
       threeBoxController,
       txController,
+      incomingTransactionsController,
     } = this;
 
     return {
@@ -521,10 +524,17 @@ export default class MetamaskController extends EventEmitter {
         networkController.setProviderType,
         networkController
       ),
+
       setCustomRpc: nodeify(this.setCustomRpc, this),
       updateAndSetCustomRpc: nodeify(this.updateAndSetCustomRpc, this),
       delCustomRpc: nodeify(this.delCustomRpc, this),
 
+      // Incoming Transaction controller (This is actually transaction list controller)
+      //TODO: Rename Controller
+
+      paginate: this.incomingTransactionsController.paginate.bind(
+        this.incomingTransactionsController
+      ),
       // PreferencesController
       setSelectedAddress: nodeify(
         preferencesController.setSelectedAddress,
@@ -831,32 +841,33 @@ export default class MetamaskController extends EventEmitter {
    */
   getBalance(address) {
     return new Promise(async (resolve, reject) => {
-      const cached = this.accountTracker.store.getState().accounts[address];
+      // const cached = this.accountTracker.store.getState().accounts[address];
 
-      if (cached && cached.balance) {
-        resolve(cached.balance);
-      } else {
-        const blockCount = await this.web3.tolar.getBlockCount();
-        const { balance } = await this.web3.tolar.getBalance(
-          address,
-          blockCount - 1
-        );
-        // const _query = new EthQuery(this.provider);
-        // const { balance } = await _query.sendAsync({
-        //   method: "tol_getLatestBalance",
-        //   params: [address],
-        // });
-        resolve(balance || "0");
-        // TODO TONI implement real metod
-        // ethQuery.getBalance(address, (error, balance) => {
-        //   if (error) {
-        //     reject(error);
-        //     log.error(error);
-        //   } else {
-        //     resolve(balance || "0x0");
-        //   }
-        // });
-      }
+      // if (cached && cached.balance) {
+      //   resolve(cached.balance);
+      // } else {
+      //   const blockCount = await this.web3.tolar.getBlockCount();
+      // const { balance } = await this.web3.tolar.getBalance(
+      //   address,
+      //   blockCount - 1
+      // );
+      const _query = new EthQuery(this.provider);
+
+      const { balance = "0" } = await _query.sendAsync({
+        method: "tol_getLatestBalance",
+        params: [address],
+      });
+      resolve(balance);
+      // TODO TONI implement real metod
+      // ethQuery.getBalance(address, (error, balance) => {
+      //   if (error) {
+      //     reject(error);
+      //     log.error(error);
+      //   } else {
+      //     resolve(balance || "0x0");
+      //   }
+      // });
+      // }
     });
   }
 
@@ -1299,6 +1310,7 @@ export default class MetamaskController extends EventEmitter {
    * @param {Object} req - (optional) the original request, containing the origin
    */
   async newUnapprovedTransaction(txParams, req) {
+    console.log("toni debug newUnapprovedTransaction", txParams, req);
     return await this.txController.newUnapprovedTransaction(txParams, req);
   }
 
@@ -1687,8 +1699,6 @@ export default class MetamaskController extends EventEmitter {
   }
 
   estimateGas(estimateGasParams) {
-    console.log("toni debug tx estimate gas", estimateGasParams);
-
     return this.accountTracker.web3.tolar
       .getNonce(estimateGasParams.sender_address)
       .then((nonce) =>

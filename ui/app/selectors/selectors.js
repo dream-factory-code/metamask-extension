@@ -348,3 +348,7 @@ export function getOriginOfCurrentTab(state) {
 export function getIpfsGateway(state) {
   return state.metamask.ipfsGateway;
 }
+
+export function getCurrentTxPage(state) {
+  return state?.metamask?.transactionPagination?.currentPage || 1;
+}

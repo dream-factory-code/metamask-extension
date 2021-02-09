@@ -57,7 +57,6 @@ export default class TxGasUtil {
   */
   async estimateTxGas(txMeta) {
     const { txParams } = txMeta;
-    console.log("TONI debug tx estimateGas", txParams);
     // estimate tx gas requirements
     return await this.query.estimateGas(txParams);
   }

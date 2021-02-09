@@ -7,6 +7,12 @@ import {
 import AccountDetailsModal from './account-details-modal.component'
 
 const mapStateToProps = (state) => {
+  console.log('toni debug address labels',  {
+    network: state.metamask.network,
+    selectedIdentity: getSelectedIdentity(state),
+    keyrings: state.metamask.keyrings,
+    rpcPrefs: getRpcPrefsForCurrentProvider(state),
+  })
   return {
     network: state.metamask.network,
     selectedIdentity: getSelectedIdentity(state),

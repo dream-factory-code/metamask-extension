@@ -34,7 +34,7 @@ export default class TransactionListItemDetails extends PureComponent {
     onClose: PropTypes.func.isRequired,
     recipientEns: PropTypes.string,
     recipientAddress: PropTypes.string,
-    rpcPrefs: PropTypes.object,
+    // rpcPrefs: PropTypes.object,
     senderAddress: PropTypes.string.isRequired,
     tryReverseResolveAddress: PropTypes.func.isRequired,
     senderNickname: PropTypes.string.isRequired,
@@ -48,7 +48,7 @@ export default class TransactionListItemDetails extends PureComponent {
   handleEtherscanClick = () => {
     const {
       transactionGroup: { primaryTransaction },
-      rpcPrefs,
+      // rpcPrefs,
     } = this.props;
     const { hash, metamaskNetworkId } = primaryTransaction;
 
@@ -145,7 +145,7 @@ export default class TransactionListItemDetails extends PureComponent {
       showRetry,
       recipientEns,
       recipientAddress,
-      rpcPrefs: { blockExplorerUrl } = {},
+      // rpcPrefs: { blockExplorerUrl } = {},
       senderAddress,
       isEarliestNonce,
       senderNickname,
@@ -154,7 +154,7 @@ export default class TransactionListItemDetails extends PureComponent {
       recipientNickname,
     } = this.props;
     const { primaryTransaction: transaction } = transactionGroup;
-    const { hash } = transaction;
+    const { transaction_hash: hash } = transactionGroup;
     console.log(
       "toni data",
       transactionGroup,
@@ -162,7 +162,7 @@ export default class TransactionListItemDetails extends PureComponent {
       showRetry,
       recipientEns,
       recipientAddress,
-      rpcPrefs,
+      // rpcPrefs,
       senderAddress,
       isEarliestNonce,
       senderNickname,
@@ -200,7 +200,7 @@ export default class TransactionListItemDetails extends PureComponent {
                   <Copy size={10} color="#3098DC" />
                 </Button>
               </Tooltip>
-              <Tooltip
+              {/* <Tooltip
                 title={
                   blockExplorerUrl
                     ? t("viewOnCustomBlockExplorer", [blockExplorerUrl])
@@ -215,8 +215,8 @@ export default class TransactionListItemDetails extends PureComponent {
                 >
                   <img src="/images/arrow-popout.svg" />
                 </Button>
-              </Tooltip>
-              {showRetry && (
+              </Tooltip> */}
+              {/* {showRetry && (
                 <Tooltip
                   title={
                     blockExplorerUrl
@@ -232,7 +232,7 @@ export default class TransactionListItemDetails extends PureComponent {
                     <i className="fa fa-sync"></i>
                   </Button>
                 </Tooltip>
-              )}
+              )} */}
             </div>
           </div>
           <div className="transaction-list-item-details__body">
@@ -267,18 +267,18 @@ export default class TransactionListItemDetails extends PureComponent {
               />
             </div>
             <div className="transaction-list-item-details__cards-container">
-              <TransactionBreakdown
-                nonce={transactionGroup.initialTransaction.txParams.nonce}
+              {/* <TransactionBreakdown
+                nonce={transactionGroup.nonce || "FIX: unknown"}
                 transaction={transaction}
                 className="transaction-list-item-details__transaction-breakdown"
-              />
-              <TransactionActivityLog
+              /> */}
+              {/* <TransactionActivityLog
                 transactionGroup={transactionGroup}
                 className="transaction-list-item-details__transaction-activity-log"
                 onCancel={this.handleCancel}
                 onRetry={this.handleRetry}
                 isEarliestNonce={isEarliestNonce}
-              />
+              /> */}
             </div>
           </div>
         </div>

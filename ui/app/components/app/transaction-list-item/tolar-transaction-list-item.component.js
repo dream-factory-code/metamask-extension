@@ -4,6 +4,8 @@ import classnames from "classnames";
 import { useHistory } from "react-router-dom";
 import ListItem from "../../ui/list-item";
 import { useTransactionDisplayData } from "../../../hooks/useTransactionDisplayData";
+import { useTolarTransactionDisplayData } from "../../../hooks/useTolarTransactionDisplayData";
+
 import Preloader from "../../ui/icon/preloader";
 import { useI18nContext } from "../../../hooks/useI18nContext";
 import { useCancelTransaction } from "../../../hooks/useCancelTransaction";
@@ -25,7 +27,8 @@ import TransactionStatus from "../transaction-status/transaction-status.componen
 import TransactionIcon from "../transaction-icon";
 import { useTransactionTimeRemaining } from "../../../hooks/useTransactionTimeRemaining";
 import IconWithLabel from "../../ui/icon-with-label";
-
+import Receive from "../../ui/icon/receive-icon.component";
+import Send from "../../ui/icon/send-icon.component";
 export default function TransactionListItem({
   transactionGroup,
   isEarliestNonce = false,
@@ -34,34 +37,34 @@ export default function TransactionListItem({
   const history = useHistory();
   const { hasCancelled } = transactionGroup;
   const [showDetails, setShowDetails] = useState(false);
+  // console.log("toni debug tx item", transactionGroup);
+  const { id, time: submittedTime, gas_price: gasPrice } = transactionGroup;
+  // const [cancelEnabled, cancelTransaction] = useCancelTransaction(
+  //   transactionGroup
+  // );
+  // const retryTransaction = useRetryTransaction(transactionGroup);
+  // const shouldShowSpeedUp = useShouldShowSpeedUp(
+  //   transactionGroup,
+  //   isEarliestNonce
+  // );
 
   const {
-    initialTransaction: { id },
-    primaryTransaction: { err, submittedTime, gasPrice },
-  } = transactionGroup;
-  const [cancelEnabled, cancelTransaction] = useCancelTransaction(
-    transactionGroup
-  );
-  const retryTransaction = useRetryTransaction(transactionGroup);
-  const shouldShowSpeedUp = useShouldShowSpeedUp(
-    transactionGroup,
-    isEarliestNonce
-  );
-
-  const {
-    title,
-    subtitle,
-    subtitleContainsOrigin,
-    date,
-    category,
-    primaryCurrency,
-    recipientAddress,
-    secondaryCurrency,
-    status,
-    isPending,
-    senderAddress,
-  } = useTransactionDisplayData(transactionGroup);
-
+    title = "",
+    subtitle = "",
+    subtitleContainsOrigin = "",
+    date = "",
+    category = "",
+    primaryCurrency = "",
+    recipientAddress = "",
+    secondaryCurrency = "",
+    status = "",
+    isPending = "",
+  } = useTolarTransactionDisplayData(transactionGroup);
+  const { sender_address: senderAddress = "" } = transactionGroup;
+  const otherAddressDisplayData =
+    category === "sent-tx"
+      ? `To: ${recipientAddress}`
+      : `From ${senderAddress}`;
   const timeRemaining = useTransactionTimeRemaining(
     isPending,
     isEarliestNonce,
@@ -80,20 +83,16 @@ export default function TransactionListItem({
   });
 
   const toggleShowDetails = useCallback(() => {
-    if (isUnapproved) {
-      history.push(`${CONFIRM_TRANSACTION_ROUTE}/${id}`);
-      return;
-    }
     setShowDetails((prev) => !prev);
   }, [isUnapproved, history, id]);
 
   const cancelButton = useMemo(() => {
     const btn = (
       <Button
-        onClick={cancelTransaction}
+        // onClick={cancelTransaction}
         rounded
         className="transaction-list-item__header-button"
-        disabled={!cancelEnabled}
+        // disabled={!cancelEnabled}
       >
         {t("cancel")}
       </Button>
@@ -102,7 +101,8 @@ export default function TransactionListItem({
       return null;
     }
 
-    return cancelEnabled ? (
+    return "";
+    cancelEnabled ? (
       btn
     ) : (
       <Tooltip title={t("notEnoughGas")} position="bottom">
@@ -113,81 +113,61 @@ export default function TransactionListItem({
     isPending,
     t,
     isUnapproved,
-    cancelEnabled,
-    cancelTransaction,
+    // cancelEnabled,
+    // cancelTransaction,
     hasCancelled,
   ]);
 
-  const speedUpButton = useMemo(() => {
-    if (!shouldShowSpeedUp || !isPending || isUnapproved) {
-      return null;
-    }
-    return (
-      <Button
-        type="secondary"
-        rounded
-        onClick={retryTransaction}
-        className="transaction-list-item-details__header-button"
-      >
-        {t("speedUp")}
-      </Button>
-    );
-  }, [shouldShowSpeedUp, isUnapproved, t, isPending, retryTransaction]);
+  // const speedUpButton = useMemo(() => {
+  //   if (!shouldShowSpeedUp || !isPending || isUnapproved) {
+  //     return null;
+  //   }
+  //   return (
+  //     <Button
+  //       type="secondary"
+  //       rounded
+  //       // onClick={retryTransaction}
+  //       className="transaction-list-item-details__header-button"
+  //     >
+  //       {t("speedUp")}
+  //     </Button>
+  //   );
+  // }, [shouldShowSpeedUp, isUnapproved, t, isPending /*retryTransaction*/]);
 
   return (
     <>
       <ListItem
-        onClick={toggleShowDetails}
+        // onClick={toggleShowDetails}
         className={className}
         title={title}
         titleIcon={
-          !isUnapproved &&
-          isPending &&
-          isEarliestNonce && (
-            <IconWithLabel
-              icon={<Preloader size={16} color="#D73A49" />}
-              label={timeRemaining}
-            />
+          category === "sent-tx" ? (
+            <Send size={24} color={"red"} />
+          ) : (
+            <Receive size={24} color={"green"} />
           )
         }
-        icon={<TransactionIcon category={category} status={status} />}
+        // icon={<TransactionIcon category={category} status={status} />}
         subtitle={
-          <h3>
-            <TransactionStatus
-              isPending={isPending}
-              isEarliestNonce={isEarliestNonce}
-              error={err}
-              date={date}
-              status={status}
-            />
-            <span
-              className={
-                subtitleContainsOrigin
-                  ? "transaction-list-item__origin"
-                  : "transaction-list-item__address"
-              }
-              title={subtitle}
-            >
-              {subtitle}
-            </span>
-          </h3>
+          <>
+            <h2>{otherAddressDisplayData}</h2>
+
+            <h3>{date}</h3>
+          </>
         }
         rightContent={
-          !isSignatureReq &&
-          !isApproval && (
-            <>
-              <h2 className="transaction-list-item__primary-currency">
-                {primaryCurrency}
-              </h2>
-              <h3 className="transaction-list-item__secondary-currency">
-                {secondaryCurrency}
-              </h3>
-            </>
-          )
+          <>
+            <h2 className="transaction-list-item__primary-currency">
+              {primaryCurrency}
+            </h2>
+            <h3 className="transaction-list-item__secondary-currency">
+              {secondaryCurrency}
+            </h3>
+          </>
         }
       >
         <div className="transaction-list-item__pending-actions">
-          {speedUpButton}
+          {/* {speedUpButton} */}
           {cancelButton}
         </div>
       </ListItem>
@@ -196,15 +176,15 @@ export default function TransactionListItem({
           title={title}
           onClose={toggleShowDetails}
           transactionGroup={transactionGroup}
-          senderAddress={senderAddress}
-          recipientAddress={recipientAddress}
-          onRetry={retryTransaction}
-          showRetry={status === FAILED_STATUS}
-          showSpeedUp={shouldShowSpeedUp}
-          isEarliestNonce={isEarliestNonce}
-          onCancel={cancelTransaction}
-          showCancel={isPending && !hasCancelled}
-          cancelDisabled={!cancelEnabled}
+          // senderAddress={senderAddress}
+          // recipientAddress={recipientAddress}
+          // onRetry={retryTransaction}
+          // showRetry={status === FAILED_STATUS}
+          // showSpeedUp={shouldShowSpeedUp}
+          // isEarliestNonce={isEarliestNonce}
+          // onCancel={cancelTransaction}
+          // showCancel={isPending && !hasCancelled}
+          // cancelDisabled={!cancelEnabled}
         />
       )}
     </>

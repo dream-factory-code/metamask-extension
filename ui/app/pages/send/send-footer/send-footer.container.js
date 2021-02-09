@@ -122,11 +122,11 @@ function mapDispatchToProps(dispatch) {
     },
 
     addToAddressBookIfNew: (newAddress, toAccounts, nickname = "") => {
-      const hexPrefixedAddress = ethUtil.addHexPrefix(newAddress);
-      if (addressIsNew(toAccounts, hexPrefixedAddress)) {
-        // TODO: nickname, i.e. addToAddressBook(recipient, nickname)
-        dispatch(addToAddressBook(hexPrefixedAddress, nickname));
-      }
+      // const hexPrefixedAddress = ethUtil.addHexPrefix(newAddress);
+      // if (addressIsNew(toAccounts, hexPrefixedAddress)) {
+      //   // TODO: nickname, i.e. addToAddressBook(recipient, nickname)
+      //   dispatch(addToAddressBook(hexPrefixedAddress, nickname));
+      // }
     },
   };
 }

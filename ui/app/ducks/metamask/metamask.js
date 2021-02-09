@@ -58,6 +58,7 @@ export default function reduceMetamask(state = {}, action) {
     participateInMetaMetrics: null,
     metaMetricsSendCount: 0,
     nextNonce: null,
+    transactionPagination: {},
     ...state,
   };
   switch (action.type) {
@@ -330,6 +331,15 @@ export default function reduceMetamask(state = {}, action) {
         currentNetworkTxList,
       };
     }
+
+    case actionConstants.TX_PAGE_CHANGE:
+      return {
+        ...metamaskState,
+        transactionPagination: {
+          ...metamaskState.transactionPagination,
+          page: action.value,
+        },
+      };
 
     case actionConstants.SET_PARTICIPATE_IN_METAMETRICS:
       return {

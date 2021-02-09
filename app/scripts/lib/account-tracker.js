@@ -259,15 +259,15 @@ export default class AccountTracker {
       this._currentBlockNumber.block_index ||
       (await this.web3.tolar.getBlockCount());
     //const tolarAddress = ethAddressToTolarAddress(address);
-    const { balance } = await this.web3.tolar.getBalance(
-      address,
-      blockCount - 1
-    );
+    // const { balance } = await this.web3.tolar.getBalance(
+    //   address,
+    //   blockCount - 1
+    // );
     // TODO TONI CLEANUP
-    // const { balance } = await this._query.sendAsync({
-    //   method: "tol_getLatestBalance",
-    //   params: [address],
-    // });
+    const { balance = "0" } = await this._query.sendAsync({
+      method: "tol_getLatestBalance",
+      params: [address],
+    });
     //await this._query.getBalance(address);
     const result = { address, balance /*, tolarAddress*/ };
     // update accounts state

@@ -107,7 +107,6 @@ export default class ConfirmTransactionBase extends Component {
     mostRecentOverviewPage: PropTypes.string.isRequired,
     isMainnet: PropTypes.bool,
   };
-
   state = {
     submitting: false,
     submitError: null,
@@ -126,6 +125,7 @@ export default class ConfirmTransactionBase extends Component {
       toAddress,
       tryReverseResolveAddress,
     } = this.props;
+
     const {
       customNonceValue: prevCustomNonceValue,
       nextNonce: prevNextNonce,
@@ -260,6 +260,10 @@ export default class ConfirmTransactionBase extends Component {
       getNextNonce,
       isMainnet,
     } = this.props;
+    console.log("this props", this.props);
+    const total =
+      this.props.txData.txParams.body.amount +
+      Number(hexTransactionFee.replace(/^0x/, ""));
 
     if (hideDetails) {
       return null;
@@ -287,7 +291,7 @@ export default class ConfirmTransactionBase extends Component {
                   : ""
               }
             />
-            {advancedInlineGasShown || notMainnetOrTest ? (
+            {/* {advancedInlineGasShown || notMainnetOrTest ? (
               <AdvancedGasInputs
                 updateCustomGasPrice={(newGasPrice) =>
                   updateGasAndCalculate({ ...customGas, gasPrice: newGasPrice })
@@ -301,7 +305,7 @@ export default class ConfirmTransactionBase extends Component {
                 customPriceIsSafe
                 isSpeedUp={false}
               />
-            ) : null}
+            ) : null} */}
           </div>
           <div
             className={
@@ -310,7 +314,7 @@ export default class ConfirmTransactionBase extends Component {
           >
             <ConfirmDetailRow
               label="Total"
-              value={hexTransactionTotal}
+              value={total}
               primaryText={primaryTotalTextOverride}
               secondaryText={
                 hideFiatConversion
@@ -517,24 +521,25 @@ export default class ConfirmTransactionBase extends Component {
       },
       () => {
         this._removeBeforeUnload();
-        metricsEvent({
-          eventOpts: {
-            category: "Transactions",
-            action: "Confirm Screen",
-            name: "Transaction Completed",
-          },
-          customVariables: {
-            recipientKnown: null,
-            functionType:
-              actionKey ||
-              getMethodName(methodData.name) ||
-              "contractInteraction",
-            origin,
-          },
-        });
+        // metricsEvent({
+        //   eventOpts: {
+        //     category: "Transactions",
+        //     action: "Confirm Screen",
+        //     name: "Transaction Completed",
+        //   },
+        //   customVariables: {
+        //     recipientKnown: null,
+        //     functionType:
+        //       actionKey ||
+        //       getMethodName(methodData.name) ||
+        //       "contractInteraction",
+        //     origin,
+        //   },
+        // });
 
         // setMetaMetricsSendCount(metaMetricsSendCount + 1)
         //   .then(() => {
+        console.log("toni debug send tx", onSubmit, txData);
         if (onSubmit) {
           Promise.resolve(onSubmit(txData)).then(() => {
             this.setState({
@@ -571,7 +576,7 @@ export default class ConfirmTransactionBase extends Component {
 
   renderTitleComponent() {
     const { title, titleComponent, hexTransactionAmount } = this.props;
-
+    const amount = this.props.txData.txParams.body.amount;
     // Title string passed in by props takes priority
     if (title) {
       return null;
@@ -580,7 +585,7 @@ export default class ConfirmTransactionBase extends Component {
     return (
       titleComponent || (
         <UserPreferencedCurrencyDisplay
-          value={hexTransactionAmount}
+          value={amount}
           type={PRIMARY}
           showEthLogo
           ethLogoHeight="26"

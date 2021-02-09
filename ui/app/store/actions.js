@@ -24,13 +24,14 @@ import {
 import { switchedToUnconnectedAccount } from "../ducks/alerts/unconnected-account";
 import { getUnconnectedAccountAlertEnabledness } from "../ducks/metamask/metamask";
 import * as actionConstants from "./actionConstants";
-// import Web3TolarAccounts from "web3-tolar-accounts";
+// import { dropdownIndicatorCSS } from "react-select/src/components/indicators";
 
 let background = null;
 let promisifiedBackground = null;
 export function _setBackgroundConnection(backgroundConnection) {
   background = backgroundConnection;
   promisifiedBackground = pify(background);
+  console.log("pagination debug", background);
 }
 
 export function goHome() {
@@ -925,7 +926,6 @@ const updateMetamaskStateFromBackground = () => {
 export function updateTransaction(txData) {
   return (dispatch) => {
     dispatch(showLoadingIndication());
-    console.log("TONI debug tx state", txData);
 
     return new Promise((resolve, reject) => {
       background.updateTransaction(txData, (err) => {
@@ -952,6 +952,7 @@ export function updateTransaction(txData) {
 }
 
 export function updateAndApproveTx(txData) {
+  console.log("toni debug update and approve tx", txData);
   return (dispatch) => {
     dispatch(showLoadingIndication());
     return new Promise((resolve, reject) => {
@@ -1817,6 +1818,59 @@ export function showNetworkDropdown() {
 export function hideNetworkDropdown() {
   return {
     type: actionConstants.NETWORK_DROPDOWN_CLOSE,
+  };
+}
+
+export function setTxPage() {
+  return {
+    type: actionConstants.TX_PAGE_CHANGE,
+    payload: page,
+  };
+}
+
+export async function paginate(page) {
+  await promisifiedBackground.paginate(page);
+}
+
+export function paginate2(page) {
+  console.log("TONI pagination action call");
+  return (dispatch) => {
+    dispatch(showLoadingIndication());
+    return new Promise((resolve, reject) => {
+      try {
+        promisifiedBackground.paginate(page, (err) => {
+          dispatch(hideLoadingIndication());
+
+          if (err) {
+            // TODO DISPLAY ERROR
+            log.error(err.message);
+            reject(err);
+            return;
+          }
+
+          resolve(page);
+        });
+      } catch (e) {
+        console.log("TONI debug pagination action", e);
+        reject(e);
+      }
+    })
+      .then(() => updateMetamaskStateFromBackground())
+      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then(() => {
+        dispatch(hideLoadingIndication());
+        return txData;
+      })
+      .catch((err) => {
+        dispatch(hideLoadingIndication());
+        return Promise.reject(err);
+      });
+  };
+
+  console.debug("TONI debug state tx_page_change", page);
+  return {
+    type: actionConstants.TX_PAGE_CHANGE,
+    payload: page,
   };
 }
 

@@ -281,11 +281,9 @@ export function updateGasAndCalculate({ gasLimit, gasPrice }) {
       ...txData,
       txParams: {
         ...txData.txParams,
-        gas: addHexPrefix(gasLimit),
-        gasPrice: addHexPrefix(gasPrice),
+        body: { ...txData.txParams.body, gas: gasLimit, gas_price: gasPrice },
       },
     };
-
     dispatch(updateTxDataAndCalculate(newTxData));
   };
 }
@@ -306,12 +304,11 @@ function increaseFromLastGasPrice(txData) {
     !previousGasPrice || gasPriceBelowMinimum
       ? minimumGasPrice
       : previousGasPrice;
-
   return {
     ...txData,
     txParams: {
       ...txData.txParams,
-      gasPrice,
+      body: { ...txData.txParams.body, gas_price: gasPrice },
     },
   };
 }
@@ -328,7 +325,6 @@ export function updateTxDataAndCalculate(txData) {
     const {
       txParams: { value = "0x0", gas: gasLimit = "0x0", gasPrice = "0x0" } = {},
     } = txData;
-
     const fiatTransactionAmount = getValueFromWeiHex({
       value,
       fromCurrency: nativeCurrency,
@@ -406,7 +402,6 @@ export function setTransactionToConfirm(transactionId) {
       console.error(`Transaction with id ${transactionId} not found`);
       return;
     }
-
     if (transaction.txParams) {
       const { lastGasPrice } = transaction;
       const txData = lastGasPrice
@@ -418,7 +413,6 @@ export function setTransactionToConfirm(transactionId) {
 
       if (txParams.data) {
         const { data } = txParams;
-
         const tokenData = getTokenData(data);
         dispatch(updateTokenData(tokenData));
       }

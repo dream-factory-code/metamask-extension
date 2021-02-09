@@ -20,7 +20,6 @@ const mapDispatchToProps = (dispatch) => {
     editTransaction: (txData) => {
       const { id, txParams } = txData;
       const { from, gas: gasLimit, gasPrice, to, value: amount } = txParams;
-      console.log("TONI debug tx state", txParams);
       dispatch(
         updateSend({
           from,

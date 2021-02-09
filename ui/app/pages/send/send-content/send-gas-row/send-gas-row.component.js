@@ -35,7 +35,10 @@ export default class SendGasRow extends Component {
 
   renderAdvancedOptionsButton() {
     const { metricsEvent } = this.context;
-    const { showCustomizeGasModal, isMainnet } = this.props;
+    const { showCustomizeGasModal } = this.props;
+    //TODO TONI isMainnet hardcoded to false to override display gas controls behaviour
+    const isMainnet = false;
+
     // Tests should behave in same way as mainnet, but are using Localhost
     if (!isMainnet && !process.env.IN_TEST) {
       return null;
@@ -91,10 +94,10 @@ export default class SendGasRow extends Component {
       gasPrice,
       gasLimit,
       insufficientBalance,
-      isMainnet,
     } = this.props;
     const { metricsEvent } = this.context;
-
+    //TODO TONI isMainnet hardcoded to false to override display gas controls behaviour
+    const isMainnet = false;
     const gasPriceButtonGroup = (
       <div>
         <GasPriceButtonGroup

@@ -225,8 +225,6 @@ export default class TransactionStateManager extends EventEmitter {
     @param {string} [note] - a note about the update for history
   */
   updateTx(txMeta, note) {
-    console.log("TONI debug tx state", txMeta, note);
-
     // normalize and validate txParams if present
     // if (txMeta.txParams) {
     //   txMeta.txParams = this.normalizeAndValidateTxParams(txMeta.txParams);

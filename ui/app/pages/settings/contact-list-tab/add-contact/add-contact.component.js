@@ -62,21 +62,23 @@ export default class AddContact extends PureComponent {
 
   validate = async (address) => {
     try {
-      const valid =
-        this.isValidTolarAddressFormat(address) &&
-        (await validateTolarAddress(address));
-      const validEnsAddress = isValidDomainName(address);
+      const valid = this.isValidTolarAddressFormat(address);
+      await validateTolarAddress(address);
+      // &&
+      // (await validateTolarAddress(address));
+      //  const validEnsAddress = isValidDomainName(address);
       console.log("TONI debug validate address", {
         address,
         valid,
-        validEnsAddress,
+        //validEnsAddress,
       });
-      if (valid || validEnsAddress || address === "") {
-        this.setState({ error: "", ethAddress: address });
+      if (valid || address === "") {
+        this.setState({ error: "", ethAddress: address, tolAddress: address });
       } else {
         this.setState({ error: "Invalid Address" });
       }
     } catch (e) {
+      console.log("TONI debug validate address error", e);
       this.setState({ error: "Invalid Address" });
     }
   };

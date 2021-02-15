@@ -46,7 +46,7 @@ export default function CurrencyDisplay({
       <span className="currency-display-component__text">
         {/* {parts.prefix}
         {parts.value} */}
-        {balance}
+        {balance || ""}
       </span>
       {currencyDisplay && (
         <span className="currency-display-component__suffix">

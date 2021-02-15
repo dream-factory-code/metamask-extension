@@ -223,7 +223,7 @@ export default class SignatureRequestOriginal extends Component {
           })}
         >
           {notice}
-          {type === MESSAGE_TYPE.ETH_SIGN ? (
+          {/* {type === MESSAGE_TYPE.ETH_SIGN ? (
             <span
               className="request-signature__help-link"
               onClick={() => {
@@ -235,12 +235,11 @@ export default class SignatureRequestOriginal extends Component {
             >
               {this.context.t("learnMore")}
             </span>
-          ) : null}
+          ) : null} */}
         </div>
         <div className="request-signature__rows">
           {rows.map(({ name, value }, index) => {
             if (typeof value === "boolean") {
-              // eslint-disable-next-line no-param-reassign
               value = value.toString();
             }
             return (

@@ -83,16 +83,11 @@ const mapStateToProps = (state, ownProps) => {
         gasPrice: send.gasPrice || getFastPriceEstimateInHexWEI(state, true),
         value: sendToken ? "0x0" : send.amount,
       };
-  console.log("toni debug gasPrice", { txParams });
   const { gasPrice: currentGasPrice, gas: currentGasLimit, value } = txParams;
   const customModalGasPriceInHex = getCustomGasPrice(state) || currentGasPrice;
   const customModalGasLimitInHex =
     getCustomGasLimit(state) || currentGasLimit || 21000; // TONI gas hax "0x5208";
-  console.log("toni debug gasPrice", {
-    state: getCustomGasLimit(state),
-    currentGasLimit,
-    default: 21000, // TONI gas hax "0x5208",
-  });
+
   const customGasTotal = calcGasTotal(
     customModalGasLimitInHex,
     customModalGasPriceInHex
@@ -138,14 +133,6 @@ const mapStateToProps = (state, ownProps) => {
       ? subtractHexWEIsFromRenderableEth(balance, customGasTotal)
       : addHexWEIsToRenderableEth(value, "0x0");
 
-  console.log("toni debug gasPrice", {
-    currentCurrency,
-    conversionRate,
-    newTotalFiat,
-    newTotalEth,
-    customGasPrice,
-    customGasLimit,
-  });
   const insufficientBalance = maxModeOn
     ? false
     : !isBalanceSufficient({
@@ -258,7 +245,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchBasicGasAndTimeEstimates()),
     setGasTotal: (total) => dispatch(setGasTotal(total)),
     setAmountToMax: (maxAmountDataObject) => {
-      console.log("toni debug amount", maxAmountDataObject);
       dispatch(updateSendErrors({ amount: null }));
       dispatch(updateSendAmount(calcMaxAmount(maxAmountDataObject)));
     },
@@ -366,7 +352,6 @@ function calcCustomGasPrice(customGasPriceInHex) {
 }
 
 function calcCustomGasLimit(customGasLimitInHex) {
-  console.log("toni debug gasLimit", customGasLimitInHex);
   return parseInt(customGasLimitInHex, 16);
 }
 

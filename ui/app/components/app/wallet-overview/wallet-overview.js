@@ -7,7 +7,7 @@ const WalletOverview = ({ balance, buttons, className, icon }) => {
     <div className={classnames("wallet-overview", className)}>
       <div className="wallet-overview__balance">
         {/* { icon } */}
-        {balance}
+        {balance || ""}
       </div>
       <div className="wallet-overview__buttons">{buttons}</div>
     </div>

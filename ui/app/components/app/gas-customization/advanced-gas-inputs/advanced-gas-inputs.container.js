@@ -31,7 +31,6 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     updateCustomGasPrice,
     updateCustomGasLimit,
   } = ownProps;
-  console.log("TONI debug gas", { customGasPrice, customGasLimit });
   return {
     ...ownProps,
     ...stateProps,

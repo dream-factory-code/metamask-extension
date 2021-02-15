@@ -59,7 +59,7 @@ const EthOverview = ({ className }) => {
                   // "eth-overview__cached-balance": balanceIsCached,
                 })}
                 data-testid="eth-overview__primary-currency"
-                value={balance}
+                value={balance || ""}
                 type={PRIMARY}
                 ethNumberOfDecimals={4}
                 hideTitle

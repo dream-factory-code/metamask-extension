@@ -82,14 +82,7 @@ export default class TokenInput extends PureComponent {
     const hexValue = multiplyCurrencies(decimalValue || 0, multiplier, {
       toNumericBase: "hex",
     });
-    console.log(
-      "TONI debug amount",
-      { args },
-      "\n decimal value",
-      decimalValue,
-      "\n hexValue",
-      hexValue
-    );
+
     this.setState({ hexValue, decimalValue });
     onChange(hexValue);
   };

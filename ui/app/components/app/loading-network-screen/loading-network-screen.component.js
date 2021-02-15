@@ -42,7 +42,6 @@ export default class LoadingNetworkScreen extends PureComponent {
     const providerName = provider.type;
 
     let name;
-    // console.log("TONI debug loader", loadingMessage);
     if (providerName === "mainnet") {
       name = "Connecting to Main Net" || this.context.t("connectingToMainnet");
     } else if (providerName === "stagingnet") {

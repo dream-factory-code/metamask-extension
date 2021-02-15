@@ -39,7 +39,6 @@ export {
 };
 
 function calcGasTotal(gasLimit = "0", gasPrice = "0") {
-  // console.log("toni debug gasPrice", { gasLimit, gasPrice });
   return multiplyCurrencies(gasLimit, gasPrice, {
     toNumericBase: "dec",
     multiplicandBase: 10,
@@ -54,13 +53,6 @@ function isBalanceSufficient({
   gasTotal = "0x0",
   primaryCurrency,
 }) {
-  console.log("toni debug isBalance sufficient", {
-    amount,
-    balance,
-    conversionRate,
-    gasTotal,
-    primaryCurrency,
-  });
   const totalAmount = addCurrencies(amount, gasTotal, {
     aBase: 16,
     bBase: 16,
@@ -210,16 +202,7 @@ async function estimateGas({
   estimateGasMethod,
 }) {
   const paramsForGasEstimate = { from: selectedAddress, value, gasPrice };
-  console.log("TONI DEBUG updateGas estimateGas", {
-    selectedAddress,
-    sendToken,
-    blockGasLimit,
-    to,
-    value,
-    data,
-    gasPrice,
-    estimateGasMethod,
-  });
+
   // if recipient has no code, gas is 21k max:
   if (!sendToken && !data) {
     const code = Boolean(to); //TONI TODO: && (await global.eth.getCode(to));
@@ -374,7 +357,6 @@ function generateTokenTransferData({
 }
 
 function getToAddressForGasUpdate(...addresses) {
-  console.log("TONI debug updateGas", { ...addresses });
   return [...addresses, ""]
     .find((str) => str !== undefined && str !== null)
     .toLowerCase();

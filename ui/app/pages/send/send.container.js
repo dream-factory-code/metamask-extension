@@ -81,26 +81,13 @@ function mapDispatchToProps(dispatch) {
       value,
       data,
     }) => {
-      console.log("TONI debug updateGas", {
-        blockGasLimit,
-        editingTransactionId,
-        gasLimit,
-        gasPrice,
-        selectedAddress,
-        sendToken,
-        to,
-        value,
-        data,
-      });
       editingTransactionId
         ? dispatch(
             setGasTotal(() => {
-              console.log("toni debug setGas", { gasLimit, gasPrice });
               return calcGasTotal(gasLimit, gasPrice);
             })
           )
         : dispatch(() => {
-            console.log("toni debug setGas", { gasLimit, gasPrice });
             return updateGasData({
               gasPrice,
               selectedAddress,

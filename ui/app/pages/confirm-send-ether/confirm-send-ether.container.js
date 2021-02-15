@@ -10,7 +10,6 @@ const mapStateToProps = (state) => {
     confirmTransaction: { txData: { txParams } = {} },
   } = state;
   const { confirmTransaction } = state;
-  console.log("toni debug send ether", confirmTransaction);
   return {
     txParams,
   };

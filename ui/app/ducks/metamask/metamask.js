@@ -325,7 +325,6 @@ export default function reduceMetamask(state = {}, action) {
       currentNetworkTxList = currentNetworkTxList.map((tx) => {
         if (tx.id === txId) {
           const newTx = { ...tx };
-          console.log("toni debug setGas update tx params", { tx, newTx });
           newTx.txParams = value;
           return newTx;
         }

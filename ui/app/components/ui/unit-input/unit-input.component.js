@@ -33,11 +33,7 @@ export default class UnitInput extends PureComponent {
     const { value: prevPropsValue } = prevProps;
     const { value: propsValue } = this.props;
     const { value: stateValue } = this.state;
-    console.log("TONI debug amount", {
-      prevPropsValue,
-      propsValue,
-      stateValue,
-    });
+
     if (prevPropsValue !== propsValue && propsValue !== stateValue) {
       this.setState({ value: propsValue });
     }

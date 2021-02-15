@@ -4,7 +4,6 @@ import UserPreferencedCurrencyInput from "./user-preferenced-currency-input.comp
 
 const mapStateToProps = (state) => {
   const { useNativeCurrencyAsPrimaryCurrency } = getPreferences(state);
-  console.log("toni debug amount flow ", useNativeCurrencyAsPrimaryCurrency);
   return {
     useNativeCurrencyAsPrimaryCurrency,
   };

@@ -101,7 +101,15 @@ export default class SendFooter extends Component {
     //       unapprovedTxs,
     //     })
     //   : sign({ data, sendToken, to, amount, from, gas, gasPrice });
-    await sign({ data, sendToken, to, amount, from, gas, gasPrice });
+    await sign({
+      data,
+      sendToken,
+      to,
+      amount: amount === "0x0" ? "0" : amount,
+      from,
+      gas,
+      gasPrice,
+    });
     // Promise.resolve(promise).then(() => {
     //   // metricsEvent({
     //   //   eventOpts: {
@@ -115,6 +123,7 @@ export default class SendFooter extends Component {
     //   // });
     //   history.push(CONFIRM_TRANSACTION_ROUTE);
     // });
+    console.log("toni debug history push confirm tx");
     history.push(CONFIRM_TRANSACTION_ROUTE);
   }
 
@@ -138,15 +147,7 @@ export default class SendFooter extends Component {
       !(data || to) ||
       gasLimitTooLow ||
       gasIsLoading;
-    console.log("TONI debug next gas disabled next", {
-      inError,
-      noTotal: !gasTotal,
-      missingTokenBalance: missingTokenBalance,
-      noDataOrTo: !(data || to),
-      gasLimitTooLow,
-      gasLimit,
-      gasIsLoading,
-    });
+
     return shouldBeDisabled;
   }
 

@@ -73,7 +73,7 @@ const TolarOverview = ({ className }) => {
                 })}
                 data-testid="eth-overview__primary-currency"
               />
-              {balance} TOL
+              {balance || ""} TOL
             </div>
             {balanceIsCached ? (
               <span className="eth-overview__cached-star">*</span>

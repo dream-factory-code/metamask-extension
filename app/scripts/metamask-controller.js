@@ -27,7 +27,7 @@ import EthQuery from "eth-query";
 import nanoid from "nanoid";
 import contractMap from "eth-contract-metadata";
 import {
-  AddressBookController,
+  // AddressBookController,
   // CurrencyRateController,
   PhishingController,
 } from "@metamask/controllers";
@@ -67,6 +67,8 @@ import backgroundMetaMetricsEvent from "./lib/background-metametrics";
 
 import TolarKeyring from "./tolar-keyring/tolar-keyring";
 import { TolarKeyringController } from "./controllers/tolar-keyring/tolar-keyring-controller";
+import { TolarAddressBookController } from "./controllers/tolar-address-book/TolarAddressBookController";
+
 import Web3 from "@dreamfactoryhr/web3t";
 
 export default class MetamaskController extends EventEmitter {
@@ -233,7 +235,7 @@ export default class MetamaskController extends EventEmitter {
       web3: this.web3,
     });
 
-    this.addressBookController = new AddressBookController(
+    this.addressBookController = new TolarAddressBookController(
       undefined,
       initState.AddressBookController
     );
@@ -450,7 +452,6 @@ export default class MetamaskController extends EventEmitter {
   getState() {
     const { vault } = this.keyringController.store.getState();
     const isInitialized = Boolean(vault);
-    console.log("TONI debug loader", { isInitialized }, { vault });
 
     return {
       ...{ isInitialized },
@@ -1316,7 +1317,6 @@ export default class MetamaskController extends EventEmitter {
    * @param {Object} req - (optional) the original request, containing the origin
    */
   async newUnapprovedTransaction(txParams, req) {
-    console.log("toni debug newUnapprovedTransaction", txParams, req);
     return await this.txController.newUnapprovedTransaction(txParams, req);
   }
 
@@ -2285,9 +2285,9 @@ export default class MetamaskController extends EventEmitter {
     await this.preferencesController.removeFromFrequentRpcList(rpcTarget);
   }
 
-  async initializeThreeBox() {
-    await this.threeBoxController.init();
-  }
+  // async initializeThreeBox() {
+  //   await this.threeBoxController.init();
+  // }
 
   /**
    * Sets whether or not to use the blockie identicon format.

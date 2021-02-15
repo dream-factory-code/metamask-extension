@@ -48,9 +48,7 @@ export default class IncomingTransactionsController {
       if (!selectedAddress) return;
       //const newBlockNumberDec = parseInt(latestBlock, 16);
       const { newBlockNumberDec } = latestBlock;
-      console.log(
-        "toni debug update, receive signal here from ui, on latest block"
-      );
+
       await this._update({
         address: selectedAddress,
         newBlockNumberDec,
@@ -106,10 +104,7 @@ export default class IncomingTransactionsController {
         if (currSelectedAddress === prevSelectedAddress) {
           return;
         }
-        console.log(
-          "toni debug update, receive signal here from ui, preferences store update"
-        );
-        this.pagination = {
+        pagination = {
           page: 1,
           pageSize: 5,
           isLoading: false,
@@ -121,9 +116,6 @@ export default class IncomingTransactionsController {
     );
 
     this.networkController.on("networkDidChange", async (newType) => {
-      console.log(
-        "toni debug update, receive signal here from ui, network did change"
-      );
       this.pagination = {
         page: 1,
         pageSize: 5,

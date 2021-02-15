@@ -151,6 +151,7 @@ export default class EnsInput extends Component {
       const cleanAddress = address.replace(/^0x54/, "");
       return cleanAddress.length === 50;
     };
+
     if (onValidAddressTyped && isValidTolarAddress(input)) {
       onValidAddressTyped(input.toLowerCase());
     }

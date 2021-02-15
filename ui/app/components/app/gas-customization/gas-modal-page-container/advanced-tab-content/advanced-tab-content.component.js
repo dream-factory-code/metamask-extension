@@ -69,10 +69,7 @@ export default class AdvancedTabContent extends Component {
       transactionFee,
       isEthereumNetwork,
     } = this.props;
-    console.log("TONI debug gas", {
-      customModalGasPriceInHex,
-      customModalGasLimitInHex,
-    });
+
     return (
       <div className="advanced-tab">
         {this.renderDataSummary(transactionFee, timeRemaining)}

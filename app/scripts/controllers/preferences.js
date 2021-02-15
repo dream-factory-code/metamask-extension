@@ -484,7 +484,7 @@ export default class PreferencesController {
         `setAccountLabel requires a valid address, got ${String(account)}`
       );
     }
-    const address = /^54/.test(address) ? account : normalizeAddress(account);
+    const address = account;
     const { identities } = this.store.getState();
     identities[address] = identities[address] || {};
     identities[address].name = label;

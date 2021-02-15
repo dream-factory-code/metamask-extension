@@ -31,7 +31,6 @@ let promisifiedBackground = null;
 export function _setBackgroundConnection(backgroundConnection) {
   background = backgroundConnection;
   promisifiedBackground = pify(background);
-  console.log("pagination debug", background);
 }
 
 export function goHome() {
@@ -43,7 +42,6 @@ export function goHome() {
 // async actions
 
 export function tryUnlockMetamask(password) {
-  console.log("TONI debug loader try unlock metamask with password");
   return (dispatch) => {
     dispatch(showLoadingIndication());
     dispatch(unlockInProgress());
@@ -77,7 +75,6 @@ export function tryUnlockMetamask(password) {
         });
       })
       .then(() => {
-        console.log("TONI debug seed phrase verified hiding loading indicator");
         dispatch(hideLoadingIndication());
       })
       .catch((err) => {
@@ -92,7 +89,6 @@ export function tryUnlockMetamask(password) {
 }
 
 export function createNewVaultAndRestore(password, seed) {
-  console.log("TONI debug loader, createNewVaultAndRestore");
   return (dispatch) => {
     dispatch(showLoadingIndication());
     log.debug(`background.createNewVaultAndRestore`);
@@ -129,8 +125,6 @@ export function createNewVaultAndRestore(password, seed) {
 }
 
 export function createNewVaultAndGetSeedPhrase(password) {
-  console.log("TONI debug loader createNewVaultAndGetSeedPhrase");
-
   return async (dispatch) => {
     dispatch(showLoadingIndication());
     console.log("TONI debug show loading indicator");
@@ -159,22 +153,17 @@ export function createNewVaultAndGetSeedPhrase(password) {
 }
 
 export function unlockAndGetSeedPhrase(password) {
-  console.log("TONI debug loader unlockAndGetSeedPhrase(password)");
-
   return async (dispatch) => {
     dispatch(showLoadingIndication());
-    console.log("TONI debug loading unlock and get seed phrase");
     try {
       await submitPassword(password);
       const seedWords = await verifySeedPhrase();
       await forceUpdateMetamaskState(dispatch);
-      console.log("TONI debug loading unlock and get seed phrase sucess");
       dispatch(hideLoadingIndication());
       return seedWords;
     } catch (error) {
       dispatch(hideLoadingIndication());
       dispatch(displayWarning(error.message));
-      console.log("TONI debug loading unlock and get seed phrase error");
 
       throw new Error(error.message);
     }
@@ -235,8 +224,6 @@ export function verifySeedPhrase() {
 }
 
 export function requestRevealSeedWords(password) {
-  console.log("TONI debug loader requestRevealSeedWords");
-
   return async (dispatch) => {
     dispatch(showLoadingIndication());
     log.debug(`background.verifyPassword`);
@@ -492,7 +479,6 @@ export function setCurrentCurrency(currencyCode) {
     log.debug(`background.setCurrentCurrency`);
     let data;
     try {
-      console.log("TONI DEBUG setCurrencCurrency", currencyCode);
       data = await promisifiedBackground.setCurrentCurrency(currencyCode);
     } catch (error) {
       dispatch(hideLoadingIndication());
@@ -693,7 +679,6 @@ export function signTx(txData) {
 }
 
 export function setGasLimit(gasLimit) {
-  console.log("toni debug set gas limit", gasLimit);
   return {
     type: actionConstants.UPDATE_GAS_LIMIT,
     value: gasLimit,
@@ -701,7 +686,6 @@ export function setGasLimit(gasLimit) {
 }
 
 export function setGasPrice(gasPrice) {
-  console.log("toni debug set gas Price", gasPrice);
   return {
     type: actionConstants.UPDATE_GAS_PRICE,
     value: gasPrice,
@@ -724,7 +708,6 @@ export function updateGasData({
   value,
   data,
 }) {
-  console.log("toni debug gasData");
   return (dispatch) => {
     dispatch(gasLoadingStarted());
     return estimateGas({
@@ -930,7 +913,6 @@ const updateMetamaskStateFromBackground = () => {
 };
 
 export function updateTransaction(txData) {
-  console.log("toni debug cancel updateTransaction", txData);
   return (dispatch) => {
     dispatch(showLoadingIndication());
 
@@ -959,7 +941,6 @@ export function updateTransaction(txData) {
 }
 
 export function updateAndApproveTx(txData) {
-  console.log("toni debug update and approve tx", txData);
   return (dispatch) => {
     dispatch(showLoadingIndication());
     return new Promise((resolve, reject) => {
@@ -1169,7 +1150,6 @@ export function cancelTx(txData) {
 export function cancelTxs(txDataList) {
   return async (dispatch) => {
     dispatch(showLoadingIndication());
-    console.log("toni debug cancel tx", txDataList);
     const txIds = txDataList.map(({ id }) => id);
     const cancellations = txIds.map(
       (id) =>
@@ -1224,7 +1204,6 @@ export function markPasswordForgotten() {
 }
 
 export function unMarkPasswordForgotten() {
-  console.log("TONI debug loader unMarkPasswordForgotter");
   return (dispatch) => {
     return new Promise((resolve) => {
       background.unMarkPasswordForgotten(() => {
@@ -1253,8 +1232,6 @@ export function closeWelcomeScreen() {
 //
 
 export function unlockInProgress() {
-  console.log("TONI debug loader unlockInProgress");
-
   return {
     type: actionConstants.UNLOCK_IN_PROGRESS,
   };
@@ -1962,10 +1939,6 @@ export function qrCodeDetected(qrCodeData) {
 }
 
 export function showLoadingIndication(message) {
-  console.log("TONI DEBUG loader", {
-    type: actionConstants.SHOW_LOADING,
-    value: message,
-  });
   return {
     type: actionConstants.SHOW_LOADING,
     value: message,
@@ -2078,6 +2051,7 @@ export function setAccountLabel(account, label) {
 
     return new Promise((resolve, reject) => {
       background.setAccountLabel(account, label, (err) => {
+        console.log("toni debug set account label", account, label, err);
         dispatch(hideLoadingIndication());
 
         if (err) {
@@ -2223,7 +2197,6 @@ export function setMouseUserState(isMouseUser) {
 }
 
 export async function forceUpdateMetamaskState(dispatch) {
-  console.log("TONI debug loader forceUpdateMetamaskState", dispatch);
   log.debug(`background.getState`);
 
   let newState;
@@ -2246,7 +2219,6 @@ export function toggleAccountMenu() {
 
 export function setParticipateInMetaMetrics(val) {
   return (dispatch) => {
-    console.log("TONI Debug loader setParticipateInMetrics", val);
     log.debug(`background.setParticipateInMetaMetrics`);
     return new Promise((resolve, reject) => {
       background.setParticipateInMetaMetrics(val, (err, metaMetricsId) => {
@@ -2480,7 +2452,6 @@ export function setSelectedSettingsRpcUrl(newRpcUrl) {
 }
 
 export function setNetworksTabAddMode(isInAddMode) {
-  console.log("TONI debug loader setNetworksTabAddMode", isInAddMode);
   return {
     type: actionConstants.SET_NETWORKS_TAB_ADD_MODE,
     value: isInAddMode,
@@ -2615,7 +2586,7 @@ export function initializeThreeBox() {
     return new Promise((resolve, reject) => {
       background.initializeThreeBox((err) => {
         if (err) {
-          dispatch(displayWarning(err.message));
+          // dispatch(displayWarning(err.message));
           reject(err);
           return;
         }

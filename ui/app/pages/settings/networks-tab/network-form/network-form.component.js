@@ -60,14 +60,6 @@ export default class NetworkForm extends PureComponent {
         errors: {},
       });
     } else if (prevRpcUrl !== rpcUrl) {
-      console.log("TONI debug loader setState", {
-        rpcUrl,
-        chainId,
-        ticker,
-        networkName,
-        blockExplorerUrl,
-        errors: {},
-      });
       this.setState({
         rpcUrl,
         chainId,
@@ -99,14 +91,7 @@ export default class NetworkForm extends PureComponent {
       networkName,
       blockExplorerUrl,
     } = this.props;
-    console.log("TONI debug loader setState", {
-      rpcUrl,
-      chainId,
-      ticker,
-      networkName,
-      blockExplorerUrl,
-      errors: {},
-    });
+
     this.setState({
       rpcUrl,
       chainId,
@@ -234,12 +219,6 @@ export default class NetworkForm extends PureComponent {
   };
 
   setErrorTo = (errorKey, errorVal) => {
-    console.log("TONI debug loader setState", {
-      errors: {
-        ...this.state.errors,
-        [errorKey]: errorVal,
-      },
-    });
     this.setState({
       errors: {
         ...this.state.errors,

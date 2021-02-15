@@ -1,26 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import React from "react";
+import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 
-import Identicon from '../../../../components/ui/identicon'
-import Copy from '../../../../components/ui/icon/copy-icon.component'
-import Button from '../../../../components/ui/button/button.component'
+import Identicon from "../../../../components/ui/identicon";
+import Copy from "../../../../components/ui/icon/copy-icon.component";
+import Button from "../../../../components/ui/button/button.component";
 
-import Tooltip from '../../../../components/ui/tooltip'
-import { useI18nContext } from '../../../../hooks/useI18nContext'
-import { useCopyToClipboard } from '../../../../hooks/useCopyToClipboard'
+import Tooltip from "../../../../components/ui/tooltip";
+import { useI18nContext } from "../../../../hooks/useI18nContext";
+import { useCopyToClipboard } from "../../../../hooks/useCopyToClipboard";
 
-function quadSplit (address) {
-  return (
-    `0x ${
-      address
-        .slice(2)
-        .match(/.{1,4}/ug)
-        .join(' ')}`
-  )
+function quadSplit(address) {
+  return `${address.match(/.{1,4}/gu).join(" ")}`;
 }
 
-function ViewContact ({
+function ViewContact({
   history,
   name,
   address,
@@ -29,11 +23,11 @@ function ViewContact ({
   editRoute,
   listRoute,
 }) {
-  const t = useI18nContext()
-  const [copied, handleCopy] = useCopyToClipboard()
+  const t = useI18nContext();
+  const [copied, handleCopy] = useCopyToClipboard();
 
   if (!address) {
-    return <Redirect to={{ pathname: listRoute }} />
+    return <Redirect to={{ pathname: listRoute }} />;
   }
 
   return (
@@ -47,28 +41,28 @@ function ViewContact ({
           <Button
             type="secondary"
             onClick={() => {
-              history.push(`${editRoute}/${address}`)
+              history.push(`${editRoute}/${address}`);
             }}
           >
-            {t('edit')}
+            {t("edit")}
           </Button>
         </div>
         <div className="address-book__view-contact__group">
           <div className="address-book__view-contact__group__label">
-            {t('ethereumPublicAddress')}
+            {t("ethereumPublicAddress")}
           </div>
           <div className="address-book__view-contact__group__value">
             <div className="address-book__view-contact__group__static-address">
-              {quadSplit(checkSummedAddress)}
+              {quadSplit(address)}
             </div>
             <Tooltip
               position="bottom"
-              title={copied ? t('copiedExclamation') : t('copyToClipboard')}
+              title={copied ? t("copiedExclamation") : t("copyToClipboard")}
             >
               <button
                 className="address-book__view-contact__group__static-address--copy-icon"
                 onClick={() => {
-                  handleCopy(checkSummedAddress)
+                  handleCopy(address);
                 }}
               >
                 <Copy size={20} color="#3098DC" />
@@ -78,7 +72,7 @@ function ViewContact ({
         </div>
         <div className="address-book__view-contact__group">
           <div className="address-book__view-contact__group__label--capitalized">
-            {t('memo')}
+            {t("memo")}
           </div>
           <div className="address-book__view-contact__group__static-address">
             {memo}
@@ -86,7 +80,7 @@ function ViewContact ({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 ViewContact.propTypes = {
@@ -97,6 +91,6 @@ ViewContact.propTypes = {
   memo: PropTypes.string,
   editRoute: PropTypes.string,
   listRoute: PropTypes.string.isRequired,
-}
+};
 
-export default React.memo(ViewContact)
+export default React.memo(ViewContact);

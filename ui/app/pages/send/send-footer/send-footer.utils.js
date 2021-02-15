@@ -111,7 +111,6 @@ export function constructUpdatedTx({
   if (typeof editingTx.txParams.data === "undefined") {
     delete editingTx.txParams.data;
   }
-  console.log("TONI debug amount tx update tx", editingTx);
   return editingTx;
 }
 

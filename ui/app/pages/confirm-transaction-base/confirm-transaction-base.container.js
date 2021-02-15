@@ -85,7 +85,6 @@ const mapStateToProps = (state, ownProps) => {
     id: transactionId,
     transactionCategory,
   } = txData;
-  console.log("toni debug gasPrice", txData);
   const transaction =
     Object.values(unapprovedTxs).find(
       ({ id }) => id === (transactionId || Number(paramsTransactionId))
@@ -100,11 +99,7 @@ const mapStateToProps = (state, ownProps) => {
       data,
     },
   } = (transaction && transaction.txParams) || txParams;
-  console.log(
-    "TONI debug gasPrice",
-    { gasPrice, gasLimit },
-    { params: transaction.txParams, txParams }
-  );
+
   const accounts = getMetaMaskAccounts(state);
   const assetImage = assetImages[txParamsToAddress];
 
@@ -149,7 +144,6 @@ const mapStateToProps = (state, ownProps) => {
   const methodData = getKnownMethodData(state, data) || {};
 
   let fullTxData = { ...txData, ...transaction };
-  console.log("toni debug setGas", { txData, transaction });
   if (customTxParamsData) {
     fullTxData = {
       ...fullTxData,
@@ -234,7 +228,7 @@ export const mapDispatchToProps = (dispatch) => {
     cancelAllTransactions: (txList) => dispatch(cancelTxs(txList)),
     sendTransaction: (txData) => {
       console.log("toni debug send tx", txData);
-      return dispatch(updateAndApproveTx(customNonceMerge(txData)));
+      return dispatch(updateAndApproveTx(txData));
     },
     setMetaMetricsSendCount: (val) => dispatch(setMetaMetricsSendCount(val)),
     getNextNonce: () => dispatch(getNextNonce()),
@@ -323,11 +317,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
           gasPrice,
         },
       };
-      console.log("toni debug setGas updateGasAndCaluclate", {
-        gasLimit,
-        gasPrice,
-        updatedTx,
-      });
+
       dispatchUpdateGasAndCalculate(updatedTx);
     },
   };

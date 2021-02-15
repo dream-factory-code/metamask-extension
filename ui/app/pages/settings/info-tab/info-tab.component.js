@@ -74,7 +74,7 @@ export default class InfoTab extends PureComponent {
           </Button>
         </div>
         <div className="info-tab__link-item">
-          <Button
+          {/* <Button
             type="link"
             href="https://metamask.zendesk.com/hc/en-us/requests/new"
             target="_blank"
@@ -82,7 +82,7 @@ export default class InfoTab extends PureComponent {
             className="info-tab__link-text"
           >
             {t("contactUs")}
-          </Button>
+          </Button> */}
         </div>
       </div>
     );

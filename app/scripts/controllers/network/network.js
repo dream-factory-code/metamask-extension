@@ -125,9 +125,7 @@ export default class NetworkController extends EventEmitter {
   }
 
   setNetworkState(network, type) {
-    console.log("TONI debug loader", { network }, { type });
     if (network === "loading") {
-      console.log("TONI debug loader putState", type);
       this.networkStore.putState(type);
       return;
     }
@@ -136,15 +134,10 @@ export default class NetworkController extends EventEmitter {
     if (!type) {
       return;
     }
-    console.log("TONI debug loader putState", type);
     this.networkStore.putState(type);
   }
 
   isNetworkLoading() {
-    console.log(
-      "TONI debug loader is network loading",
-      this.getNetworkState() === "loading"
-    );
     return this.getNetworkState() === "loading";
   }
 
@@ -166,12 +159,10 @@ export default class NetworkController extends EventEmitter {
       const currentNetwork = this.getNetworkState();
       if (initialNetwork === currentNetwork) {
         if (err) {
-          console.log("TONI debug loader setNetworkState, error", network, err);
           this.setNetworkState("loading");
           return;
         }
         log.info(`web3.getNetwork returned ${network}`);
-        console.log("TONI debug loader setNetworkState", network, type);
 
         this.setNetworkState(network, type);
       }
@@ -294,7 +285,6 @@ export default class NetworkController extends EventEmitter {
     const settings = {
       ticker: "TOL", //'ETH',
     };
-    console.log("TONI debug loader check settings", settings);
     this.networkConfig.putState(settings);
   }
 
@@ -327,7 +317,6 @@ export default class NetworkController extends EventEmitter {
       network: chainId,
     };
     settings = Object.assign(settings, networks.networkList.rpc);
-    console.log("TONI debug loader, check if settings needs change", settings);
     this.networkConfig.putState(settings);
     this._setNetworkClient(networkClient);
   }

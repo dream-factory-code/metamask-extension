@@ -265,7 +265,6 @@ export default class ConfirmTransactionBase extends Component {
       getNextNonce,
       isMainnet,
     } = this.props;
-    console.log("this props", this.props);
     const tolarTxParams = this.props.txData.txParams.body;
     const { amount, gas, gas_price: gasPrice } = tolarTxParams;
     const totalFee = multiplyCurrencies(gas, gasPrice, {
@@ -503,7 +502,6 @@ export default class ConfirmTransactionBase extends Component {
     //     origin,
     //   },
     // });
-    console.log("toni debug cancel", onCancel);
     updateCustomNonce("");
     if (onCancel) {
       onCancel(txData);

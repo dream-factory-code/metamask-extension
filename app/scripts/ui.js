@@ -123,7 +123,6 @@ function initializeUi(activeTab, container, connectionStream, cb) {
  * @param {Function} cb - Called when controller connection is established
  */
 function connectToAccountManager(connectionStream, cb) {
-  console.log("TONI TODO swtupWeb3connection", connectionStream, cb);
   const mx = setupMultiplex(connectionStream);
   setupControllerConnection(mx.createStream("controller"), cb);
   setupWeb3Connection(mx.createStream("provider"));

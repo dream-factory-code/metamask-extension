@@ -573,8 +573,6 @@ export function setPricesAndTimeEstimates(estimatedPricesAndTimes) {
 }
 
 export function setCustomGasPrice(newPrice) {
-  console.log("TONI debug setGas", { newPrice });
-
   return {
     type: SET_CUSTOM_GAS_PRICE,
     value: newPrice,
@@ -582,8 +580,6 @@ export function setCustomGasPrice(newPrice) {
 }
 
 export function setCustomGasLimit(newLimit) {
-  console.log("TONI debug setGas", { newLimit });
-
   return {
     type: SET_CUSTOM_GAS_LIMIT,
     value: newLimit,
@@ -591,8 +587,6 @@ export function setCustomGasLimit(newLimit) {
 }
 
 export function setCustomGasTotal(newTotal) {
-  console.log("TONI debug setGas", { newTotal });
-
   return {
     type: SET_CUSTOM_GAS_TOTAL,
     value: newTotal,

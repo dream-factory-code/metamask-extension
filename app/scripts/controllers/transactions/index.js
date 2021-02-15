@@ -72,16 +72,12 @@ export default class TransactionController extends EventEmitter {
     this.getPermittedAccounts = opts.getPermittedAccounts;
     this.blockTracker = opts.blockTracker;
     this.signEthTx = async (...args) => {
-      console.log("toni debug signEtxTx", ...args);
       try {
         const result = await opts.signTransaction(...args);
-        console.log("toni debug sign tx", result);
         this.txStateManager.clearUnapprovedTxs();
         await this.addUnapprovedTransaction(result);
         return result;
-      } catch (e) {
-        console.log("toni debug sign tx error", e);
-      }
+      } catch (e) {}
     };
     this.inProcessOfSigning = new Set();
 
@@ -248,7 +244,6 @@ export default class TransactionController extends EventEmitter {
       txParams,
       type: TRANSACTION_TYPE_STANDARD,
     });
-    console.log("toni debug tx txparams", txParams, txMeta);
 
     // if (origin === "metamask") {
     //   // Assert the from address is the selected address
@@ -320,12 +315,9 @@ export default class TransactionController extends EventEmitter {
       txMeta.simulationFails = simulationFails;
     }
     if (defaultGasPrice && !txMeta.txParams.gasPrice) {
-      console.log("TONI debug gas revisiting set to default");
       txMeta.txParams.gasPrice = defaultGasPrice;
     }
     if (defaultGasLimit && !txMeta.txParams.gas) {
-      console.log("TONI debug gas revisiting set to default");
-
       txMeta.txParams.gas = defaultGasLimit;
     }
     return txMeta;

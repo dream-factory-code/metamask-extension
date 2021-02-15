@@ -259,17 +259,7 @@ export default class SendTransactionScreen extends Component {
       updateAndSetGasLimit,
     } = this.props;
     getToAddressForGasUpdate(updatedToAddress, currentToAddress);
-    console.log("TONI debug updateGas", {
-      amount,
-      blockGasLimit,
-      editingTransactionId,
-      gasLimit,
-      gasPrice,
-      selectedAddress,
-      sendToken,
-      to: currentToAddress,
-      updateAndSetGasLimit,
-    });
+
     updateAndSetGasLimit({
       blockGasLimit,
       editingTransactionId,

@@ -93,7 +93,6 @@ function mapDispatchToProps(dispatch) {
     showCustomizeGasModal: () =>
       dispatch(showModal({ name: "CUSTOMIZE_GAS", hideBasic: true })),
     setGasPrice: (newPrice, gasLimit) => {
-      console.log("toni debug gasPrice", { newPrice, gasLimit });
       dispatch(setGasPrice(newPrice));
       dispatch(setCustomGasPrice(newPrice));
       if (gasLimit) {
@@ -101,8 +100,6 @@ function mapDispatchToProps(dispatch) {
       }
     },
     setGasLimit: (newLimit, gasPrice) => {
-      console.log("toni debug gasPrice setGasLimit", { newLimit, gasPrice });
-
       dispatch(setGasLimit(newLimit));
       dispatch(setCustomGasLimit(newLimit));
       if (gasPrice) {

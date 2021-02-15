@@ -155,36 +155,9 @@ const conversionUtil = (
     invertConversionRate,
   }
 ) => Number(value);
-// {
-//   console.log("TONI debug gas ", {
-//     fromCurrency,
-//     toCurrency,
-//     fromNumericBase,
-//     toNumericBase,
-//     fromDenomination,
-//     toDenomination,
-//     numberOfDecimals,
-//     conversionRate,
-//     invertConversionRate,
-//     value: value || "0",
-//   });
-//   return converter({
-//     fromCurrency,
-//     toCurrency,
-//     fromNumericBase,
-//     toNumericBase,
-//     fromDenomination,
-//     toDenomination,
-//     numberOfDecimals,
-//     conversionRate,
-//     invertConversionRate,
-//     value: value || "0",
-//   });
-// };
 
 const addCurrencies = (a, b, options = {}) => {
   const { aBase, bBase, ...conversionOptions } = options;
-  // console.log("toni debug edit addCurrencies", { a, b, options });
 
   const value = new BigNumber(a.toString(), aBase).add(b.toString(), bBase);
 

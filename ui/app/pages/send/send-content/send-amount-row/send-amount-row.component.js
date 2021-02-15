@@ -82,7 +82,6 @@ export default class SendAmountRow extends Component {
     const { updateSendAmount, setMaxModeTo } = this.props;
 
     setMaxModeTo(false);
-    console.log("toni debug amount", { updateSendAmount, setMaxModeTo });
 
     updateSendAmount(amount);
   }

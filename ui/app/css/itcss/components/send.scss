@@ -199,12 +199,14 @@
   box-shadow: 2px 2px 2px $alto;
 }
 
-.customize-gas-tooltip-container input[type="number"]::-webkit-inner-spin-button {
+.customize-gas-tooltip-container
+  input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   display: none;
 }
 
-.customize-gas-tooltip-container input[type="number"]:hover::-webkit-inner-spin-button {
+.customize-gas-tooltip-container
+  input[type="number"]:hover::-webkit-inner-spin-button {
   -webkit-appearance: none;
   display: none;
 }
@@ -520,7 +522,7 @@
     font-size: 12px;
     line-height: 12px;
     left: 8px;
-    color: $orange;
+    color: #2fadd4;
   }
 
   &__error-border {
@@ -889,7 +891,7 @@
     }
 
     &__close::after {
-      content: '\00D7';
+      content: "\00D7";
       font-size: 1.8em;
       color: $dusty-gray;
       cursor: pointer;

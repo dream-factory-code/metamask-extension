@@ -189,7 +189,7 @@ export default class SettingsTab extends PureComponent {
     console.log("toni debug settings display", this.props);
     return (
       <div className="settings-page__body">
-        {warning && <div className="settings-tab__error">{warning}</div>}
+        {/* {warning && <div className="settings-tab__error">{warning}</div>} */}
         {/* {this.renderCurrentConversion()} */}
         {/* {this.renderUsePrimaryCurrencyOptions()} */}
         {this.renderCurrentLocale()}

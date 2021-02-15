@@ -216,7 +216,7 @@ export function getAccountsWithLabels(state) {
 export function getCurrentAccountWithSendEtherInfo(state) {
   const currentAddress = getSelectedAddress(state);
   const accounts = accountsWithSendEtherInfoSelector(state);
-  console.log("toni debug get account by address", accounts, currentAddress);
+  // console.log("toni debug get account by address", accounts, currentAddress);
   return getAccountByAddress(accounts, currentAddress);
 }
 

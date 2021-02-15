@@ -1,4 +1,5 @@
 .transaction-list-item {
+  cursor: auto !important;
   &__primary-currency {
     color: $Black-100;
     overflow: hidden;
@@ -61,4 +62,7 @@
     /*rtl:ignore*/
     direction: rtl;
   }
+}
+.tx_link_item {
+  color: #0d96c8;
 }

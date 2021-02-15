@@ -20,6 +20,11 @@ import {
 import UserPreferencedCurrencyDisplay from "../../components/app/user-preferenced-currency-display";
 import { PRIMARY, SECONDARY } from "../../helpers/constants/common";
 import { hexToDecimal } from "../../helpers/utils/conversions.util";
+import {
+  multiplyCurrencies,
+  addCurrencies,
+} from "../../helpers/utils/conversion-util";
+
 import AdvancedGasInputs from "../../components/app/gas-customization/advanced-gas-inputs";
 import TextField from "../../components/ui/text-field";
 
@@ -261,9 +266,18 @@ export default class ConfirmTransactionBase extends Component {
       isMainnet,
     } = this.props;
     console.log("this props", this.props);
-    const total =
-      this.props.txData.txParams.body.amount +
-      Number(hexTransactionFee.replace(/^0x/, ""));
+    const tolarTxParams = this.props.txData.txParams.body;
+    const { amount, gas, gas_price: gasPrice } = tolarTxParams;
+    const totalFee = multiplyCurrencies(gas, gasPrice, {
+      multiplierBase: 10,
+      multiplicandBase: 10,
+      toNumericBase: "dec",
+    });
+    const total = addCurrencies(totalFee, String(amount).replace("0x", ""), {
+      aBase: 10,
+      bBase: 10,
+      toNumericBase: "dec",
+    });
 
     if (hideDetails) {
       return null;
@@ -277,7 +291,7 @@ export default class ConfirmTransactionBase extends Component {
           <div className="confirm-page-container-content__gas-fee">
             <ConfirmDetailRow
               label="Gas Fee"
-              value={hexTransactionFee}
+              value={totalFee}
               headerText={notMainnetOrTest ? "" : "Edit"}
               headerTextClassName={
                 notMainnetOrTest ? "" : "confirm-detail-row__header-text--edit"
@@ -413,7 +427,15 @@ export default class ConfirmTransactionBase extends Component {
       txData: { origin },
       methodData = {},
     } = this.props;
-
+    console.log("toni debug handle edit", {
+      txData,
+      tokenData,
+      tokenProps,
+      onEdit,
+      actionKey,
+      origin,
+      methodData,
+    });
     this.context.metricsEvent({
       eventOpts: {
         category: "Transactions",
@@ -468,19 +490,20 @@ export default class ConfirmTransactionBase extends Component {
     } = this.props;
 
     this._removeBeforeUnload();
-    metricsEvent({
-      eventOpts: {
-        category: "Transactions",
-        action: "Confirm Screen",
-        name: "Cancel",
-      },
-      customVariables: {
-        recipientKnown: null,
-        functionType:
-          actionKey || getMethodName(methodData.name) || "contractInteraction",
-        origin,
-      },
-    });
+    // metricsEvent({
+    //   eventOpts: {
+    //     category: "Transactions",
+    //     action: "Confirm Screen",
+    //     name: "Cancel",
+    //   },
+    //   customVariables: {
+    //     recipientKnown: null,
+    //     functionType:
+    //       actionKey || getMethodName(methodData.name) || "contractInteraction",
+    //     origin,
+    //   },
+    // });
+    console.log("toni debug cancel", onCancel);
     updateCustomNonce("");
     if (onCancel) {
       onCancel(txData);

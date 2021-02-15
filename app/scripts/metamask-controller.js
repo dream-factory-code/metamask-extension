@@ -244,16 +244,16 @@ export default class MetamaskController extends EventEmitter {
     });
 
     const version = this.platform.getVersion();
-    this.threeBoxController = new ThreeBoxController({
-      preferencesController: this.preferencesController,
-      addressBookController: this.addressBookController,
-      keyringController: this.keyringController,
-      initState: initState.ThreeBoxController,
-      getKeyringControllerState: this.keyringController.memStore.getState.bind(
-        this.keyringController.memStore
-      ),
-      version,
-    });
+    // this.threeBoxController = new ThreeBoxController({
+    //   preferencesController: this.preferencesController,
+    //   addressBookController: this.addressBookController,
+    //   keyringController: this.keyringController,
+    //   initState: initState.ThreeBoxController,
+    //   getKeyringControllerState: this.keyringController.memStore.getState.bind(
+    //     this.keyringController.memStore
+    //   ),
+    //   version,
+    // });
 
     this.txController = new TransactionController({
       initState:
@@ -325,7 +325,7 @@ export default class MetamaskController extends EventEmitter {
       IncomingTransactionsController: this.incomingTransactionsController.store,
       PermissionsController: this.permissionsController.permissions,
       PermissionsMetadata: this.permissionsController.store,
-      ThreeBoxController: this.threeBoxController.store,
+      // ThreeBoxController: this.threeBoxController.store,
     });
 
     this.memStore = new ComposableObservableStore(null, {
@@ -349,7 +349,7 @@ export default class MetamaskController extends EventEmitter {
       IncomingTransactionsController: this.incomingTransactionsController.store,
       PermissionsController: this.permissionsController.permissions,
       PermissionsMetadata: this.permissionsController.store,
-      ThreeBoxController: this.threeBoxController.store,
+      // ThreeBoxController: this.threeBoxController.store,
       // ENS Controller
       EnsController: this.ensController.store,
     });
@@ -535,6 +535,7 @@ export default class MetamaskController extends EventEmitter {
       paginate: this.incomingTransactionsController.paginate.bind(
         this.incomingTransactionsController
       ),
+      validateTolarAddress: this.web3.tolar.accounts.verifyAddress.bind(this),
       // PreferencesController
       setSelectedAddress: nodeify(
         preferencesController.setSelectedAddress,
@@ -611,6 +612,10 @@ export default class MetamaskController extends EventEmitter {
       // txController
       signTx: nodeify(txController.signEthTx, txController),
       cancelTransaction: nodeify(txController.cancelTransaction, txController),
+      clearUnapprovedTxs: nodeify(
+        txController.txStateManager.clearUnapprovedTxs(),
+        txController
+      ),
       updateTransaction: nodeify(txController.updateTransaction, txController),
       updateAndApproveTransaction: nodeify(
         txController.updateAndApproveTransaction,
@@ -662,27 +667,27 @@ export default class MetamaskController extends EventEmitter {
       ),
 
       // 3Box
-      setThreeBoxSyncingPermission: nodeify(
-        threeBoxController.setThreeBoxSyncingPermission,
-        threeBoxController
-      ),
-      restoreFromThreeBox: nodeify(
-        threeBoxController.restoreFromThreeBox,
-        threeBoxController
-      ),
-      setShowRestorePromptToFalse: nodeify(
-        threeBoxController.setShowRestorePromptToFalse,
-        threeBoxController
-      ),
-      getThreeBoxLastUpdated: nodeify(
-        threeBoxController.getLastUpdated,
-        threeBoxController
-      ),
-      turnThreeBoxSyncingOn: nodeify(
-        threeBoxController.turnThreeBoxSyncingOn,
-        threeBoxController
-      ),
-      initializeThreeBox: nodeify(this.initializeThreeBox, this),
+      // setThreeBoxSyncingPermission: nodeify(
+      //   threeBoxController.setThreeBoxSyncingPermission,
+      //   threeBoxController
+      // ),
+      // restoreFromThreeBox: nodeify(
+      //   threeBoxController.restoreFromThreeBox,
+      //   threeBoxController
+      // ),
+      // setShowRestorePromptToFalse: nodeify(
+      //   threeBoxController.setShowRestorePromptToFalse,
+      //   threeBoxController
+      // ),
+      // getThreeBoxLastUpdated: nodeify(
+      //   threeBoxController.getLastUpdated,
+      //   threeBoxController
+      // ),
+      // turnThreeBoxSyncingOn: nodeify(
+      //   threeBoxController.turnThreeBoxSyncingOn,
+      //   threeBoxController
+      // ),
+      // initializeThreeBox: nodeify(this.initializeThreeBox, this),
 
       // permissions
       approvePermissionsRequest: nodeify(
@@ -853,10 +858,11 @@ export default class MetamaskController extends EventEmitter {
       // );
       const _query = new EthQuery(this.provider);
 
-      const { balance = "0" } = await _query.sendAsync({
+      const res = await _query.sendAsync({
         method: "tol_getLatestBalance",
         params: [address],
       });
+      const balance = res?.balance || "0";
       resolve(balance);
       // TODO TONI implement real metod
       // ethQuery.getBalance(address, (error, balance) => {
@@ -1004,19 +1010,19 @@ export default class MetamaskController extends EventEmitter {
 
     await this.blockTracker.checkForLatestBlock();
 
-    try {
-      const threeBoxSyncingAllowed = this.threeBoxController.getThreeBoxSyncingState();
-      if (threeBoxSyncingAllowed && !this.threeBoxController.box) {
-        // 'await' intentionally omitted to avoid waiting for initialization
-        this.threeBoxController.init();
-        this.threeBoxController.turnThreeBoxSyncingOn();
-      } else if (threeBoxSyncingAllowed && this.threeBoxController.box) {
-        this.threeBoxController.turnThreeBoxSyncingOn();
-      }
-    } catch (error) {
-      log.error(error);
-      console.log("TONI debug error", error);
-    }
+    // try {
+    //   const threeBoxSyncingAllowed = this.threeBoxController.getThreeBoxSyncingState();
+    //   if (threeBoxSyncingAllowed && !this.threeBoxController.box) {
+    //     // 'await' intentionally omitted to avoid waiting for initialization
+    //     this.threeBoxController.init();
+    //     this.threeBoxController.turnThreeBoxSyncingOn();
+    //   } else if (threeBoxSyncingAllowed && this.threeBoxController.box) {
+    //     this.threeBoxController.turnThreeBoxSyncingOn();
+    //   }
+    // } catch (error) {
+    //   log.error(error);
+    //   console.log("TONI debug error", error);
+    // }
 
     return this.keyringController.fullUpdate();
   }
@@ -2137,9 +2143,9 @@ export default class MetamaskController extends EventEmitter {
   async getNextNonce(address) {
     let nonceLock;
     try {
-      nonceLock = await this.txController.nonceTracker.getNonceLock(address);
+      nonceLock = await this.web3.tolar.getNonce(address);
     } finally {
-      nonceLock.releaseLock();
+      //nonceLock.releaseLock();
     }
     return nonceLock.nextNonce;
   }

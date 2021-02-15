@@ -4,16 +4,6 @@ import BN from "bn.js";
 import createId from "../lib/random-id";
 import { bnToHex } from "../lib/util";
 import fetchWithTimeout from "../lib/fetch-with-timeout";
-// import { ethAddressToTolarAddress } from "../../../app/scripts/tolar-keyring/tolar-keyring";
-// app\scripts\tolar-keyring\tolar-keyring.js";
-// import {
-//   ROPSTEN,
-//   RINKEBY,
-//   KOVAN,
-//   GOERLI,
-//   MAINNET,
-//   NETWORK_TYPE_TO_ID_MAP,
-// } from './network/enums'
 
 import {
   MAINNET,
@@ -21,7 +11,6 @@ import {
   TESTNET,
   NETWORK_TYPE_TO_SUBDOMAIN_MAP,
 } from "./network/enums";
-// import Web3 from "@dreamfactoryhr/web3t";
 const fetch = fetchWithTimeout({
   timeout: 30000,
 });

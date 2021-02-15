@@ -35,7 +35,6 @@ function mapDispatchToProps(dispatch) {
   return {
     setMaxModeTo: (bool) => dispatch(setMaxModeTo(bool)),
     updateSendAmount: (newAmount) => {
-      console.log("toni debug amount", newAmount);
       return dispatch(updateSendAmount(newAmount));
     },
     updateGasFeeError: (amountDataObject) => {

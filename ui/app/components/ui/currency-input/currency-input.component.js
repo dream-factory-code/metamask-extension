@@ -7,6 +7,8 @@ import {
   getWeiHexFromDecimalValue,
 } from "../../../helpers/utils/conversions.util";
 import { ETH, TOL } from "../../../helpers/constants/common";
+import BN from "bn.js";
+import currencyDisplay from "../currency-display";
 
 /**
  * Component that allows user to enter currency values as a number, and props receive a converted
@@ -60,6 +62,13 @@ export default class CurrencyInput extends PureComponent {
 
   getDecimalValue(props) {
     const { value: hexValue, currentCurrency, conversionRate } = props;
+    const { isSwapped } = this.state || {};
+
+    console.log("toni debug amount string number", {
+      hexValue,
+      currentCurrency,
+      conversionRate,
+    });
     const decimalValueString = this.shouldUseFiat()
       ? getValueFromWeiHex({
           value: hexValue,
@@ -72,8 +81,11 @@ export default class CurrencyInput extends PureComponent {
           toCurrency: ETH,
           numberOfDecimals: 6,
         });
+    let decimalVal = isSwapped
+      ? hexValue
+      : new BN(hexValue + "").div(new BN(1e18 + "")).toString();
 
-    return Number(decimalValueString) || 0;
+    return decimalVal || 0;
   }
 
   shouldUseFiat = () => {
@@ -89,6 +101,8 @@ export default class CurrencyInput extends PureComponent {
 
   swap = () => {
     const { isSwapped, decimalValue } = this.state;
+    console.log("toni debug amount swap", isSwapped, decimalValue);
+
     this.setState({ isSwapped: !isSwapped }, () => {
       this.handleChange(decimalValue);
     });
@@ -100,6 +114,8 @@ export default class CurrencyInput extends PureComponent {
       conversionRate,
       onChange,
     } = this.props;
+    const { isSwapped } = this.state;
+
     let shouldUseFiatTrue, shouldUseFiatFalse;
     // const hexValue = this.shouldUseFiat()
     //   ? (shouldUseFiatTrue = getWeiHexFromDecimalValue({
@@ -133,19 +149,38 @@ export default class CurrencyInput extends PureComponent {
     //   }
     // );
 
-    this.setState({ hexValue: decimalValue, decimalValue });
-    onChange(decimalValue);
+    this.setState({
+      hexValue: decimalValue,
+      decimalValue: decimalValue,
+    });
+    let decimalVal = isSwapped
+      ? decimalValue
+      : new BN(decimalValue + "").mul(new BN(1e18 + "")).toString();
+    onChange(decimalVal);
   };
 
   renderConversionComponent() {
-    const { currentCurrency, nativeCurrency, hideFiat } = this.props;
+    const {
+      currentCurrency,
+      nativeCurrency,
+      hideFiat,
+      fiatSuffix,
+      nativeSuffix,
+    } = this.props;
     const { hexValue } = this.state;
     let currency, numberOfDecimals;
-
+    console.log(
+      "toni debug amount unit",
+      currentCurrency,
+      nativeCurrency,
+      this.shouldUseFiat(),
+      fiatSuffix,
+      nativeSuffix
+    );
     if (hideFiat) {
       return (
         <div className="currency-input__conversion-component">
-          {this.context.t("noConversionRateAvailable")}
+          {/* {this.context.t("noConversionRateAvailable")} */}
         </div>
       );
     }
@@ -172,12 +207,11 @@ export default class CurrencyInput extends PureComponent {
 
   render() {
     const { fiatSuffix, nativeSuffix, maxModeOn, ...restProps } = this.props;
-    const { decimalValue } = this.state;
-
+    const { decimalValue, isSwapped } = this.state;
     return (
       <UnitInput
         {...restProps}
-        suffix={this.shouldUseFiat() ? fiatSuffix : nativeSuffix}
+        suffix={isSwapped ? "aTOL" : "TOL"}
         onChange={this.handleChange}
         value={decimalValue}
         maxModeOn={maxModeOn}

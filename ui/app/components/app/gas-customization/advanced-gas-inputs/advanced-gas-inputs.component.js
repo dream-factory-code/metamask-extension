@@ -26,7 +26,7 @@ export default class AdvancedGasInputs extends Component {
       gasPrice: this.props.customGasPrice,
       gasLimit: this.props.customGasLimit,
     };
-    console.log("toni debug gas state price and limit", this.state);
+    // console.log("toni debug gas state price and limit", this.state);
     this.changeGasPrice = debounce(this.changeGasPrice, 500);
     this.changeGasLimit = debounce(this.changeGasLimit, 500);
   }
@@ -36,45 +36,45 @@ export default class AdvancedGasInputs extends Component {
       customGasPrice: prevCustomGasPrice,
       customGasLimit: prevCustomGasLimit,
     } = prevProps;
-    console.log("toni debug gas prevProps", { prevProps }, this.props);
+    // console.log("toni debug gas prevProps", { prevProps }, this.props);
     const { customGasPrice, customGasLimit } = this.props;
     const { gasPrice, gasLimit } = this.state;
 
     if (customGasPrice !== prevCustomGasPrice && customGasPrice !== gasPrice) {
-      console.log("toni debug custom gas price", customGasPrice);
+      // console.log("toni debug custom gas price", customGasPrice);
       this.setState({ gasPrice: customGasPrice });
     }
     if (customGasLimit !== prevCustomGasLimit && customGasLimit !== gasLimit) {
-      console.log("toni debug custom gas price", customGasLimit);
+      // console.log("toni debug custom gas price", customGasLimit);
       this.setState({ gasLimit: customGasLimit });
     }
   }
 
   onChangeGasLimit = (e) => {
-    console.log("toni debug gasLimit onChangeGasLimit", e.target.value);
+    // console.log("toni debug gasLimit onChangeGasLimit", e.target.value);
 
     this.setState({ gasLimit: e.target.value });
     this.changeGasLimit({ target: { value: e.target.value } });
   };
 
   changeGasLimit = (e) => {
-    console.log("toni debug gasLimit changeGasLimit", Number(e.target.value));
+    // console.log("toni debug gasLimit changeGasLimit", Number(e.target.value));
 
     this.props.updateCustomGasLimit(Number(e.target.value));
   };
 
   onChangeGasPrice = (e) => {
-    console.log("toni debug gasPrice onChangeGasPrice", e.target.value);
+    // console.log("toni debug gasPrice onChangeGasPrice", e.target.value);
     this.setState({ gasPrice: e.target.value });
     this.changeGasPrice({ target: { value: e.target.value } });
   };
 
   changeGasPrice = (e) => {
-    console.log(
-      "toni debug gasPrice changeGasPrice",
-      Number(e.target.value),
-      e.target.value
-    );
+    // console.log(
+    //   "toni debug gasPrice changeGasPrice",
+    //   Number(e.target.value),
+    //   e.target.value
+    // );
     this.props.updateCustomGasPrice(Number(e.target.value));
   };
 
@@ -225,7 +225,7 @@ export default class AdvancedGasInputs extends Component {
     return (
       <div className="advanced-gas-inputs__gas-edit-rows">
         {this.renderGasInput({
-          label: this.context.t("gasPrice"),
+          label: this.context.t("gasPrice").replace("GWEI", "aTOL"),
           value: this.state.gasPrice,
           onChange: this.onChangeGasPrice,
           errorComponent: gasPriceErrorComponent,

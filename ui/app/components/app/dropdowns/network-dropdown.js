@@ -254,7 +254,7 @@ class NetworkDropdown extends Component {
           </div>
           <div className="network-dropdown-divider" />
           <div className="network-dropdown-content">
-            {"TONI TEST default network" || this.context.t("defaultNetwork")}
+            {/* {" " || this.context.t("defaultNetwork")} */}
           </div>
         </div>
         <DropdownMenuItem

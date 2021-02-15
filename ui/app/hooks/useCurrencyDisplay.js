@@ -9,6 +9,7 @@ import {
   getConversionRate,
   getNativeCurrency,
 } from "../selectors";
+import BN from "bn.js";
 
 /**
  * Defines the shape of the options parameter for useCurrencyDisplay
@@ -85,4 +86,12 @@ export function useCurrencyDisplay(
     `${prefix || ""}${value || 0}${suffix ? ` ${suffix}` : ""}`,
     { prefix, value, suffix },
   ];
+}
+
+export function parseTolarDisplay(val) {
+  const bnVal = new BN((val + "").replace("0x", ""));
+
+  return bnVal.gt(new BN(1e15 + ""))
+    ? `${bnVal.divRound(new BN(1e15 + "")).toNumber() / 1000} TOL`
+    : `${val} aTOL`;
 }

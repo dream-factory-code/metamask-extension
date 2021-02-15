@@ -188,6 +188,10 @@ export default function reduceMetamask(state = {}, action) {
       };
 
     case actionConstants.UPDATE_SEND_AMOUNT:
+      console.log(
+        `TONI debug send state ${actionConstants.UPDATE_SEND_AMOUNT}`,
+        action.value
+      );
       return {
         ...metamaskState,
         send: {
@@ -279,6 +283,8 @@ export default function reduceMetamask(state = {}, action) {
       );
       return {
         ...metamaskState,
+        // reset unapprovedTxs because change in workflow
+        unapprovedTxs: {},
         send: {
           tx: {
             sender_address: "",

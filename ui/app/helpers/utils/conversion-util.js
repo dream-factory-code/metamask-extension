@@ -184,6 +184,8 @@ const conversionUtil = (
 
 const addCurrencies = (a, b, options = {}) => {
   const { aBase, bBase, ...conversionOptions } = options;
+  // console.log("toni debug edit addCurrencies", { a, b, options });
+
   const value = new BigNumber(a.toString(), aBase).add(b.toString(), bBase);
 
   return converter({
@@ -194,6 +196,7 @@ const addCurrencies = (a, b, options = {}) => {
 
 const subtractCurrencies = (a, b, options = {}) => {
   const { aBase, bBase, ...conversionOptions } = options;
+  // console.log("toni debug edit subtractCurrencies", { a, b, options });
   const value = new BigNumber(String(a), aBase).minus(b, bBase);
 
   return converter({
@@ -204,11 +207,11 @@ const subtractCurrencies = (a, b, options = {}) => {
 
 const multiplyCurrencies = (a, b, options = {}) => {
   const { multiplicandBase, multiplierBase, ...conversionOptions } = options;
-
   const bigNumberA = new BigNumber(String(a), multiplicandBase);
   const bigNumberB = new BigNumber(String(b), multiplierBase);
 
   const value = bigNumberA.times(bigNumberB);
+  // console.log("toni debug edit multiply", { a, b, options, value });
 
   return converter({
     value,

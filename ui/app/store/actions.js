@@ -648,21 +648,27 @@ export function signTypedMsg(msgData) {
 }
 
 export function signTx(txData) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const state = getState();
     console.log("TONI debug send txData action", txData);
     // const signedTx =
-    promisifiedBackground
-      .signTx(txData, txData.sender_address)
-      .then((result) => {
-        console.log("TONI send tx state, signedTx test", { result, state });
-        // dispatch(showConfTxPage());
-      })
-      .catch((err) => {
-        console.log("TONI debug send txData error", err);
-        dispatch(displayWarning(err.message));
-      });
-    dispatch(showConfTxPage());
+    dispatch(showLoadingIndication());
+    try {
+      const result = await promisifiedBackground.signTx(
+        txData,
+        txData.sender_address
+      );
+
+      console.log("TONI send tx state, signedTx test", { result, state });
+      dispatch(hideLoadingIndication());
+      dispatch(showConfTxPage());
+      // dispatch(showConfTxPage());
+    } catch (err) {
+      console.log("TONI debug send txData error", err);
+      dispatch(hideLoadingIndication());
+
+      dispatch(displayWarning(err.message));
+    }
 
     // let a = new Web3TolarAccounts(state.metamask.rpcTarget);
     // const params = Object.values(txData);
@@ -924,6 +930,7 @@ const updateMetamaskStateFromBackground = () => {
 };
 
 export function updateTransaction(txData) {
+  console.log("toni debug cancel updateTransaction", txData);
   return (dispatch) => {
     dispatch(showLoadingIndication());
 
@@ -1138,7 +1145,11 @@ export function cancelTx(txData) {
       });
     })
       .then(() => updateMetamaskStateFromBackground())
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then((newState) => {
+        return dispatch(
+          updateMetamaskState({ ...newState, unapprovedTxs: {} })
+        );
+      })
       .then(() => {
         dispatch(clearSend());
         dispatch(completedTx(txData.id));
@@ -1158,6 +1169,7 @@ export function cancelTx(txData) {
 export function cancelTxs(txDataList) {
   return async (dispatch) => {
     dispatch(showLoadingIndication());
+    console.log("toni debug cancel tx", txDataList);
     const txIds = txDataList.map(({ id }) => id);
     const cancellations = txIds.map(
       (id) =>
@@ -1778,7 +1790,7 @@ export function addToAddressBook(recipient, nickname = "", memo = "") {
     let set;
     try {
       set = await promisifiedBackground.setAddressBook(
-        checksumAddress(recipient),
+        recipient,
         nickname,
         chainId,
         memo
@@ -2760,4 +2772,7 @@ export function getCurrentWindowTab() {
     const currentWindowTab = await global.platform.currentTab();
     dispatch(setCurrentWindowTab(currentWindowTab));
   };
+}
+export function validateTolarAddress(address) {
+  return promisifiedBackground.validateTolarAddress(address);
 }

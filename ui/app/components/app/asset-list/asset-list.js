@@ -14,7 +14,10 @@ import {
   getNativeCurrency,
   getShouldShowFiat,
 } from "../../../selectors";
-import { useCurrencyDisplay } from "../../../hooks/useCurrencyDisplay";
+import {
+  useCurrencyDisplay,
+  parseTolarDisplay,
+} from "../../../hooks/useCurrencyDisplay";
 
 const AssetList = ({ onClickAsset }) => {
   const history = useHistory();
@@ -51,18 +54,20 @@ const AssetList = ({ onClickAsset }) => {
     numberOfDecimals: primaryNumberOfDecimals,
     currency: primaryCurrency,
   });
+  const [balance, currencyDisplay] = parseTolarDisplay(
+    selectedAccountBalance
+  ).split(" ");
 
   const [secondaryCurrencyDisplay] = useCurrencyDisplay(
     selectedAccountBalance,
     { numberOfDecimals: secondaryNumberOfDecimals, currency: secondaryCurrency }
   );
-
   return (
     <>
       <AssetListItem
         onClick={() => onClickAsset(nativeCurrency)}
         data-testid="wallet-balance"
-        primary={primaryCurrencyDisplay}
+        primary={`${balance} ${currencyDisplay}`}
         secondary={showFiat ? secondaryCurrencyDisplay : undefined}
       />
       <TokenList

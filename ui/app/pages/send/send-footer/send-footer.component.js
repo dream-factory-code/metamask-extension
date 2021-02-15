@@ -36,9 +36,23 @@ export default class SendFooter extends Component {
     metricsEvent: PropTypes.func,
   };
 
-  onCancel() {
-    const { clearSend, history, mostRecentOverviewPage } = this.props;
+  async onCancel() {
+    const {
+      clearSend,
+      history,
+      mostRecentOverviewPage,
+      cancelTx,
+      unapprovedTxs,
+      clearConfirmTransaction,
+    } = this.props;
+    console.log("TONI debug send cancel", this.props);
+
     clearSend();
+    clearConfirmTransaction();
+    const promises = Object.keys(unapprovedTxs).map(
+      async (id) => await cancelTx({ id })
+    );
+    await Promise.all(promises);
     history.push(mostRecentOverviewPage);
   }
 
@@ -62,7 +76,7 @@ export default class SendFooter extends Component {
       history,
       gasEstimateType,
     } = this.props;
-    console.log("TONI debug send", this.props);
+    console.log("TONI debug send submit", this.props);
     const { metricsEvent } = this.context;
 
     // Should not be needed because submit should be disabled if there are errors.
@@ -74,33 +88,34 @@ export default class SendFooter extends Component {
 
     // TODO: add nickname functionality
     await addToAddressBookIfNew(to, toAccounts);
-    const promise = editingTransactionId
-      ? update({
-          amount,
-          data,
-          editingTransactionId,
-          from,
-          gas,
-          gasPrice,
-          sendToken,
-          to,
-          unapprovedTxs,
-        })
-      : sign({ data, sendToken, to, amount, from, gas, gasPrice });
-
-    Promise.resolve(promise).then(() => {
-      metricsEvent({
-        eventOpts: {
-          category: "Transactions",
-          action: "Edit Screen",
-          name: "Complete",
-        },
-        customVariables: {
-          gasChanged: gasEstimateType,
-        },
-      });
-      history.push(CONFIRM_TRANSACTION_ROUTE);
-    });
+    // const promise = false //editingTransactionId
+    //   ? update({
+    //       amount,
+    //       data,
+    //       editingTransactionId,
+    //       from,
+    //       gas,
+    //       gasPrice,
+    //       sendToken,
+    //       to,
+    //       unapprovedTxs,
+    //     })
+    //   : sign({ data, sendToken, to, amount, from, gas, gasPrice });
+    await sign({ data, sendToken, to, amount, from, gas, gasPrice });
+    // Promise.resolve(promise).then(() => {
+    //   // metricsEvent({
+    //   //   eventOpts: {
+    //   //     category: "Transactions",
+    //   //     action: "Edit Screen",
+    //   //     name: "Complete",
+    //   //   },
+    //   //   customVariables: {
+    //   //     gasChanged: gasEstimateType,
+    //   //   },
+    //   // });
+    //   history.push(CONFIRM_TRANSACTION_ROUTE);
+    // });
+    history.push(CONFIRM_TRANSACTION_ROUTE);
   }
 
   formShouldBeDisabled() {

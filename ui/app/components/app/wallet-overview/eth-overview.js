@@ -56,7 +56,7 @@ const EthOverview = ({ className }) => {
             <div className="eth-overview__primary-container">
               <UserPreferencedCurrencyDisplay
                 className={classnames("eth-overview__primary-balance", {
-                  "eth-overview__cached-balance": balanceIsCached,
+                  // "eth-overview__cached-balance": balanceIsCached,
                 })}
                 data-testid="eth-overview__primary-currency"
                 value={balance}

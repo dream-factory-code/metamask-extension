@@ -39,11 +39,11 @@ export {
 };
 
 function calcGasTotal(gasLimit = "0", gasPrice = "0") {
-  console.log("toni debug gasPrice", { gasLimit, gasPrice });
+  // console.log("toni debug gasPrice", { gasLimit, gasPrice });
   return multiplyCurrencies(gasLimit, gasPrice, {
-    toNumericBase: "hex",
-    multiplicandBase: 16,
-    multiplierBase: 16,
+    toNumericBase: "dec",
+    multiplicandBase: 10,
+    multiplierBase: 10,
   });
 }
 
@@ -54,6 +54,13 @@ function isBalanceSufficient({
   gasTotal = "0x0",
   primaryCurrency,
 }) {
+  console.log("toni debug isBalance sufficient", {
+    amount,
+    balance,
+    conversionRate,
+    gasTotal,
+    primaryCurrency,
+  });
   const totalAmount = addCurrencies(amount, gasTotal, {
     aBase: 16,
     bBase: 16,

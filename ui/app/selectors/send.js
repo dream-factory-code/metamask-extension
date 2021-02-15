@@ -39,7 +39,7 @@ export function getGasPrice(state) {
 }
 
 export function getGasTotal(state) {
-  console.log("TONI debug gas ", getGasLimit(state), getGasPrice(state));
+  // console.log("TONI debug gas ", getGasLimit(state), getGasPrice(state));
   return calcGasTotal(getGasLimit(state), getGasPrice(state));
 }
 

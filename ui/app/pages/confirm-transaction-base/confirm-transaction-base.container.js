@@ -115,9 +115,9 @@ const mapStateToProps = (state, ownProps) => {
   const toName =
     identities[toAddress]?.name ||
     casedContractMap[toAddress]?.name ||
-    shortenAddress(checksumAddress(toAddress));
+    shortenAddress(toAddress);
 
-  const checksummedAddress = checksumAddress(toAddress);
+  const checksummedAddress = toAddress;
   const addressBookObject = addressBook[checksummedAddress];
   const toEns = ensResolutionsByAddress[checksummedAddress] || "";
   const toNickname = addressBookObject ? addressBookObject.name : "";

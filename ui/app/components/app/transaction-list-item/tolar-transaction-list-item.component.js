@@ -59,6 +59,8 @@ export default function TransactionListItem({
     secondaryCurrency = "",
     status = "",
     isPending = "",
+    hash,
+    url,
   } = useTolarTransactionDisplayData(transactionGroup);
   const { sender_address: senderAddress = "" } = transactionGroup;
   const otherAddressDisplayData =
@@ -71,11 +73,9 @@ export default function TransactionListItem({
     submittedTime,
     gasPrice
   );
-
   const isSignatureReq = category === TRANSACTION_CATEGORY_SIGNATURE_REQUEST;
   const isApproval = category === TRANSACTION_CATEGORY_APPROVAL;
   const isUnapproved = status === UNAPPROVED_STATUS;
-
   const className = classnames("transaction-list-item", {
     "transaction-list-item--unconfirmed":
       isPending ||
@@ -109,35 +109,11 @@ export default function TransactionListItem({
         <div>{btn}</div>
       </Tooltip>
     );
-  }, [
-    isPending,
-    t,
-    isUnapproved,
-    // cancelEnabled,
-    // cancelTransaction,
-    hasCancelled,
-  ]);
-
-  // const speedUpButton = useMemo(() => {
-  //   if (!shouldShowSpeedUp || !isPending || isUnapproved) {
-  //     return null;
-  //   }
-  //   return (
-  //     <Button
-  //       type="secondary"
-  //       rounded
-  //       // onClick={retryTransaction}
-  //       className="transaction-list-item-details__header-button"
-  //     >
-  //       {t("speedUp")}
-  //     </Button>
-  //   );
-  // }, [shouldShowSpeedUp, isUnapproved, t, isPending /*retryTransaction*/]);
+  }, [isPending, t, isUnapproved, hasCancelled]);
 
   return (
     <>
       <ListItem
-        // onClick={toggleShowDetails}
         className={className}
         title={title}
         titleIcon={
@@ -147,9 +123,18 @@ export default function TransactionListItem({
             <Receive size={24} color={"green"} />
           )
         }
-        // icon={<TransactionIcon category={category} status={status} />}
         subtitle={
           <>
+            <h2>
+              <a
+                href={url}
+                className="tx_link_item"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                {hash}
+              </a>
+            </h2>
             <h2>{otherAddressDisplayData}</h2>
 
             <h3>{date}</h3>
@@ -168,7 +153,7 @@ export default function TransactionListItem({
       >
         <div className="transaction-list-item__pending-actions">
           {/* {speedUpButton} */}
-          {cancelButton}
+          {/* {cancelButton} */}
         </div>
       </ListItem>
       {showDetails && (

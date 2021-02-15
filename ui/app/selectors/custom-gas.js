@@ -68,11 +68,11 @@ export function getDefaultActiveButtonIndex(
   gasPrice
 ) {
   return gasButtonInfo.findIndex(({ priceInHexWei }) => {
-    console.log("TOni debug custom gas price", {
-      gasPrice,
-      priceInHexWei,
-      customGasPriceInHex,
-    });
+    // console.log("TOni debug custom gas price", {
+    //   gasPrice,
+    //   priceInHexWei,
+    //   customGasPriceInHex,
+    // });
     return priceInHexWei === addHexPrefix(customGasPriceInHex || gasPrice);
   });
 }
@@ -121,7 +121,7 @@ export function basicPriceEstimateToETHTotal(
   gasLimit,
   numberOfDecimals = 9
 ) {
-  console.log("toni debug setGas", gasLimit, estimate);
+  // console.log("toni debug setGas", gasLimit, estimate);
   return calcGasTotal(gasLimit, estimate);
   conversionUtil(calcGasTotal(gasLimit, estimate), {
     fromNumericBase: "hex",
@@ -136,7 +136,7 @@ export function getRenderableEthFee(estimate, gasLimit, numberOfDecimals = 9) {
     fromNumericBase: "dec",
     toNumericBase: "hex",
   });
-  console.log("toni debug gasPrice", "conversionUtil", estimate);
+  // console.log("toni debug gasPrice", "conversionUtil", estimate);
   const fee = basicPriceEstimateToETHTotal(value, gasLimit, numberOfDecimals);
   return formatETHFee(fee);
 }
@@ -151,7 +151,7 @@ export function getRenderableConvertedCurrencyFee(
     fromNumericBase: "dec",
     toNumericBase: "hex",
   });
-  console.log("toni debug gasPrice converted", "conversionUtil", estimate);
+  // console.log("toni debug gasPrice converted", "conversionUtil", estimate);
 
   const fee = basicPriceEstimateToETHTotal(value, gasLimit);
   const feeInCurrency = ethTotalToConvertedCurrency(
@@ -303,11 +303,11 @@ export function getRenderableEstimateDataForSmallButtonsFromGWEI(state) {
   const showFiat = isMainnet || Boolean(showFiatInTestnets);
   const gasLimit =
     state.metamask.send.tx.gas || getCustomGasLimit(state) || 21000; // toni gas hax"0x5208";
-  console.log("TONI debug gasLimit", gasLimit, {
-    state: state.metamask.send.tx.gas,
-    custom: getCustomGasLimit(state),
-    default: 21000,
-  });
+  // console.log("TONI debug gasLimit", gasLimit, {
+  //   state: state.metamask.send.tx.gas,
+  //   custom: getCustomGasLimit(state),
+  //   default: 21000,
+  // });
   const { conversionRate } = state.metamask;
   const currentCurrency = getCurrentCurrency(state);
   const {

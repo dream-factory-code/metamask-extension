@@ -76,6 +76,7 @@ export default class TransactionController extends EventEmitter {
       try {
         const result = await opts.signTransaction(...args);
         console.log("toni debug sign tx", result);
+        this.txStateManager.clearUnapprovedTxs();
         await this.addUnapprovedTransaction(result);
         return result;
       } catch (e) {
@@ -247,6 +248,7 @@ export default class TransactionController extends EventEmitter {
       txParams,
       type: TRANSACTION_TYPE_STANDARD,
     });
+    console.log("toni debug tx txparams", txParams, txMeta);
 
     // if (origin === "metamask") {
     //   // Assert the from address is the selected address
@@ -278,9 +280,9 @@ export default class TransactionController extends EventEmitter {
     txMeta.transactionCategory = transactionCategory;
 
     // ensure value
-    txMeta.txParams.value = txMeta.txParams.value
-      ? ethUtil.addHexPrefix(txMeta.txParams.value)
-      : "0x0";
+    // txMeta.txParams.value = txMeta.txParams.value
+    //   ? ethUtil.addHexPrefix(txMeta.txParams.value)
+    //   : "0x0";
 
     this.addTx(txMeta);
     this.emit("newUnapprovedTx", txMeta);
@@ -621,6 +623,7 @@ export default class TransactionController extends EventEmitter {
     // sign tx
     const fromAddress = txParams.from;
     const ethTx = new Transaction(txParams);
+    console.log("toni debug signTransaction", txMeta, ethTx);
     await this.signEthTx(ethTx, fromAddress);
     // add r,s,v values for provider request purposes see createMetamaskMiddleware
     // and JSON rpc standard for further explanation
@@ -711,6 +714,7 @@ export default class TransactionController extends EventEmitter {
     @returns {Promise<void>}
   */
   async cancelTransaction(txId) {
+    console.log("toni debug cancel transaction", txId);
     this.txStateManager.setTxStatusRejected(txId);
   }
 

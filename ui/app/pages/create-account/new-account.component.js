@@ -17,7 +17,6 @@ export default class NewAccountCreateForm extends Component {
   render() {
     const { newAccountName, defaultAccountName } = this.state;
     const { history, createAccount, mostRecentOverviewPage } = this.props;
-    console.log("TONI DEBUG account create", { state });
 
     const createClick = (_) => {
       console.log(

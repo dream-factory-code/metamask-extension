@@ -37,6 +37,7 @@ import { useTokenDisplayValue } from "./useTokenDisplayValue";
 import { useTokenData } from "./useTokenData";
 import { NETWORK_TO_NAME_MAP } from "../../../app/scripts/controllers/network/enums";
 import BN from "bn.js";
+import { toNumber } from "lodash";
 
 /**
  * @typedef {Object} TransactionDisplayData
@@ -71,52 +72,16 @@ export function useTolarTransactionDisplayData(transaction) {
   const {
     sender_address: senderAddress = "",
     receiver_address: to = "",
+    transaction_hash: hash,
   } = transaction;
 
-  // for smart contract interactions, methodData can be used to derive the name of the action being taken
-  // const methodData = useSelector((state) => getKnownMethodData(state, initialTransaction?.txParams?.data)) || {}
-
-  // const actionKey = getTransactionActionKey(initialTransaction)
   const { status = "unknown" } = transaction;
-
   const { value: primaryValue = "0" } = transaction;
   let prefix = "-";
   const date = formatDateWithYearContext(transaction.time || 0);
   // let subtitle;
   // let subtitleContainsOrigin = false;
   let recipientAddress = to;
-
-  // This value is used to determine whether we should look inside txParams.data
-  // to pull out and render token related information
-  // const isTokenCategory = TOKEN_CATEGORY_HASH[transactionCategory]
-
-  // these values are always instantiated because they are either
-  // used by or returned from hooks. Hooks must be called at the top level,
-  // so as an additional safeguard against inappropriately associating token
-  // transfers, we pass an additional argument to these hooks that will be
-  // false for non-token transactions. This additional argument forces the
-  // hook to return null
-  // const token =
-  //   isTokenCategory &&
-  //   knownTokens.find(({ address }) => address === recipientAddress);
-  // const tokenData = useTokenData(
-  //   initialTransaction?.txParams?.data,
-  //   isTokenCategory
-  // );
-  // const tokenDisplayValue = useTokenDisplayValue(
-  //   initialTransaction?.txParams?.data,
-  //   token,
-  //   isTokenCategory
-  // );
-  // const tokenFiatAmount = useTokenFiatAmount(
-  //   token?.address,
-  //   tokenDisplayValue,
-  //   token?.symbol
-  // );
-
-  // const origin = stripHttpSchemes(
-  //   initialTransaction.origin || initialTransaction.msgParams?.origin || ""
-  //   );
 
   const networkName =
     (transaction &&
@@ -128,70 +93,28 @@ export function useTolarTransactionDisplayData(transaction) {
     senderAddress === address ? "Sent Transaction" : "Received Transaction";
 
   const subtitle = networkName;
-  // There are four types of transaction entries that are currently differentiated in the design
-  // 1. signature request
-  // 2. Send (sendEth sendTokens)
-  // 3. Deposit
-  // 4. Site interaction
-  // 5. Approval
-  // if (transactionCategory === null || transactionCategory === undefined) {
-  //   category = TRANSACTION_CATEGORY_SIGNATURE_REQUEST
-  //   title = t('signatureRequest')
-  //   subtitle = origin
-  //   subtitleContainsOrigin = true
-  // } else if (transactionCategory === TOKEN_METHOD_APPROVE) {
-  //   category = TRANSACTION_CATEGORY_APPROVAL
-  //   title = t('approveSpendLimit', [token?.symbol || t('token')])
-  //   subtitle = origin
-  //   subtitleContainsOrigin = true
-  // } else if (transactionCategory === DEPLOY_CONTRACT_ACTION_KEY || transactionCategory === CONTRACT_INTERACTION_KEY) {
-  //   category = TRANSACTION_CATEGORY_INTERACTION
-  //   title = (methodData?.name && camelCaseToCapitalize(methodData.name)) || (actionKey && t(actionKey)) || ''
-  //   subtitle = origin
-  //   subtitleContainsOrigin = true
-  // } else if (transactionCategory === INCOMING_TRANSACTION) {
-  //   category = TRANSACTION_CATEGORY_RECEIVE
-  //   title = t('receive')
-  //   prefix = ''
-  //   subtitle = t('fromAddress', [shortenAddress(senderAddress)])
-  // } else if (transactionCategory === TOKEN_METHOD_TRANSFER_FROM || transactionCategory === TOKEN_METHOD_TRANSFER) {
-  //   category = TRANSACTION_CATEGORY_SEND
-  //   title = t('sendSpecifiedTokens', [token?.symbol || t('token')])
-  //   recipientAddress = getTokenToAddress(tokenData.params)
-  //   subtitle = t('toAddress', [shortenAddress(recipientAddress)])
-  // } else if (transactionCategory === SEND_ETHER_ACTION_KEY) {
-  //   category = TRANSACTION_CATEGORY_SEND
-  //   title = t('sendETH')
-  //   subtitle = t('toAddress', [shortenAddress(recipientAddress)])
-  // }
 
-  // const primaryCurrencyPreferences = useUserPreferencedCurrency(PRIMARY)
-  // const secondaryCurrencyPreferences = useUserPreferencedCurrency(SECONDARY)
+  const networkIdToTypeMap = {
+    mainnet: "hashnet",
+    stagingnet: "hashnet-staging",
+    testnet: "hashnet-test",
+  };
 
-  // const [primaryCurrency] = useCurrencyDisplay(primaryValue, {
-  //   prefix,
-  //   displayValue: isTokenCategory ? tokenDisplayValue : undefined,
-  //   suffix: isTokenCategory ? token?.symbol : undefined,
-  //   ...primaryCurrencyPreferences,
-  // })
+  const network = transaction.network;
+  const isTolar = Boolean(networkIdToTypeMap[network]);
+  const netPrefix = networkIdToTypeMap[network] || "hashnet";
 
-  // const [secondaryCurrency] = useCurrencyDisplay(primaryValue, {
-  //   prefix,
-  //   displayValue: isTokenCategory ? tokenFiatAmount : undefined,
-  //   hideLabel: isTokenCategory ? true : undefined,
-  //   ...secondaryCurrencyPreferences,
-  // })
-  const primaryBNVal = new BN(primaryValue + "");
-  const aTolToTol = (val) => {};
+  const url = isTolar
+    ? `https://${netPrefix}.dream-factory.hr/transaction/${hash}`
+    : "";
 
   const parseTolarDisplay = (val) => {
     const bnVal = new BN(val + "");
 
-    return bnVal.gt(new BN(1e15))
-      ? `${bnVal.divRound(new BN(1e15 + "")).div(new BN("1000"))} TOL`
+    return bnVal.gt(new BN(1e15 + ""))
+      ? `${bnVal.divRound(new BN(1e15 + "")).toNumber() / 1000} TOL`
       : `${val} aTOL`;
   };
-  const isGreaterThan = primaryBNVal.gt(1e18);
   return {
     title,
     category,
@@ -201,9 +124,11 @@ export function useTolarTransactionDisplayData(transaction) {
     primaryCurrency: parseTolarDisplay(primaryValue),
     senderAddress,
     recipientAddress,
-    secondaryCurrency: `${new BN(primaryValue + "")
-      .divRound(new BN(1e15 + ""))
-      .div(new BN("1000"))} TOL`,
+    hash,
+    url,
+    secondaryCurrency: `${
+      new BN(primaryValue + "").divRound(new BN(1e15 + "")).toNumber() / 1000
+    } TOL`,
     //isTokenCategory && !tokenFiatAmount ? undefined : secondaryCurrency,
     status,
     isPending: true, //: status in PENDING_STATUS_HASH,

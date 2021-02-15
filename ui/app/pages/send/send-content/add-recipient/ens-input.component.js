@@ -146,6 +146,7 @@ export default class EnsInput extends Component {
     //   this.lookupEnsName(input);
     // } else
     const isValidTolarAddress = (address) => {
+      console.log("Toni debug isValidTolarAddress");
       if (!/^54|^0x54/.test(address)) return false;
       const cleanAddress = address.replace(/^0x54/, "");
       return cleanAddress.length === 50;

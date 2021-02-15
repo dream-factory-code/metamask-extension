@@ -353,6 +353,13 @@ async function fetchExternalBasicGasAndTimeEstimates(dispatch) {
 }
 
 function extrapolateY({ higherY, lowerY, higherX, lowerX, xForExtrapolation }) {
+  // console.log("toni debug edit extrapolateY()", {
+  //   higherY,
+  //   lowerY,
+  //   higherX,
+  //   lowerX,
+  //   xForExtrapolation,
+  // });
   /* eslint-disable no-param-reassign */
   higherY = new BigNumber(higherY, 10);
   lowerY = new BigNumber(lowerY, 10);
@@ -370,6 +377,8 @@ function extrapolateY({ higherY, lowerY, higherX, lowerX, xForExtrapolation }) {
 }
 
 function getRandomArbitrary(minStr, maxStr) {
+  // console.log("toni debug edit getRandomArbitrary", { minStr, maxStr });
+
   const min = new BigNumber(minStr, 10);
   const max = new BigNumber(maxStr, 10);
   const random = new BigNumber(String(Math.random()), 10);
@@ -497,9 +506,15 @@ export function fetchGasEstimates(blockTime) {
               ).reverse();
               const timeMappedToSeconds = withOutliersRemoved.map(
                 ({ expectedWait, gasprice }) => {
+                  // console.log("toni debug edit timeMappedToSeconds", {
+                  //   expectedWait,
+                  //   gasprice,
+                  // });
+
                   const expectedTime = new BigNumber(expectedWait)
                     .times(Number(blockTime), 10)
                     .toNumber();
+
                   return {
                     expectedTime,
                     gasprice: new BigNumber(gasprice, 10).toNumber(),

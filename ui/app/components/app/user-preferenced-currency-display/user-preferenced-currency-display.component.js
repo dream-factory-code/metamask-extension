@@ -20,17 +20,18 @@ export default function UserPreferencedCurrencyDisplay({
     numberOfDecimals: propsNumberOfDecimals,
   });
 
-  const prefixComponent = useMemo(() => {
-    return (
-      currency === ETH &&
-      showEthLogo && <img src="/images/eth.svg" height={ethLogoHeight} />
-    );
-  }, [currency, showEthLogo, ethLogoHeight]);
+  const prefixComponent = "";
+  // useMemo(() => {
+  //   return (
+  //     currency === ETH &&
+  //     showEthLogo && <img src="/images/eth.svg" height={ethLogoHeight} />
+  //   );
+  // }, [currency, showEthLogo, ethLogoHeight]);
 
   return (
     <CurrencyDisplay
       {...restProps}
-      currency={currency}
+      currency={String(currency).replace("0x", "")}
       data-testid={dataTestId}
       numberOfDecimals={numberOfDecimals}
       prefixComponent={prefixComponent}

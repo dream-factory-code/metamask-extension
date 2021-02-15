@@ -6,6 +6,7 @@ import {
   signTokenTx,
   signTx,
   updateTransaction,
+  cancelTx,
 } from "../../../store/actions";
 import {
   getGasLimit,
@@ -36,6 +37,7 @@ import {
   constructTolarTxParams,
   constructUpdatedTx,
 } from "./send-footer.utils";
+import { clearConfirmTransaction } from "../../../ducks/confirm-transaction/confirm-transaction.duck";
 
 export default connect(mapStateToProps, mapDispatchToProps)(SendFooter);
 
@@ -78,6 +80,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     clearSend: () => dispatch(clearSend()),
+    cancelTx: (opts) => dispatch(cancelTx(opts)),
+    clearConfirmTransaction: () => dispatch(clearConfirmTransaction()),
     sign: (opts) => {
       const { sendToken, to, amount, from, gas, gasPrice, data } = opts;
       console.log("TONI debug sign", opts);

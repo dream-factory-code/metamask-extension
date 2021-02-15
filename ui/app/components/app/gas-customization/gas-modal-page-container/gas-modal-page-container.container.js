@@ -258,6 +258,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(fetchBasicGasAndTimeEstimates()),
     setGasTotal: (total) => dispatch(setGasTotal(total)),
     setAmountToMax: (maxAmountDataObject) => {
+      console.log("toni debug amount", maxAmountDataObject);
       dispatch(updateSendErrors({ amount: null }));
       dispatch(updateSendAmount(calcMaxAmount(maxAmountDataObject)));
     },

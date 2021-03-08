@@ -190,19 +190,9 @@ class NetworkDropdown extends Component {
 
     if (providerName === "mainnet") {
       name = "Main Net";
-    } else if (providerName === "stagingnet") {
-      name = "Staging Net";
     } else if (providerName === "testnet") {
       name = "Test Net";
-    }
-    //  else if (providerName === 'rinkeby') {
-    //   name = this.context.t('rinkeby')
-    // } else if (providerName === 'localhost') {
-    //   name = this.context.t('localhost')
-    // } else if (providerName === 'goerli') {
-    //   name = this.context.t('goerli')
-    // }
-    else {
+    } else {
       name = provider.nickname || this.context.t("unknownNetwork");
     }
 
@@ -281,30 +271,7 @@ class NetworkDropdown extends Component {
             {"Main Net"}
           </span>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          key="stagingnet"
-          closeMenu={() => this.props.hideNetworkDropdown()}
-          onClick={() => this.handleClick("stagingnet")}
-          style={dropdownMenuItemStyle}
-        >
-          {providerType === "stagingnet" ? (
-            <i className="fa fa-check" />
-          ) : (
-            <div className="network-check__transparent">✓</div>
-          )}
-          <NetworkDropdownIcon
-            backgroundColor="#ff4a8d"
-            isSelected={providerType === "staginnet"}
-          />
-          <span
-            className="network-name-item"
-            style={{
-              color: providerType === "stagingnet" ? "#ffffff" : "#9b9b9b",
-            }}
-          >
-            {"Staging Net"}
-          </span>
-        </DropdownMenuItem>
+
         <DropdownMenuItem
           key="testnet"
           closeMenu={() => this.props.hideNetworkDropdown()}

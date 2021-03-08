@@ -8,7 +8,6 @@ export const SECONDARY = "SECONDARY";
 
 export const NETWORK_TYPES = {
   MAINNET: "mainnet",
-  STAGINGNET: "stagingnet",
   TESTNET: "testnet",
 };
 

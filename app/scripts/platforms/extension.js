@@ -194,9 +194,8 @@ export default class ExtensionPlatform {
     // const nonce = parseInt(txMeta.txParams.nonce, 16)
     // TODO changing urls
     const networkIdToTypeMap = {
-      mainnet: "hashnet",
-      stagingnet: "hashnet-staging",
-      testnet: "hashnet-test",
+      mainnet: "explorer",
+      testnet: "testnet-explorer.dev",
     };
 
     const netId = txMeta.metamaskNetworkId;
@@ -205,7 +204,7 @@ export default class ExtensionPlatform {
     const hash = txMeta?.txParams?.body?.transaction_hash || txMeta?.hash || "";
 
     const url = isTolar
-      ? `https://${prefix}.dream-factory.hr/transaction/${hash}`
+      ? `https://${prefix}.tolar.io/transaction/${hash}`
       : undefined;
     const title = "Confirmed transaction";
     const nonce = txMeta.nonce;

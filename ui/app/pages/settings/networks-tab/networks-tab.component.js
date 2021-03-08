@@ -36,8 +36,7 @@ export default class NetworksTab extends PureComponent {
     switch (key) {
       case "mainnet":
         return "Main Net";
-      case "staging":
-        return "Staging Net";
+
       case "testnet":
         return "Test Net";
 

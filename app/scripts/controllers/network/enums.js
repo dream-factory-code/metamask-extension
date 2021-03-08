@@ -4,7 +4,6 @@
 // export const MAINNET = 'mainnet'
 // export const GOERLI = 'goerli'
 export const MAINNET = "mainnet";
-export const STAGINGNET = "stagingnet";
 export const TESTNET = "testnet";
 export const LOCALHOST = "localhost";
 
@@ -14,12 +13,10 @@ export const LOCALHOST = "localhost";
 // export const GOERLI_NETWORK_ID = '5'
 // export const KOVAN_NETWORK_ID = '42'
 export const MAINNET_NETWORK_ID = "1";
-export const STAGINGNET_NETWORK_ID = "2";
 export const TESTNET_NETWORK_ID = "3";
 
-export const MAINNET_SUBDOMAIN = "tolar";
-export const STAGINGNET_SUBDOMAIN = "tolar-staging";
-export const TESTNET_SUBDOMAIN = "tolar-test";
+export const MAINNET_SUBDOMAIN = "mainnet-gateway-01.dev";
+export const TESTNET_SUBDOMAIN = "testnet-gateway-01.dev";
 
 // export const MAINNET_CHAIN_ID = '0x1'
 // export const ROPSTEN_CHAIN_ID = '0x3'
@@ -34,10 +31,9 @@ export const TESTNET_SUBDOMAIN = "tolar-test";
 // export const GOERLI_DISPLAY_NAME = 'Goerli'
 
 export const MAINNET_DISPLAY_NAME = "Main Tolar Network";
-export const STAGINGNET_DISPLAY_NAME = "Staging Tolar Network";
 export const TESTNET_DISPLAY_NAME = "Test Tolar Network";
 
-export const TOLAR_PROVIDER_TYPES = [MAINNET, STAGINGNET, TESTNET];
+export const TOLAR_PROVIDER_TYPES = [MAINNET, TESTNET];
 
 // export const INFURA_PROVIDER_TYPES = [
 //   ROPSTEN,
@@ -57,13 +53,11 @@ export const TOLAR_PROVIDER_TYPES = [MAINNET, STAGINGNET, TESTNET];
 
 export const NETWORK_TYPE_TO_ID_MAP = {
   [MAINNET]: { networkId: MAINNET_NETWORK_ID },
-  [STAGINGNET]: { networkId: STAGINGNET_NETWORK_ID },
   [TESTNET]: { networkId: TESTNET_NETWORK_ID },
 };
 
 export const NETWORK_TYPE_TO_SUBDOMAIN_MAP = {
   [MAINNET]: { subdomain: MAINNET_SUBDOMAIN },
-  [STAGINGNET]: { subdomain: STAGINGNET_SUBDOMAIN },
   [TESTNET]: { subdomain: TESTNET_SUBDOMAIN },
 };
 
@@ -89,6 +83,5 @@ export const NETWORK_TYPE_TO_SUBDOMAIN_MAP = {
 
 export const NETWORK_TO_NAME_MAP = {
   [MAINNET]: MAINNET_DISPLAY_NAME,
-  [STAGINGNET]: STAGINGNET_DISPLAY_NAME,
   [TESTNET]: TESTNET_DISPLAY_NAME,
 };

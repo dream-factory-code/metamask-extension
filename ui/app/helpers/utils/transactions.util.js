@@ -252,5 +252,5 @@ export function getBlockExplorerUrlForTx(networkId, hash = "", rpcPrefs = {}) {
   }
   const prefix = getEtherscanNetworkPrefix(networkId);
   // TODO changing urls
-  return `https://${prefix}.dream-factory.hr/transaction/${hash}`;
+  return `https://${prefix}.tolar.io/transaction/${hash}`;
 }

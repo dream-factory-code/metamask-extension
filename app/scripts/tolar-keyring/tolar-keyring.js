@@ -17,7 +17,7 @@ export default class TolarKeyring extends HdKeyring {
 
   constructor(opts) {
     super(opts);
-    this.web3 = new Web3("https://tolar-test.dream-factory.hr");
+    this.web3 = new Web3("https://tolar-test.tolar.io");
 
     this.type = type;
 

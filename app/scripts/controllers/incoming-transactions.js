@@ -7,7 +7,6 @@ import fetchWithTimeout from "../lib/fetch-with-timeout";
 
 import {
   MAINNET,
-  STAGINGNET,
   TESTNET,
   NETWORK_TYPE_TO_SUBDOMAIN_MAP,
 } from "./network/enums";
@@ -57,7 +56,6 @@ export default class IncomingTransactionsController {
         // [KOVAN]: null,
         // [GOERLI]: null,
         [MAINNET]: null,
-        [STAGINGNET]: null,
         [TESTNET]: null,
       },
       ...opts.initState,
@@ -228,7 +226,7 @@ export default class IncomingTransactionsController {
     }
 
     // const apiUrl = `https://${etherscanSubdomain}.etherscan.io`
-    // const apiUrl = `https://${subdomain}.dream-factory.hr`;
+    // const apiUrl = `https://${subdomain}.tolar.io`;
     // let _web3 = new Web3(apiUrl);
     // const tolarAddress = ethAddressToTolarAddress(address);
     const result = await this.web3.tolar.getTransactionList(

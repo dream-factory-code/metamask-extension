@@ -93,7 +93,7 @@ export default function AccountOptionsMenu({ anchorElement, onClose }) {
           global.platform.openTab({
             url: `https://hashnet${
               network !== "maninnet" ? "-" + network.replace(/net$/, "") : ""
-            }.dream-factory.hr/address/${
+            }.tolar.io/address/${
               selectedIdentity.address
             }` /*getAccountLink(address, network, rpcPrefs)*/,
           });

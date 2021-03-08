@@ -65,7 +65,7 @@ export default class AccountDetailsModal extends Component {
             global.platform.openTab({
               url: `https://hashnet${
                 network !== "maninnet" ? "-" + network.replace(/net$/, "") : ""
-              }.dream-factory.hr/address/${address}`,
+              }.tolar.io/address/${address}`,
             });
           }}
         >

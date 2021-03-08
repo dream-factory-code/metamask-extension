@@ -26,8 +26,6 @@ import createLocalhostClient from "./createLocalhostClient";
 
 import {
   MAINNET,
-  STAGINGNET,
-  TESTNET,
   LOCALHOST,
   TOLAR_PROVIDER_TYPES,
   NETWORK_TYPE_TO_SUBDOMAIN_MAP,
@@ -223,7 +221,7 @@ export default class NetworkController extends EventEmitter {
     if (isTolar) {
       // this._configureInfuraProvider(opts)
       //TODO changing urls
-      const tolarRpc = `https://${NETWORK_TYPE_TO_SUBDOMAIN_MAP[type].subdomain}.dream-factory.hr`;
+      const tolarRpc = `https://${NETWORK_TYPE_TO_SUBDOMAIN_MAP[type].subdomain}.tolar.io`;
       this._configureStandardProvider({
         rpcUrl: tolarRpc,
         chainId: type,
@@ -264,7 +262,7 @@ export default class NetworkController extends EventEmitter {
 
   _configureTolarProvider({ type }) {
     log.info("NetworkController - configureTolarProvider", type);
-    const rpcTarget = `${NETWORK_TYPE_TO_SUBDOMAIN_MAP[MAINNET]?.subdomain}.dream-factory.hr`;
+    const rpcTarget = `${NETWORK_TYPE_TO_SUBDOMAIN_MAP[MAINNET]?.subdomain}.tolar.io`;
     const networkClient = this._configureStandardProvider({
       rpcUrl: rpcTarget,
       chainId,

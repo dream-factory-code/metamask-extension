@@ -95,9 +95,8 @@ export function useTolarTransactionDisplayData(transaction) {
   const subtitle = networkName;
 
   const networkIdToTypeMap = {
-    mainnet: "hashnet",
-    stagingnet: "hashnet-staging",
-    testnet: "hashnet-test",
+    mainnet: "explorer",
+    testnet: "testnet-explorer.dev",
   };
 
   const network = transaction.network;
@@ -105,7 +104,7 @@ export function useTolarTransactionDisplayData(transaction) {
   const netPrefix = networkIdToTypeMap[network] || "hashnet";
 
   const url = isTolar
-    ? `https://${netPrefix}.dream-factory.hr/transaction/${hash}`
+    ? `https://${netPrefix}.tolar.io/transaction/${hash}`
     : "";
 
   const parseTolarDisplay = (val) => {

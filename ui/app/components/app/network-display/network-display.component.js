@@ -3,13 +3,11 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import {
   MAINNET_NETWORK_ID,
-  STAGINGNET_NETWORK_ID,
   TESTNET_NETWORK_ID,
 } from "../../../../../app/scripts/controllers/network/enums";
 
 const networkIdToTypeMap = {
   [MAINNET_NETWORK_ID]: "mainnet",
-  [STAGINGNET_NETWORK_ID]: "stagingnet",
   [TESTNET_NETWORK_ID]: "testnet",
 };
 

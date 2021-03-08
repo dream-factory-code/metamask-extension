@@ -12,27 +12,8 @@ import EthQuery from "eth-query";
 import ObservableStore from "obs-store";
 import log from "loglevel";
 import pify from "pify";
-//import Web3 from 'web3'
-// import Web3 from "@dreamfactoryhr/web3t";
 
-// import SINGLE_CALL_BALANCES_ABI from "single-call-balance-checker-abi";
-// import {
-//   MAINNET,
-//   STAGINGNET,
-//   TESTNET,
-//   // MAINNET_NETWORK_ID,
-//   // RINKEBY_NETWORK_ID,
-//   // ROPSTEN_NETWORK_ID,
-//   // KOVAN_NETWORK_ID,
-// } from "../controllers/network/enums";
-
-import // SINGLE_CALL_BALANCES_ADDRESS,
-// SINGLE_CALL_BALANCES_ADDRESS_RINKEBY,
-// SINGLE_CALL_BALANCES_ADDRESS_ROPSTEN,
-// SINGLE_CALL_BALANCES_ADDRESS_KOVAN,
-"../controllers/network/contract-addresses";
 import { bnToHex } from "./util";
-// import { ethAddressToTolarAddress } from "../tolar-keyring/tolar-keyring";
 
 export default class AccountTracker {
   /**

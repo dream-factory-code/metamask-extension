@@ -10,7 +10,7 @@ import Preloader from "../../ui/icon/preloader";
 import { useI18nContext } from "../../../hooks/useI18nContext";
 import { useCancelTransaction } from "../../../hooks/useCancelTransaction";
 import { useRetryTransaction } from "../../../hooks/useRetryTransaction";
-import Button from "../../ui/button";
+// import { Button } from "@material-ui/core";
 import Tooltip from "../../ui/tooltip";
 import TransactionListItemDetails from "../transaction-list-item-details";
 import { CONFIRM_TRANSACTION_ROUTE } from "../../../helpers/constants/routes";
@@ -29,6 +29,7 @@ import { useTransactionTimeRemaining } from "../../../hooks/useTransactionTimeRe
 import IconWithLabel from "../../ui/icon-with-label";
 import Receive from "../../ui/icon/receive-icon.component";
 import Send from "../../ui/icon/send-icon.component";
+import copyToClipboard from "copy-to-clipboard";
 export default function TransactionListItem({
   transactionGroup,
   isEarliestNonce = false,
@@ -37,16 +38,7 @@ export default function TransactionListItem({
   const history = useHistory();
   const { hasCancelled } = transactionGroup;
   const [showDetails, setShowDetails] = useState(false);
-  // console.log("toni debug tx item", transactionGroup);
   const { id, time: submittedTime, gas_price: gasPrice } = transactionGroup;
-  // const [cancelEnabled, cancelTransaction] = useCancelTransaction(
-  //   transactionGroup
-  // );
-  // const retryTransaction = useRetryTransaction(transactionGroup);
-  // const shouldShowSpeedUp = useShouldShowSpeedUp(
-  //   transactionGroup,
-  //   isEarliestNonce
-  // );
 
   const {
     title = "",
@@ -86,31 +78,6 @@ export default function TransactionListItem({
     setShowDetails((prev) => !prev);
   }, [isUnapproved, history, id]);
 
-  const cancelButton = useMemo(() => {
-    const btn = (
-      <Button
-        // onClick={cancelTransaction}
-        rounded
-        className="transaction-list-item__header-button"
-        // disabled={!cancelEnabled}
-      >
-        {t("cancel")}
-      </Button>
-    );
-    if (hasCancelled || !isPending || isUnapproved) {
-      return null;
-    }
-
-    return "";
-    cancelEnabled ? (
-      btn
-    ) : (
-      <Tooltip title={t("notEnoughGas")} position="bottom">
-        <div>{btn}</div>
-      </Tooltip>
-    );
-  }, [isPending, t, isUnapproved, hasCancelled]);
-
   return (
     <>
       <ListItem
@@ -128,13 +95,14 @@ export default function TransactionListItem({
             <h2>
               <a
                 href={url}
-                className="tx_link_item"
+                className="tolar_link"
                 target="_blank"
                 rel="noreferrer noopener"
               >
                 {hash}
               </a>
             </h2>
+
             <h2>{otherAddressDisplayData}</h2>
 
             <h3>{date}</h3>
@@ -151,25 +119,13 @@ export default function TransactionListItem({
           </>
         }
       >
-        <div className="transaction-list-item__pending-actions">
-          {/* {speedUpButton} */}
-          {/* {cancelButton} */}
-        </div>
+        <div className="transaction-list-item__pending-actions"></div>
       </ListItem>
       {showDetails && (
         <TransactionListItemDetails
           title={title}
           onClose={toggleShowDetails}
           transactionGroup={transactionGroup}
-          // senderAddress={senderAddress}
-          // recipientAddress={recipientAddress}
-          // onRetry={retryTransaction}
-          // showRetry={status === FAILED_STATUS}
-          // showSpeedUp={shouldShowSpeedUp}
-          // isEarliestNonce={isEarliestNonce}
-          // onCancel={cancelTransaction}
-          // showCancel={isPending && !hasCancelled}
-          // cancelDisabled={!cancelEnabled}
         />
       )}
     </>

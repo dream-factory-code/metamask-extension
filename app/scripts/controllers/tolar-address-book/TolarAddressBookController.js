@@ -39,11 +39,7 @@ export class TolarAddressBookController extends BaseController {
    */
   delete(chainId, address) {
     // address = ethereumjs_util_1.toChecksumAddress(address);
-    console.log(
-      "toni debug contact delete",
-      this.state.addressBook[chainId],
-      !this.state.addressBook[chainId][address]
-    );
+
     if (
       !ethereumjs_util_1.isValidAddress(address) ||
       !this.state.addressBook[chainId] ||
@@ -82,20 +78,11 @@ export class TolarAddressBookController extends BaseController {
     };
 
     const ensName = util.normalizeEnsName(name);
-    console.log("toni debug contact set", { entry, name, ensName });
     if (ensName) {
       entry.name = ensName;
       entry.isEns = true;
     }
 
-    console.log("toni debug contact set", {
-      addressBook: Object.assign(Object.assign({}, this.state.addressBook), {
-        [chainId]: Object.assign(
-          Object.assign({}, this.state.addressBook[chainId]),
-          { [address]: entry }
-        ),
-      }),
-    });
     this.update({
       addressBook: Object.assign(Object.assign({}, this.state.addressBook), {
         [chainId]: Object.assign(

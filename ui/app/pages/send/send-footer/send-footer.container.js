@@ -84,7 +84,6 @@ function mapDispatchToProps(dispatch) {
     clearConfirmTransaction: () => dispatch(clearConfirmTransaction()),
     sign: (opts) => {
       const { sendToken, to, amount, from, gas, gasPrice, data } = opts;
-      console.log("TONI debug sign", opts);
       const txParams = constructTolarTxParams({
         amount,
         data,

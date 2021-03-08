@@ -15,11 +15,10 @@ import { useI18nContext } from "../../../hooks/useI18nContext";
 import TransactionListItem from "../transaction-list-item";
 import Button from "../../ui/button";
 import { TOKEN_CATEGORY_HASH } from "../../../helpers/constants/transactions";
-import { paginate } from "../../../store/actions";
+import { paginate, paginate2 } from "../../../store/actions";
 
 const PAGE_INCREMENT = 5;
 const getTransactionGroupRecipientAddressFilter = (recipientAddress) => {
-  console.log("Toni transaction list", { recipientAddress });
   return (args) => {
     const {
       initialTransaction: { txParams },
@@ -55,108 +54,32 @@ export default function TransactionList({
   const t = useI18nContext();
 
   const dispatch = useDispatch();
-  // const unfilteredPendingTransactions = useSelector(
-  //   nonceSortedPendingTransactionsSelector
-  // );
-  // const unfilteredCompletedTransactions = useSelector(
-  //   nonceSortedCompletedTransactionsSelector
-  // );
-  // const { transactionTime: transactionTimeFeatureActive } = useSelector(
-  //   getFeatureFlags
-  // );
-  // console.log(
-  //   "Toni transaction list",
-  //   unfilteredPendingTransactions,
-  //   unfilteredCompletedTransactions
-  // );
 
+  const defaultPagination = {
+    page: 1,
+    pageSize: 5,
+  };
   const tolarCompletedTransactions = useSelector(incomingTxListSelector);
-  const pagination = useSelector(incomingTxPaginationSelector);
-  const { page: currentPage, isLoading } = pagination;
-  // const pendingTransactions = useMemo(
-  //   () =>
-  //     getFilteredTransactionGroups(
-  //       unfilteredPendingTransactions,
-  //       hideTokenTransactions,
-  //       tokenAddress
-  //     ),
-  //   [hideTokenTransactions, tokenAddress, unfilteredPendingTransactions]
-  // );
+  const pagination =
+    useSelector(incomingTxPaginationSelector) || defaultPagination;
+  const { page: currentPage = 1, isLoading = false } = pagination;
+
   const completedTransactions = tolarCompletedTransactions;
-  // const completedTransactions = useMemo(
-  //   () =>
-  //     getFilteredTransactionGroups(
-  //       unfilteredCompletedTransactions,
-  //       hideTokenTransactions,
-  //       tokenAddress
-  //     ),
-  //   [hideTokenTransactions, tokenAddress, unfilteredCompletedTransactions]
-  // );
-
-  // const { fetchGasEstimates, fetchBasicGasAndTimeEstimates } = useMemo(
-  //   () => ({
-  //     fetchGasEstimates: (blockTime) =>
-  //       dispatch(actions.fetchGasEstimates(blockTime)),
-  //     fetchBasicGasAndTimeEstimates: () =>
-  //       dispatch(actions.fetchBasicGasAndTimeEstimates()),
-  //   }),
-  //   [dispatch]
-  // );
-
-  // keep track of previous values from state.
-  // loaded is used here to determine if our effect has ran at least once.
-  // const prevState = useRef({
-  //   loaded: false,
-  //   pendingTransactions,
-  //   transactionTimeFeatureActive,
-  // });
-
-  // useEffect(() => {
-  //   const { loaded } = prevState.current;
-  //   const pendingTransactionAdded =
-  //     pendingTransactions.length > 0 &&
-  //     prevState.current.pendingTransactions.length === 0;
-  //   const transactionTimeFeatureWasActivated =
-  //     !prevState.current.transactionTimeFeatureActive &&
-  //     transactionTimeFeatureActive;
-  //   if (
-  //     transactionTimeFeatureActive &&
-  //     pendingTransactions.length > 0 &&
-  //     (loaded === false ||
-  //       transactionTimeFeatureWasActivated ||
-  //       pendingTransactionAdded)
-  //   ) {
-  //     fetchBasicGasAndTimeEstimates().then(({ blockTime }) =>
-  //       fetchGasEstimates(blockTime)
-  //     );
-  //   }
-  //   prevState.current = {
-  //     loaded: true,
-  //     pendingTransactions,
-  //     transactionTimeFeatureActive,
-  //   };
-  // }, [
-  //   fetchGasEstimates,
-  //   fetchBasicGasAndTimeEstimates,
-  //   transactionTimeFeatureActive,
-  //   pendingTransactions,
-  // ]);
 
   const viewMore = useCallback(
     () => setLimit((prev) => prev + PAGE_INCREMENT),
     []
   );
 
-  // const pendingLength = pendingTransactions.length;
   const nextPage = () => {
-    paginate(currentPage + 1, dispatch);
+    paginate2(currentPage + 1, dispatch);
   };
   const prevPage = () => {
-    paginate(currentPage - 1, dispatch);
+    paginate2(currentPage - 1, dispatch);
   };
 
   const firstPage = () => {
-    paginate(1, dispatch);
+    paginate2(1, dispatch);
   };
   return (
     <div className="transaction-list">
@@ -167,24 +90,7 @@ export default function TransactionList({
       )}
 
       <div className="transaction-list__transactions">
-        {/* {pendingLength > 0 && (
-          <div className="transaction-list__pending-transactions">
-            <div className="transaction-list__header">
-              {`${t("queue")} (${pendingTransactions.length})`}
-            </div>
-            {pendingTransactions.map((transactionGroup, index) => (
-              <TransactionListItem
-                isEarliestNonce={index === 0}
-                transactionGroup={transactionGroup}
-                key={`${transactionGroup.nonce}:${index}`}
-              />
-            ))}
-          </div>
-        )} */}
         <div className="transaction-list__completed-transactions">
-          {/* {pendingLength > 0 ? (
-            <div className="transaction-list__header">{t("history")}</div>
-          ) : null} */}
           {completedTransactions.length > 0 ? (
             completedTransactions
               .slice(0, limit)

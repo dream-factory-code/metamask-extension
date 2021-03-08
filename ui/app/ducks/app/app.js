@@ -253,7 +253,7 @@ export default function reduceApp(state = {}, action) {
     case actionConstants.SHOW_LOADING:
       return {
         ...appState,
-        isLoading: true, // TODO TONI: enable loader true,
+        isLoading: true,
         loadingMessage: action.value,
       };
 

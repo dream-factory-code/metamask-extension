@@ -78,11 +78,7 @@ export default class ConfirmApproveContent extends Component {
       ethTransactionTotal,
       fiatTransactionTotal,
     } = this.props;
-    console.log("TONI DEBUG error  renderTransactionDetailsContent", {
-      currentCurrency,
-      ethTransactionTotal,
-      fiatTransactionTotal,
-    });
+
     return (
       <div className="confirm-approve-content__transaction-details-content">
         <div className="confirm-approve-content__small-text">

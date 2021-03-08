@@ -25,12 +25,10 @@ export function getCurrentNetwork(state) {
 }
 
 export function getGasLimit(state) {
-  // TODO TONI gas hax
   return state.metamask.send.tx.gas || 21000;
 }
 
 export function getGasPrice(state) {
-  // TODO TONI gas hax
   return (
     state.metamask.send.tx.gas_price ||
     1 ||

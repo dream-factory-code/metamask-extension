@@ -5,7 +5,6 @@ const pify = require("pify");
 export default class TolarBlockTracker extends PollingBlockTracker {
   constructor(opts) {
     super(opts);
-    console.log("TONI TolarBlockTracker constructed with opts", opts, this);
   }
 
   async _fetchLatestBlock() {
@@ -18,7 +17,6 @@ export default class TolarBlockTracker extends PollingBlockTracker {
     if (this._setSkipCacheFlag) reqInfo.skipCache = true;
     const resInfo = await pify((cb) => this._provider.sendAsync(reqInfo, cb))();
     const { result } = resInfo;
-    console.log("TONI debug result", result, "\nresInfo", resInfo);
     const req = {
       jsonrpc: "2.0",
       id: 1,

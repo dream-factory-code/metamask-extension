@@ -22,7 +22,6 @@ function QrCodeView(props) {
   const qrImage = qrCode(4, "M");
   qrImage.addData(address);
   qrImage.make();
-  console.log("toni debug QR message");
   return (
     <div className="qr-code">
       {Array.isArray(message) ? (

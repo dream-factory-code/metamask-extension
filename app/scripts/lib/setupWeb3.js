@@ -6,7 +6,6 @@
 // import "web3/dist/web3.min";
 import Web3 from "@dreamfactoryhr/web3t/dist/web3.min";
 
-console.log("imported web3.min");
 const shouldLogUsage = ![
   "docs.metamask.io",
   "metamask.github.io",
@@ -58,7 +57,6 @@ export default function setupWeb3(log) {
       return _web3[key];
     },
     set: (_web3, key, value) => {
-      console.log("TONI debug web3", { _web3, key, value });
       const name = stringifyKey(key);
       // if (shouldLogUsage) {
       //   window.ethereum.request({

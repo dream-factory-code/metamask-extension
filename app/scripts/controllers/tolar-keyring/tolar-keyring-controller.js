@@ -12,33 +12,12 @@ export class TolarKeyringController extends KeyringController {
       ? keyringTypes.concat(opts.keyringTypes)
       : keyringTypes;
     this.web3 = opts.web3;
-
-    // console.log('TONI tolar keyring constructed')
   }
-
-  // createFirstKeyTree () {
-  //   console.log('TONI create first key tree')
-  //   this.clearKeyrings()
-  //   return this.addNewKeyring('Tolar Keyring', { numberOfAccounts: 1 })
-  //     .then((keyring) => {
-  //       console.log('TONI, keyring added', keyring, 'TONI trying to get accounts')
-  //       return keyring.getAccounts()
-  //     })
-  //     .then(([firstAccount]) => {
-  //       if (!firstAccount) {
-  //         throw new Error('KeyringController - No account found on keychain.')
-  //       }
-  //       const hexAccount = firstAccount;//normalizeAddress(firstAccount)
-  //       this.emit('newVault', hexAccount)
-  //       return null
-  //     })
-  // }
 
   createFirstKeyTree() {
     this.clearKeyrings();
     return this.addNewKeyring("Tolar Keyring", { numberOfAccounts: 1 })
       .then((keyring) => {
-        console.log("TONI DEBUG keyring getAccounts", keyring.getAccounts());
         return keyring.getAccounts();
       })
       .then(([firstAccount]) => {
@@ -48,7 +27,6 @@ export class TolarKeyringController extends KeyringController {
         const hexAccount = /^54/.test(firstAccount)
           ? firstAccount
           : normalizeAddress(firstAccount);
-        console.log("TONI DEBUG keyring getAccounts", hexAccount);
         this.emit("newVault", hexAccount);
         return null;
       });
@@ -63,7 +41,7 @@ export class TolarKeyringController extends KeyringController {
         return res.concat(arr);
       }, []);
     });
-    // TODO TONI CLEANUP remove normalize for tolar only and improve testing for tolar addresses
+    // TODO CLEANUP remove normalize for tolar only and improve testing for tolar addresses
     return addrs.map((address) =>
       /^54/.test(address) ? address : normalizeAddress(address)
     );
@@ -74,7 +52,6 @@ export class TolarKeyringController extends KeyringController {
       ? _fromAddress
       : normalizeAddress(_fromAddress);
     return this.getKeyringForAccount(fromAddress).then((keyring) => {
-      console.log("keyring", keyring);
       return keyring.signTransaction(fromAddress, ethTx, opts);
     });
   }
@@ -100,8 +77,38 @@ export class TolarKeyringController extends KeyringController {
     return keyring.getAppKeyAddress(address, origin);
   }
 
+  removeAccount(address) {
+    return this.getKeyringForAccount(address)
+      .then((keyring) => {
+        // Not all the keyrings support this, so we have to check
+        if (typeof keyring.removeAccount === "function") {
+          keyring.removeAccount(address);
+          this.emit("removedAccount", address);
+          return keyring.getAccounts();
+        }
+        return Promise.reject(
+          new Error(
+            `Keyring ${keyring.type} doesn't support account removal operations`
+          )
+        );
+      })
+      .then((accounts) => {
+        // Check if this was the last/only account
+        if (accounts.length === 0) {
+          return this.removeEmptyKeyrings();
+        }
+        return undefined;
+      })
+      .then(this.persistAllKeyrings.bind(this))
+      .then(this._updateMemStoreKeyrings.bind(this))
+      .then(this.fullUpdate.bind(this))
+      .catch((e) => {
+        return Promise.reject(e);
+      });
+  }
+
   getKeyringForAccount(address) {
-    const hexed = /^54/.test(address) ? address : normalizeAddress(address);
+    // const hexed = /^54/.test(address) ? address : normalizeAddress(address);
 
     // log.debug(`KeyringController - getKeyringForAccount: ${hexed}`);
 
@@ -111,10 +118,8 @@ export class TolarKeyringController extends KeyringController {
       })
     ).then((candidates) => {
       const winners = candidates.filter((candidate) => {
-        const accounts = candidate[1].map((_address) =>
-          /^54/.test(_address) ? _address : normalizeAddress(_address)
-        );
-        return accounts.includes(hexed);
+        const accounts = candidate[1];
+        return accounts.includes(address);
       });
       if (winners && winners.length > 0) {
         return winners[0][0];
@@ -174,7 +179,6 @@ export class TolarKeyringController extends KeyringController {
   }
 
   fullUpdate() {
-    console.log("TONI debug error, ", this.memStore.getState(), this);
     this.emit("update", this.memStore.getState());
     return this.memStore.getState();
   }

@@ -36,8 +36,8 @@ const INVALID_RECIPIENT_ADDRESS_NOT_ETH_NETWORK_ERROR =
 const REQUIRED_ERROR = "required";
 const KNOWN_RECIPIENT_ADDRESS_ERROR = "knownAddressRecipient";
 
-const SIMPLE_GAS_COST = 21000; //TONI gas hax "0x5208"; // Hex for 21000, cost of a simple send.
-const BASE_TOKEN_GAS_COST = "0x1"; // TODO TONI CHECK Hex for 100000, a base estimate for token transfers.
+const SIMPLE_GAS_COST = 21000;
+const BASE_TOKEN_GAS_COST = "0x1";
 
 export {
   INSUFFICIENT_FUNDS_ERROR,

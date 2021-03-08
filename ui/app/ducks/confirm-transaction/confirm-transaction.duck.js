@@ -285,7 +285,6 @@ export function updateGasAndCalculate({ gasLimit, gasPrice }) {
       },
     };
     const { confirmTransaction: confTxData } = getState();
-    console.log("toni debug updateTxDataAndCalculate", newTxData, confTxData);
     dispatch(updateTxDataAndCalculate(newTxData));
   };
 }
@@ -316,7 +315,6 @@ function increaseFromLastGasPrice(txData) {
 }
 
 export function updateTxDataAndCalculate(txData) {
-  console.log("update tx data and calculate", txData);
   return (dispatch, getState) => {
     const state = getState();
     const currentCurrency = currentCurrencySelector(state);

@@ -35,7 +35,6 @@ const BIG_NUMBER_ETH_MULTIPLIER = new BigNumber("1");
 // Setter Maps
 const toBigNumber = {
   hex: (n) => {
-    // TODO TONI would be better to call dec method instead of making hex method dec method
     try {
       return new BigNumber(stripHexPrefix(n), 16);
     } catch (e) {
@@ -169,7 +168,6 @@ const addCurrencies = (a, b, options = {}) => {
 
 const subtractCurrencies = (a, b, options = {}) => {
   const { aBase, bBase, ...conversionOptions } = options;
-  // console.log("toni debug edit subtractCurrencies", { a, b, options });
   const value = new BigNumber(String(a), aBase).minus(b, bBase);
 
   return converter({
@@ -184,7 +182,6 @@ const multiplyCurrencies = (a, b, options = {}) => {
   const bigNumberB = new BigNumber(String(b), multiplierBase);
 
   const value = bigNumberA.times(bigNumberB);
-  // console.log("toni debug edit multiply", { a, b, options, value });
 
   return converter({
     value,

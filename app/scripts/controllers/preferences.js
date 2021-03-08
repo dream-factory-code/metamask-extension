@@ -792,8 +792,6 @@ export default class PreferencesController {
       );
     }
     if (!/^54/.test(rawAddress)) {
-      // if (!isValidAddress(rawAddress)) {
-      // TODO TONI: check when this is activated, if so replace it with await web3.tolar.accounts.verifyAddress(validAddress);
       throw new Error(`Invalid address ${rawAddress}`);
     }
   }

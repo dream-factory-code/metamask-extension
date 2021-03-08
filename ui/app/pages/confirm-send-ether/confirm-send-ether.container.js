@@ -26,18 +26,6 @@ const mapDispatchToProps = (dispatch) => {
         receiver_address: to,
         amount,
       } = txParams?.body || txParams;
-      console.log("toni debug edit tx data", {
-        txData,
-        txParams,
-        from,
-        gasLimit,
-        gasPrice,
-        gasTotal: null,
-        to,
-        amount,
-        errors: { to: null, amount: null },
-        editingTransactionId: id && id.toString(),
-      });
       dispatch(
         updateSend({
           from,

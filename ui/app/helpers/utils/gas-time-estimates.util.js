@@ -1,7 +1,6 @@
 import BigNumber from "bignumber.js";
 
 export function newBigSigDig(n) {
-  // console.log("toni debug edit", n);
   return new BigNumber(new BigNumber(String(n)).toPrecision(15));
 }
 

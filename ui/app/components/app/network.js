@@ -85,7 +85,7 @@ export default class Network extends Component {
               nonSelectBackgroundColor="#15afb2"
               loading={networkNumber === "loading"}
             />
-            <div className="network-name">{"Main Net" || t("mainnet")}</div>
+            <div className="network-name">{"Main Net"}</div>
           </NetworkIndicator>
         );
 
@@ -93,7 +93,7 @@ export default class Network extends Component {
         return (
           <NetworkIndicator
             disabled={disabled}
-            hoverText={"Staging Net" || t("stagingnet")}
+            hoverText={"Staging Net"}
             onClick={onClick}
             providerName={providerName}
           >
@@ -102,9 +102,7 @@ export default class Network extends Component {
               nonSelectBackgroundColor="#ec2c50"
               loading={networkNumber === "loading"}
             />
-            <div className="network-name">
-              {"Staging Net" || t("stagingnet")}
-            </div>
+            <div className="network-name">{"Staging Net"}</div>
           </NetworkIndicator>
         );
 

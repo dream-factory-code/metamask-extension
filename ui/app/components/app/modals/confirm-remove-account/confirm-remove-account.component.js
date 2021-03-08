@@ -46,7 +46,7 @@ export default class ConfirmRemoveAccount extends Component {
             {addressSummary(identity.address, 4, 4)}
           </span>
         </div>
-        <div className="confirm-remove-account__account__link">
+        {/* <div className="confirm-remove-account__account__link">
           <a
             className=""
             href={getAccountLink(identity.address, this.props.network)}
@@ -56,7 +56,7 @@ export default class ConfirmRemoveAccount extends Component {
           >
             <img src="images/popout.svg" />
           </a>
-        </div>
+        </div> */}
       </div>
     );
   }

@@ -180,12 +180,6 @@ async function loadStateFromPersistence() {
   // report migration errors to sentry
   migrator.on("error", (err) => {
     // get vault structure without secrets
-    console.error("TONI debug vault", err);
-    const vaultStructure = getObjStructure(versionedData);
-    // sentry.captureException(err, {
-    //   // "extra" key is required by Sentry
-    //   extra: { vaultStructure },
-    // });
   });
 
   // migrate data

@@ -32,7 +32,7 @@ import {
 
 abiDecoder.addABI(abi);
 
-const SIMPLE_GAS_COST = 21000; // TONI gas hax "0x5208"; // Hex for 21000, cost of a simple send.
+const SIMPLE_GAS_COST = 21000;
 const MAX_MEMSTORE_TX_LIST_SIZE = 100; // Number of transactions (by unique nonces) to keep in memory
 
 /**
@@ -305,7 +305,6 @@ export default class TransactionController extends EventEmitter {
    * @returns {Promise<object>} - resolves with txMeta
    */
   async addTxGasDefaults(txMeta, getCodeResponse) {
-    // TODO TONI revisit
     const defaultGasPrice = 1; //await this._getDefaultGasPrice(txMeta);
     const { gasLimit: defaultGasLimit, simulationFails } = { gasLimit: 21000 }; // await this._getDefaultGasLimit(txMeta, getCodeResponse);
 
@@ -332,10 +331,7 @@ export default class TransactionController extends EventEmitter {
     if (txMeta.txParams.gasPrice) {
       return undefined || 1;
     }
-    // TODO toni revisit
-    const gasPrice = 1; //await this.query.gasPrice();
-
-    // return ethUtil.addHexPrefix(gasPrice.toString(16));¸
+    // TODO revisit
     return 1;
   }
 
@@ -404,7 +400,7 @@ export default class TransactionController extends EventEmitter {
         from,
         to: from,
         nonce,
-        gas: 21000, // TONI gas hax "0x5208",
+        gas: 21000,
         value: "0x0",
         gasPrice: newGasPrice,
       },
@@ -484,9 +480,7 @@ export default class TransactionController extends EventEmitter {
     @param {number} txId - the tx's Id
   */
 
-  // TONI tolar and mm flow differs, replaced this with sendSignedTx but keeps tx status flow
   async approveTransaction(txId) {
-    //TODO TONI APPROVE TX implement here, or at least start investigating
     // TODO: Move this safety out of this function.
     // Since this transaction is async,
     // we need to keep track of what is currently being signed,
@@ -564,25 +558,15 @@ export default class TransactionController extends EventEmitter {
       // get next nonce
       const txMeta = this.txStateManager.getTx(txId);
       const fromAddress = txMeta.txParams.body.sender_address; //txMeta.txParams.from;
-      // wait for a nonce
-      // let { customNonceValue } = txMeta;
-      // customNonceValue = Number(customNonceValue);
-      console.log("TONI debug send signed tx", txMeta);
-      // nonceLock = await this.nonceTracker.getNonceLock(fromAddress);
-      // add nonce to txParams
-      // if txMeta has lastGasPrice then it is a retry at same nonce with higher
-      // gas price transaction and their for the nonce should not be calculated
+
       const nonce = await this.web3.tolar.getNonce(fromAddress);
       this.txStateManager.updateTx(
         { ...txMeta, nonce },
         "transactions#approveTransaction"
       );
-      await this.web3.tolar.sendSignedTransaction(txMeta.txParams);
-      // sign transaction
-      // const rawTx = await this.signTransaction(txId);
-      // await this.publishTransaction(txId, rawTx);
-      // must set transaction to submitted/failed before releasing lock
-      // nonceLock.releaseLock();
+      const res = await this.web3.tolar.sendSignedTransaction(txMeta.txParams);
+
+      this.txStateManager.setTxStatusConfirmed(txId, res);
     } catch (err) {
       // this is try-catch wrapped so that we can guarantee that the nonceLock is released
       try {
@@ -598,7 +582,6 @@ export default class TransactionController extends EventEmitter {
       throw err;
     } finally {
       this.inProcessOfSigning.delete(txId);
-      this.txStateManager.setTxStatusConfirmed(txId);
     }
   }
 
@@ -615,7 +598,6 @@ export default class TransactionController extends EventEmitter {
     // sign tx
     const fromAddress = txParams.from;
     const ethTx = new Transaction(txParams);
-    console.log("toni debug signTransaction", txMeta, ethTx);
     await this.signEthTx(ethTx, fromAddress);
     // add r,s,v values for provider request purposes see createMetamaskMiddleware
     // and JSON rpc standard for further explanation
@@ -692,11 +674,13 @@ export default class TransactionController extends EventEmitter {
         txMeta,
         "transactions#confirmTransaction - add txReceipt"
       );
+
+      this.txStateManager.setTxStatusConfirmed(txId);
     } catch (err) {
       log.error(err);
+      this.txStateManager.setTxStatusFailed(txId, err);
     }
 
-    this.txStateManager.setTxStatusConfirmed(txId);
     this._markNonceDuplicatesDropped(txId);
   }
 
@@ -706,7 +690,6 @@ export default class TransactionController extends EventEmitter {
     @returns {Promise<void>}
   */
   async cancelTransaction(txId) {
-    console.log("toni debug cancel transaction", txId);
     this.txStateManager.setTxStatusRejected(txId);
   }
 
@@ -825,9 +808,9 @@ export default class TransactionController extends EventEmitter {
       "tx:failed",
       this.txStateManager.setTxStatusFailed.bind(this.txStateManager)
     );
-    this.pendingTxTracker.on("tx:confirmed", (txId, transactionReceipt) =>
-      this.confirmTransaction(txId, transactionReceipt)
-    );
+    this.pendingTxTracker.on("tx:confirmed", (txId, transactionReceipt) => {
+      return this.confirmTransaction(txId, transactionReceipt);
+    });
     this.pendingTxTracker.on(
       "tx:dropped",
       this.txStateManager.setTxStatusDropped.bind(this.txStateManager)
@@ -859,7 +842,6 @@ export default class TransactionController extends EventEmitter {
   */
   async _determineTransactionCategory(txParams) {
     const { data, to } = txParams;
-    console.log("TONI DEBUG getCode", txParams);
 
     const { name } = (data && abiDecoder.decodeMethod(data)) || {};
     const tokenMethodName = [
@@ -878,8 +860,6 @@ export default class TransactionController extends EventEmitter {
     let code;
     if (!result) {
       try {
-        console.log("TONI DEBUG getCode", txParams);
-        //code = await this.query.getCode(to);
       } catch (e) {
         code = null;
         log.warn(e);
@@ -889,10 +869,7 @@ export default class TransactionController extends EventEmitter {
 
       result = codeIsEmpty ? SEND_ETHER_ACTION_KEY : CONTRACT_INTERACTION_KEY;
     }
-    console.log("TONI TODO determineTransactionCategory", {
-      transactionCategory: result,
-      getCodeResponse: code,
-    });
+
     return { transactionCategory: result, getCodeResponse: code };
   }
 
@@ -934,7 +911,6 @@ export default class TransactionController extends EventEmitter {
 
     function updateSubscription() {
       const pendingTxs = txStateManager.getPendingTransactions();
-      console.log("TONI debug paste address updateSubscription", pendingTxs);
       if (!listenersAreActive && pendingTxs.length > 0) {
         blockTracker.on("latest", latestBlockHandler);
         listenersAreActive = true;

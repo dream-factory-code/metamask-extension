@@ -81,7 +81,6 @@ export default class AccountTracker {
     this._blockTracker.removeListener("latest", this._updateForBlock);
     // add listener
     this._blockTracker.addListener("latest", this._updateForBlock);
-    console.log("TONI debug paste blockTracker start", arguments);
 
     // fetch account balances
     this._updateAccounts();
@@ -120,11 +119,6 @@ export default class AccountTracker {
       }
     });
 
-    console.log("TONI debug account infinite loop", {
-      addresses,
-      locals,
-      accountsToAdd,
-    });
     this.addAccounts(accountsToAdd);
     this.removeAccount(accountsToRemove);
   }
@@ -186,13 +180,10 @@ export default class AccountTracker {
    */
   async _updateForBlock(block) {
     this._currentBlockNumber = block;
-    console.log("TONI debug, should be blockNumber not block object", block);
     // block gasLimit polling shouldn't be in account-tracker shouldn't be here...
     // const currentBlock = await this._query.getBlockByNumber(blockNumber, false);
     const { block_index } = block;
-    // TODO Toni uncomment this when staging is fixed:
     const currentBlock = await this.web3.tolar.getBlockByIndex(block_index);
-    console.log("TONI web3.tolar.getBlockByIndex", block, currentBlock);
     if (!currentBlock) {
       return;
     }
@@ -217,10 +208,6 @@ export default class AccountTracker {
     const { accounts } = this.store.getState();
     const addresses = Object.keys(accounts);
     const currentNetwork = this.network.getNetworkState();
-    console.log("TONI this.network.getNetworkState(), accounts", {
-      currentNetwork,
-      accounts,
-    });
     switch (currentNetwork) {
       // case MAINNET_NETWORK_ID.toString():
       //   await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS)
@@ -254,16 +241,10 @@ export default class AccountTracker {
   async _updateAccount(address) {
     // query balance
     if (!/^54/.test(address)) return;
-    console.log("toni debug account", this._currentBlockNumber, { address });
     const blockCount =
       this._currentBlockNumber.block_index ||
       (await this.web3.tolar.getBlockCount());
-    //const tolarAddress = ethAddressToTolarAddress(address);
-    // const { balance } = await this.web3.tolar.getBalance(
-    //   address,
-    //   blockCount - 1
-    // );
-    // TODO TONI CLEANUP
+
     const { balance = "0" } = await this._query.sendAsync({
       method: "tol_getLatestBalance",
       params: [address],
@@ -272,12 +253,7 @@ export default class AccountTracker {
     const result = { address, balance /*, tolarAddress*/ };
     // update accounts state
     const { accounts, ...state } = this.store.getState();
-    console.log(
-      "toni debug address, balance",
-      { address /*, tolarAddress*/ },
-      { balance },
-      { state }
-    );
+
     // only populate if the entry is still present
     if (!accounts[address]) {
       return;

@@ -294,7 +294,6 @@ export default class SignatureRequestOriginal extends Component {
           large
           className="request-signature__footer__sign-button"
           onClick={async (event) => {
-            console.log("TONi debug sign", event);
             this._removeBeforeUnload();
             await sign(event);
             this.context.metricsEvent({

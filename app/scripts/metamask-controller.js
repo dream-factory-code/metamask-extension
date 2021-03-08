@@ -78,7 +78,6 @@ export default class MetamaskController extends EventEmitter {
    */
   constructor(opts) {
     super();
-    console.log(`constructing metamask controller with options: \n `, opts);
     this.defaultMaxListeners = 20;
 
     this.sendUpdate = debounce(this.privateSendUpdate.bind(this), 200);
@@ -95,26 +94,22 @@ export default class MetamaskController extends EventEmitter {
 
     // observable state store
     this.store = new ComposableObservableStore(initState);
-    console.log(`mm controller store:\n`, this.store);
     // external connections by origin
     // Do not modify directly. Use the associated methods.
     this.connections = {};
 
     // lock to ensure only one vault created at once
     this.createVaultMutex = new Mutex();
-    console.log(`created vault mutex:\n`, this.createVaultMutex);
     // next, we will initialize the controllers
     // controller initialization order matters
 
     this.networkController = new NetworkController(initState.NetworkController);
-    console.log(`network Controller: \n`, this.networkController);
     this.preferencesController = new PreferencesController({
       initState: initState.PreferencesController,
       initLangCode: opts.initLangCode,
       openPopup: opts.openPopup,
       network: this.networkController,
     });
-    console.log(`preferences Controller: \n `, this.preferencesController);
     this.appStateController = new AppStateController({
       addUnlockListener: this.on.bind(this, "unlock"),
       isUnlocked: this.isUnlocked.bind(this),
@@ -125,7 +120,6 @@ export default class MetamaskController extends EventEmitter {
     });
     // this.currencyRateController = new CurrencyRateController(undefined, initState.CurrencyController)
     this.phishingController = new PhishingController();
-    console.log(`phishing Controller: \n`, this.phishingController);
     // now we can initialize the RPC provider, which other controllers require
     this.initializeProvider();
     this.provider = this.networkController.getProviderAndBlockTracker().provider;
@@ -277,7 +271,6 @@ export default class MetamaskController extends EventEmitter {
     this.txController.on("newUnapprovedTx", () => opts.showUnapprovedTx());
 
     this.txController.on(`tx:status-update`, async (txId, status) => {
-      console.log("txstatus update: do i have id?", txId, status);
       if (status === "confirmed" || status === "failed") {
         const txMeta = this.txController.txStateManager.getTx(txId);
         this.platform.showTransactionNotification(txMeta);
@@ -380,7 +373,6 @@ export default class MetamaskController extends EventEmitter {
       version,
       // account mgmt
       getAccounts: async ({ origin }) => {
-        console.log(`init provider, get Accounts; origin: \n `, { origin });
         if (origin === "metamask") {
           const selectedAddress = this.preferencesController.getSelectedAddress();
           return selectedAddress ? [selectedAddress] : [];
@@ -747,25 +739,15 @@ export default class MetamaskController extends EventEmitter {
     try {
       let vault;
       const accounts = await this.keyringController.getAccounts();
-      console.log(
-        "TONI mm-ctrl keyringController getAccounts() call response ",
-        accounts
-      );
       if (accounts.length > 0) {
         vault = await this.keyringController.fullUpdate();
-        console.log("TONI mm-ctrl update vault", vault);
       } else {
-        console.log("TONI mm-ctrl before create vault");
         vault = await this.keyringController.createNewVaultAndKeychain(
           password
         );
-        console.log("TONI mm-ctrl create vault", vault);
         const addresses = await this.keyringController.getAccounts();
-        console.log("TONI debug Error", { addresses });
         this.preferencesController.setAddresses(addresses);
-        console.log("TONI debug Error preference controller success");
         this.selectFirstIdentity(addresses[0]);
-        console.log("TONI debug Error select first identity sucess");
       }
       return vault;
     } finally {
@@ -784,7 +766,6 @@ export default class MetamaskController extends EventEmitter {
       let accounts, lastBalance;
 
       const { keyringController } = this;
-      console.log({ keyringController });
       // clear known identities
       this.preferencesController.setAddresses([]);
 
@@ -822,7 +803,6 @@ export default class MetamaskController extends EventEmitter {
         throw new Error("MetamaskController - No Tolar Keyring found");
       }
 
-      console.log("TONI last balance infinite loop?", lastBalance);
       // seek out the first zero balance
       while (lastBalance !== "0") {
         await keyringController.addNewAccount(primaryKeyring);
@@ -831,7 +811,6 @@ export default class MetamaskController extends EventEmitter {
       }
 
       // set new identities
-      console.log("TONI DEBUG accounts", accounts);
       this.preferencesController.setAddresses(accounts);
       this.selectFirstIdentity();
       return vault;
@@ -865,16 +844,6 @@ export default class MetamaskController extends EventEmitter {
       });
       const balance = res?.balance || "0";
       resolve(balance);
-      // TODO TONI implement real metod
-      // ethQuery.getBalance(address, (error, balance) => {
-      //   if (error) {
-      //     reject(error);
-      //     log.error(error);
-      //   } else {
-      //     resolve(balance || "0x0");
-      //   }
-      // });
-      // }
     });
   }
 
@@ -897,14 +866,7 @@ export default class MetamaskController extends EventEmitter {
       selectedAddress,
       tokens,
     } = this.preferencesController.store.getState();
-    console.log("TONI fetchInfoToSync", {
-      accountTokens,
-      currentLocale,
-      frequentRpcList,
-      identities,
-      selectedAddress,
-      tokens,
-    });
+
     // Filter ERC20 tokens
     const filteredAccountTokens = {};
     Object.keys(accountTokens).forEach((address) => {
@@ -937,7 +899,6 @@ export default class MetamaskController extends EventEmitter {
     };
 
     // Accounts
-    console.log("TONI accounts");
     const tolarKeyring = this.keyringController.getKeyringsByType(
       "Tolar Keyring"
     )[0];
@@ -1011,20 +972,6 @@ export default class MetamaskController extends EventEmitter {
 
     await this.blockTracker.checkForLatestBlock();
 
-    // try {
-    //   const threeBoxSyncingAllowed = this.threeBoxController.getThreeBoxSyncingState();
-    //   if (threeBoxSyncingAllowed && !this.threeBoxController.box) {
-    //     // 'await' intentionally omitted to avoid waiting for initialization
-    //     this.threeBoxController.init();
-    //     this.threeBoxController.turnThreeBoxSyncingOn();
-    //   } else if (threeBoxSyncingAllowed && this.threeBoxController.box) {
-    //     this.threeBoxController.turnThreeBoxSyncingOn();
-    //   }
-    // } catch (error) {
-    //   log.error(error);
-    //   console.log("TONI debug error", error);
-    // }
-
     return this.keyringController.fullUpdate();
   }
 
@@ -1052,11 +999,8 @@ export default class MetamaskController extends EventEmitter {
     try {
       const { identities } = this.preferencesController.store.getState();
       const address = _address || Object.keys(identities)[0];
-      console.log("TONI debug error, identities found");
       this.preferencesController.setSelectedAddress(address);
-    } catch (e) {
-      console.log("toni debug error, e", { e });
-    }
+    } catch (e) {}
   }
 
   //
@@ -1189,7 +1133,6 @@ export default class MetamaskController extends EventEmitter {
     const primaryKeyring = this.keyringController.getKeyringsByType(
       "Tolar Keyring"
     )[0];
-    console.log("TONI add new account \n primaryKeyring", primaryKeyring);
     if (!primaryKeyring) {
       throw new Error("MetamaskController - No HD Key Tree found");
     }
@@ -1221,7 +1164,6 @@ export default class MetamaskController extends EventEmitter {
    * @returns {Promise<string>} - Seed phrase to be confirmed by the user.
    */
   async verifySeedPhrase() {
-    console.log("TONI mm-ctrl verify seed phrase", this.keyringController);
     //const primaryKeyring = this.keyringController.getKeyringsByType('HD Key Tree')[0]
     const primaryKeyring = this.keyringController.getKeyringsByType(
       "Tolar Keyring"
@@ -1229,7 +1171,6 @@ export default class MetamaskController extends EventEmitter {
     if (!primaryKeyring) {
       throw new Error("MetamaskController - No HD Key Tree found");
     }
-    console.log("TONI primary keyring", primaryKeyring);
     const serialized = await primaryKeyring.serialize();
     const seedWords = serialized.mnemonic;
 

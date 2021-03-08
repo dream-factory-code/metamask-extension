@@ -122,7 +122,7 @@ export default class AdvancedGasInputs extends Component {
       <div className="advanced-gas-inputs__gas-edit-row">
         <div className="advanced-gas-inputs__gas-edit-row__label">
           {label}
-          <i className="fa fa-info-circle" onClick={infoOnClick} />
+          {/* <i className="fa fa-info-circle" onClick={infoOnClick} /> */}
         </div>
         <div className="advanced-gas-inputs__gas-edit-row__input-wrapper">
           <input

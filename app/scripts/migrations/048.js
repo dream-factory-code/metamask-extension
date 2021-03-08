@@ -17,6 +17,5 @@ export default {
 };
 
 function transformState(state) {
-  console.log("toni debug migrate state", state);
   return state;
 }

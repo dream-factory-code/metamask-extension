@@ -45,7 +45,6 @@ export default class SendFooter extends Component {
       unapprovedTxs,
       clearConfirmTransaction,
     } = this.props;
-    console.log("TONI debug send cancel", this.props);
 
     clearSend();
     clearConfirmTransaction();
@@ -76,31 +75,10 @@ export default class SendFooter extends Component {
       history,
       gasEstimateType,
     } = this.props;
-    console.log("TONI debug send submit", this.props);
     const { metricsEvent } = this.context;
 
-    // Should not be needed because submit should be disabled if there are errors.
-    // const noErrors = !amountError && toError === null
-
-    // if (!noErrors) {
-    //   return
-    // }
-
-    // TODO: add nickname functionality
     await addToAddressBookIfNew(to, toAccounts);
-    // const promise = false //editingTransactionId
-    //   ? update({
-    //       amount,
-    //       data,
-    //       editingTransactionId,
-    //       from,
-    //       gas,
-    //       gasPrice,
-    //       sendToken,
-    //       to,
-    //       unapprovedTxs,
-    //     })
-    //   : sign({ data, sendToken, to, amount, from, gas, gasPrice });
+
     await sign({
       data,
       sendToken,
@@ -110,20 +88,7 @@ export default class SendFooter extends Component {
       gas,
       gasPrice,
     });
-    // Promise.resolve(promise).then(() => {
-    //   // metricsEvent({
-    //   //   eventOpts: {
-    //   //     category: "Transactions",
-    //   //     action: "Edit Screen",
-    //   //     name: "Complete",
-    //   //   },
-    //   //   customVariables: {
-    //   //     gasChanged: gasEstimateType,
-    //   //   },
-    //   // });
-    //   history.push(CONFIRM_TRANSACTION_ROUTE);
-    // });
-    console.log("toni debug history push confirm tx");
+
     history.push(CONFIRM_TRANSACTION_ROUTE);
   }
 
@@ -139,7 +104,7 @@ export default class SendFooter extends Component {
       gasIsLoading,
     } = this.props;
     const missingTokenBalance = sendToken && !tokenBalance;
-    const gasLimitTooLow = gasLimit < 5208; //TONI HAX makes comment invalid 5208 is hex value of 21000, minimum gas limit
+    const gasLimitTooLow = gasLimit < 5208;
     const shouldBeDisabled =
       inError ||
       !gasTotal ||

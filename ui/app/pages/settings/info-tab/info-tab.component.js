@@ -17,7 +17,7 @@ export default class InfoTab extends PureComponent {
     return (
       <div className="settings-page__content-item settings-page__content-item--without-height">
         <div className="info-tab__link-header">{t("links")}</div>
-        <div className="info-tab__link-item">
+        {/* <div className="info-tab__link-item">
           <Button
             type="link"
             href="https://metamask.io/privacy.html"
@@ -61,11 +61,11 @@ export default class InfoTab extends PureComponent {
           >
             {t("supportCenter")}
           </Button>
-        </div>
+        </div> */}
         <div className="info-tab__link-item">
           <Button
             type="link"
-            href="https://metamask.io/"
+            href="https://tolar.io/"
             target="_blank"
             rel="noopener noreferrer"
             className="info-tab__link-text"
@@ -74,15 +74,15 @@ export default class InfoTab extends PureComponent {
           </Button>
         </div>
         <div className="info-tab__link-item">
-          {/* <Button
+          <Button
             type="link"
-            href="https://metamask.zendesk.com/hc/en-us/requests/new"
+            href="mailto:info@tolar.io"
             target="_blank"
             rel="noopener noreferrer"
             className="info-tab__link-text"
           >
             {t("contactUs")}
-          </Button> */}
+          </Button>
         </div>
       </div>
     );
@@ -99,15 +99,13 @@ export default class InfoTab extends PureComponent {
               <img src="images/icon-128.png" className="info-tab__logo" />
             </div>
             <div className="info-tab__item">
-              <div className="info-tab__version-header">
-                {t("metamaskVersion")}
-              </div>
+              <div className="info-tab__version-header">Version</div>
               <div className="info-tab__version-number">
                 {this.state.version}
               </div>
             </div>
             <div className="info-tab__item">
-              <div className="info-tab__about">{t("builtInCalifornia")}</div>
+              {/* <div className="info-tab__about">{t("builtInCalifornia")}</div> */}
             </div>
           </div>
           {this.renderInfoLinks()}

@@ -205,7 +205,7 @@ async function estimateGas({
 
   // if recipient has no code, gas is 21k max:
   if (!sendToken && !data) {
-    const code = Boolean(to); //TONI TODO: && (await global.eth.getCode(to));
+    const code = Boolean(to);
     // Geth will return '0x', and ganache-core v2.2.1 will return '0x0'
     const codeIsEmpty = !code || code === "0x" || code === "0x0";
     if (codeIsEmpty) {
@@ -251,8 +251,7 @@ async function estimateGas({
       toNumericBase: "hex",
     })
   );
-  console.log("TONI debug set gas on tx");
-  // TODO TONI replace this when replacing transaction state
+
   const tolarTx = {
     sender_address: paramsForGasEstimate.from,
     receiver_address: paramsForGasEstimate.to,
@@ -265,7 +264,6 @@ async function estimateGas({
   // run tx
   try {
     const estimatedGas = await estimateGasMethod(tolarTx); //paramsForGasEstimate);
-    console.log("estimated gas response", estimatedGas);
     const estimateWithBuffer = addGasBuffer(
       estimatedGas.toString(16),
       blockGasLimit,
@@ -366,6 +364,6 @@ function removeLeadingZeroes(str) {
   return str.replace(/^0*(?=\d)/u, "");
 }
 
-function ellipsify(text, first = 6, last = 4) {
+function ellipsify(text = "", first = 6, last = 4) {
   return `${text.slice(0, first)}...${text.slice(-last)}`;
 }

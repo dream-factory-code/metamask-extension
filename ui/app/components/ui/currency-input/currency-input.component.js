@@ -110,39 +110,6 @@ export default class CurrencyInput extends PureComponent {
     } = this.props;
     const { isSwapped } = this.state;
 
-    let shouldUseFiatTrue, shouldUseFiatFalse;
-    // const hexValue = this.shouldUseFiat()
-    //   ? (shouldUseFiatTrue = getWeiHexFromDecimalValue({
-    //       value: decimalValue,
-    //       fromCurrency,
-    //       conversionRate,
-    //       invertConversionRate: true,
-    //     }))
-    //   : (shouldUseFiatFalse = getWeiHexFromDecimalValue({
-    //       value: decimalValue,
-    //       fromCurrency: ETH,
-    //       fromDenomination: ETH,
-    //       conversionRate,
-    //     }));
-    // console.log(
-    //   "TONI debug amount",
-    //   {
-    //     value: decimalValue,
-    //     decimalValue,
-    //     fromCurrency,
-    //     conversionRate,
-    //     invertConversionRate: true,
-    //   },
-    //   "\n decimal value",
-    //   decimalValue,
-    //   "\n hexValue",
-    //   {
-    //     shouldUseFiat: this.shouldUseFiat(),
-    //     shouldUseFiatTrue,
-    //     shouldUseFiatFalse,
-    //   }
-    // );
-
     this.setState({
       hexValue: decimalValue,
       decimalValue: decimalValue,
@@ -165,11 +132,7 @@ export default class CurrencyInput extends PureComponent {
     let currency, numberOfDecimals;
 
     if (hideFiat) {
-      return (
-        <div className="currency-input__conversion-component">
-          {/* {this.context.t("noConversionRateAvailable")} */}
-        </div>
-      );
+      return <div className="currency-input__conversion-component"></div>;
     }
 
     if (this.shouldUseFiat()) {

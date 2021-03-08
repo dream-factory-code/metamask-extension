@@ -48,8 +48,6 @@ export default class AdvancedTabContent extends Component {
   onGasChartUpdate = (price) => {
     const { updateCustomGasPrice } = this.props;
 
-    console.log("TONI remove decGweit to hexWei", price);
-
     updateCustomGasPrice(price /*decGWEIToHexWEI(price)*/);
   };
 

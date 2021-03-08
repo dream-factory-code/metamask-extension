@@ -71,7 +71,7 @@ export default class FirstTimeFlow extends PureComponent {
       const seedPhrase = await createNewAccount(password);
       this.setState({ seedPhrase });
     } catch (error) {
-      console.error("TONI", error);
+      console.error(error);
       throw new Error(error.message);
     }
   };

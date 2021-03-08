@@ -192,36 +192,32 @@ export default class ExtensionPlatform {
 
     // const url = explorerLink(txMeta.hash, txMeta.metamaskNetworkId)
     // const nonce = parseInt(txMeta.txParams.nonce, 16)
-
+    // TODO changing urls
     const networkIdToTypeMap = {
       mainnet: "hashnet",
       stagingnet: "hashnet-staging",
       testnet: "hashnet-test",
     };
 
-    console.log("toni debug tx notification", txMeta);
     const netId = txMeta.metamaskNetworkId;
     const isTolar = Boolean(networkIdToTypeMap[netId]);
     const prefix = networkIdToTypeMap[netId] || "hashnet";
-    const hash = txMeta?.txParams?.body?.transaction_hash || "";
+    const hash = txMeta?.txParams?.body?.transaction_hash || txMeta?.hash || "";
 
     const url = isTolar
       ? `https://${prefix}.dream-factory.hr/transaction/${hash}`
-      : "";
+      : undefined;
     const title = "Confirmed transaction";
     const nonce = txMeta.nonce;
     const message = isTolar
-      ? `Transaction ${nonce} confirmed! View on Tolar. ${hash}`
+      ? `Transaction ${nonce} confirmed! View on Tolar Explorer. ${hash}`
       : `Transaction ${nonce} confirmed!`;
     this._showNotification(title, message, url);
   }
 
   _showFailedTransaction(txMeta, errorMessage) {
-    const nonce = parseInt(txMeta.txParams.nonce, 16);
     const title = "Failed transaction";
-    const message = `Transaction ${nonce} failed! ${
-      errorMessage || txMeta.err.message
-    }`;
+    const message = `Transaction failed! ${errorMessage || txMeta.err.message}`;
     this._showNotification(title, message);
   }
 

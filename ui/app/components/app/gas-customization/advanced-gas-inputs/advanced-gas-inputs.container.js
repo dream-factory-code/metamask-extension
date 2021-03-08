@@ -38,7 +38,6 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     customGasPrice: convertGasPriceForInputs(customGasPrice),
     customGasLimit: convertGasLimitForInputs(customGasLimit),
     updateCustomGasPrice: (price) => {
-      console.log("TONI remove decGweit to hexWei", price);
       return updateCustomGasPrice(price /*decGWEIToHexWEI(price)*/);
     },
     updateCustomGasLimit: (limit) =>

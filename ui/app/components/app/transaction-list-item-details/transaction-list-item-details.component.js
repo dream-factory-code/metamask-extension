@@ -155,21 +155,7 @@ export default class TransactionListItemDetails extends PureComponent {
     } = this.props;
     const { primaryTransaction: transaction } = transactionGroup;
     const { transaction_hash: hash } = transactionGroup;
-    console.log(
-      "toni data",
-      transactionGroup,
-      showSpeedUp,
-      showRetry,
-      recipientEns,
-      recipientAddress,
-      // rpcPrefs,
-      senderAddress,
-      isEarliestNonce,
-      senderNickname,
-      title,
-      onClose,
-      recipientNickname
-    );
+
     return (
       <Popover title={title} onClose={onClose}>
         <div className="transaction-list-item-details">

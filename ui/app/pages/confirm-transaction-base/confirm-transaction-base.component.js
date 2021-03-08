@@ -426,15 +426,7 @@ export default class ConfirmTransactionBase extends Component {
       txData: { origin },
       methodData = {},
     } = this.props;
-    console.log("toni debug handle edit", {
-      txData,
-      tokenData,
-      tokenProps,
-      onEdit,
-      actionKey,
-      origin,
-      methodData,
-    });
+
     this.context.metricsEvent({
       eventOpts: {
         category: "Transactions",
@@ -542,25 +534,7 @@ export default class ConfirmTransactionBase extends Component {
       },
       () => {
         this._removeBeforeUnload();
-        // metricsEvent({
-        //   eventOpts: {
-        //     category: "Transactions",
-        //     action: "Confirm Screen",
-        //     name: "Transaction Completed",
-        //   },
-        //   customVariables: {
-        //     recipientKnown: null,
-        //     functionType:
-        //       actionKey ||
-        //       getMethodName(methodData.name) ||
-        //       "contractInteraction",
-        //     origin,
-        //   },
-        // });
 
-        // setMetaMetricsSendCount(metaMetricsSendCount + 1)
-        //   .then(() => {
-        console.log("toni debug send tx", onSubmit, txData);
         if (onSubmit) {
           Promise.resolve(onSubmit(txData)).then(() => {
             this.setState({

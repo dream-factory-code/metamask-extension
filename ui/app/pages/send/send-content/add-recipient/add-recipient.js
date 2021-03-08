@@ -16,26 +16,12 @@ import {
 const pify = require("pify");
 
 export function getToErrorObject(to, hasHexData = false, network) {
-  console.log("TONI DEBUG");
-  // const query = new EthQuery(
-  //   `https://${NETWORK_TYPE_TO_SUBDOMAIN_MAP[network]}.dreamfactory.hr`
-  // );
   let toError = null;
   if (!to) {
     if (!hasHexData) {
       toError = REQUIRED_ERROR;
     }
-  } else if (
-    // TODO TONI: check if validation should happen on this place
-    // !(await pify(() =>
-    //   query.sendAsync({
-    //     method: "account_verifyAddress",
-    //     params: [to],
-    //   })
-    // )()) &&
-    false &&
-    !toError
-  ) {
+  } else if (false && !toError) {
     toError = INVALID_RECIPIENT_ADDRESS_ERROR;
   }
   return { to: toError };

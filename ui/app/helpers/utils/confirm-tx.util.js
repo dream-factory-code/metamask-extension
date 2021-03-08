@@ -131,7 +131,6 @@ export function hasUnconfirmedTransactions(state) {
 
 export function roundExponential(value) {
   const PRECISION = 4;
-  // console.log("toni debug edit", value);
   const bigNumberValue = new BigNumber(String(value));
   // In JS, numbers with exponentials greater than 20 get displayed as an exponential.
   return bigNumberValue.e > 20

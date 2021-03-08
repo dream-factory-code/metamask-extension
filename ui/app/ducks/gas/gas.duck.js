@@ -88,7 +88,6 @@ export default function reducer(state = initState, action) {
         basicEstimates: action.value,
       };
     case SET_CUSTOM_GAS_PRICE:
-      console.log("toni debug set gas");
       return {
         ...state,
         customData: {
@@ -239,9 +238,6 @@ export function fetchBasicGasEstimates() {
 }
 
 async function fetchExternalBasicGasEstimates(dispatch) {
-  // TODO Toni gas hax
-  //const response = await queryEthGasStationBasic();
-
   const {
     safeLow,
     average,
@@ -249,14 +245,7 @@ async function fetchExternalBasicGasEstimates(dispatch) {
     fastest,
     block_time: blockTime,
     blockNum,
-  } = {}; //await response.json();
-
-  // const [average, fast, fastest, safeLow] = [
-  //   averageTimes10,
-  //   fastTimes10,
-  //   fastestTimes10,
-  //   safeLowTimes10,
-  // ].map((price) => new BigNumber(price).div(10).toNumber());
+  } = {};
 
   const basicEstimates = {
     safeLow,
@@ -304,9 +293,6 @@ export function fetchBasicGasAndTimeEstimates() {
 }
 
 async function fetchExternalBasicGasAndTimeEstimates(dispatch) {
-  // TODO Toni gas hax
-  // const response = await queryEthGasStationBasic();
-
   const {
     average,
     avgWait,
@@ -319,13 +305,7 @@ async function fetchExternalBasicGasAndTimeEstimates(dispatch) {
     safeLow,
     safeLowWait,
     speed,
-  } = {}; //await response.json();
-  // const [average, fast, fastest, safeLow] = [
-  //   averageTimes10,
-  //   fastTimes10,
-  //   fastestTimes10,
-  //   safeLowTimes10,
-  // ].map((price) => new BigNumber(price).div(10).toNumber());
+  } = {};
 
   const basicEstimates = {
     average,
@@ -353,13 +333,6 @@ async function fetchExternalBasicGasAndTimeEstimates(dispatch) {
 }
 
 function extrapolateY({ higherY, lowerY, higherX, lowerX, xForExtrapolation }) {
-  // console.log("toni debug edit extrapolateY()", {
-  //   higherY,
-  //   lowerY,
-  //   higherX,
-  //   lowerX,
-  //   xForExtrapolation,
-  // });
   /* eslint-disable no-param-reassign */
   higherY = new BigNumber(higherY, 10);
   lowerY = new BigNumber(lowerY, 10);
@@ -377,8 +350,6 @@ function extrapolateY({ higherY, lowerY, higherX, lowerX, xForExtrapolation }) {
 }
 
 function getRandomArbitrary(minStr, maxStr) {
-  // console.log("toni debug edit getRandomArbitrary", { minStr, maxStr });
-
   const min = new BigNumber(minStr, 10);
   const max = new BigNumber(maxStr, 10);
   const random = new BigNumber(String(Math.random()), 10);
@@ -506,11 +477,6 @@ export function fetchGasEstimates(blockTime) {
               ).reverse();
               const timeMappedToSeconds = withOutliersRemoved.map(
                 ({ expectedWait, gasprice }) => {
-                  // console.log("toni debug edit timeMappedToSeconds", {
-                  //   expectedWait,
-                  //   gasprice,
-                  // });
-
                   const expectedTime = new BigNumber(expectedWait)
                     .times(Number(blockTime), 10)
                     .toNumber();
@@ -537,7 +503,6 @@ export function fetchGasEstimates(blockTime) {
               ? priceAndTimeEstimates
               : loadLocalStorageData("GAS_API_ESTIMATES")
           );
-    // TODO Toni gas hax
     return promiseToFetch
       .then((estimates) => {
         dispatch(setPricesAndTimeEstimates(estimates));

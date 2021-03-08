@@ -227,7 +227,6 @@ export const mapDispatchToProps = (dispatch) => {
     cancelTransaction: ({ id }) => dispatch(cancelTx({ id })),
     cancelAllTransactions: (txList) => dispatch(cancelTxs(txList)),
     sendTransaction: (txData) => {
-      console.log("toni debug send tx", txData);
       return dispatch(updateAndApproveTx(txData));
     },
     setMetaMetricsSendCount: (val) => dispatch(setMetaMetricsSendCount(val)),

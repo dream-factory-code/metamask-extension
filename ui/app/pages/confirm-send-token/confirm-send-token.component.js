@@ -12,15 +12,9 @@ export default class ConfirmSendToken extends Component {
 
   handleEdit(confirmTransactionData) {
     const { editTransaction, history } = this.props;
-    console.log(
-      "toni debug back tx nav 1",
-      JSON.parse(JSON.stringify(confirmTransactionData))
-    );
+
     editTransaction(confirmTransactionData);
-    console.log(
-      "toni debug back tx nav 2",
-      JSON.parse(JSON.stringify(confirmTransactionData))
-    );
+
     history.push(SEND_ROUTE);
   }
 

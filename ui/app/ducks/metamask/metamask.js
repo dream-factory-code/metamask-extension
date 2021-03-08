@@ -2,7 +2,7 @@ import * as actionConstants from "../../store/actionConstants";
 import { ALERT_TYPES } from "../../../../app/scripts/controllers/alert";
 
 export default function reduceMetamask(state = {}, action) {
-  //TODO toni set state to match tolar tx
+  //TODO changing urls
   const metamaskState = {
     isInitialized: false,
     isUnlocked: false,
@@ -38,6 +38,10 @@ export default function reduceMetamask(state = {}, action) {
       memo: "",
       errors: {},
       maxModeOn: false,
+      incomingTransactionsPagination: {
+        page: 1,
+        pageSize: 5,
+      },
       editingTransactionId: null,
       toNickname: "",
       ensResolution: null,
@@ -188,10 +192,6 @@ export default function reduceMetamask(state = {}, action) {
       };
 
     case actionConstants.UPDATE_SEND_AMOUNT:
-      console.log(
-        `TONI debug send state ${actionConstants.UPDATE_SEND_AMOUNT}`,
-        action.value
-      );
       return {
         ...metamaskState,
         send: {
@@ -210,12 +210,6 @@ export default function reduceMetamask(state = {}, action) {
       };
 
     case actionConstants.UPDATE_SEND:
-      //TODO toni match tolar tx
-      console.log(
-        `TONI debug send state ${actionConstants.UPDATE_SEND}`,
-        metamaskState.send,
-        action.value
-      );
       return Object.assign(metamaskState, {
         send: {
           ...metamaskState.send,
@@ -275,12 +269,6 @@ export default function reduceMetamask(state = {}, action) {
       };
 
     case actionConstants.CLEAR_SEND:
-      //TODO toni set clear state to match tolar tx
-      console.log(
-        `TONI debug send state ${actionConstants.CLEAR_SEND}`,
-        metamaskState.send,
-        action.value
-      );
       return {
         ...metamaskState,
         // reset unapprovedTxs because change in workflow
@@ -313,15 +301,9 @@ export default function reduceMetamask(state = {}, action) {
       };
 
     case actionConstants.UPDATE_TRANSACTION_PARAMS: {
-      //TODO toni match tolar tx
-
       const { id: txId, value } = action;
       let { currentNetworkTxList } = metamaskState;
-      console.log(
-        `TONI debug send state ${actionConstants.UPDATE_TRANSACTION_PARAMS}`,
-        { currentNetworkTxList },
-        { value }
-      );
+
       currentNetworkTxList = currentNetworkTxList.map((tx) => {
         if (tx.id === txId) {
           const newTx = { ...tx };

@@ -39,6 +39,32 @@ export class TolarSimpleKeyring extends SimpleKeyring {
     );
   }
 
+  removeAccount(address) {
+    if (
+      !this.wallets.find(
+        (w) =>
+          ethAddressToTolarAddress(ethUtil.bufferToHex(w.getAddress())) ===
+          address
+      )
+    ) {
+      throw new Error(`Address ${address} not found in this keyring`);
+    }
+
+    this.wallets = this.wallets.filter(
+      (w) =>
+        ethAddressToTolarAddress(ethUtil.bufferToHex(w.getAddress())) !==
+        address
+    );
+
+    this.wallets = this.wallets.filter((w) => {
+      const tolarAddress = ethAddressToTolarAddress(
+        ethUtil.bufferToHex(w.getAddress())
+      );
+
+      return tolarAddress !== address.toLowerCase();
+    });
+  }
+
   async signTransaction(address, tx, opts = {}) {
     const wallet = this._getWalletForAccount(address, opts);
     const nonce = await this.web3.tolar.getNonce(address);
@@ -47,36 +73,8 @@ export class TolarSimpleKeyring extends SimpleKeyring {
       wallet.getPrivateKeyString()
     );
 
-    console.log("TONi debug sign", address, tx, opts, this, signedTx);
-
-    // this.sign(privKey);
-    // return Promise.resolve(tx);
     return signedTx;
   }
-
-  //   signTolarTx(data, privateKey) {
-  //     if (!privateKey.startsWith("0x")) {
-  //         privateKey = "0x" + privateKey;
-  //     }
-
-  //     // 64 hex characters + hex-prefix
-  //     if (privateKey.length !== 66) {
-  //         throw new Error("Private key must be 32 bytes long");
-  //     }
-
-  //     const hash = data; //this.hashMessage(data);
-  //     const signature = Account.sign(hash, privateKey);
-  //     const vrs = Account.decodeSignature(signature);
-  //     return {
-  //         message: data,
-  //         messageHash: hash,
-  //         v: vrs[0],
-  //         r: vrs[1],
-  //         s: vrs[2],
-  //         signature: signature,
-  //         signer_id: Account.publicKey(privateKey),
-  //     };
-  // };
 
   _getWalletForAccount(account, opts = {}) {
     const address = /^54/.test(account) ? account : sigUtil.normalize(account);

@@ -32,6 +32,22 @@ export default class NetworksTab extends PureComponent {
     networkDefaultedToProvider: PropTypes.bool,
   };
 
+  getNetworkName(key) {
+    switch (key) {
+      case "mainnet":
+        return "Main Net";
+      case "staging":
+        return "Staging Net";
+      case "testnet":
+        return "Test Net";
+
+      case "localhost":
+        return this.context.t("localhost");
+      default:
+        return null;
+    }
+  }
+
   UNSAFE_componentWillMount() {
     this.props.setSelectedSettingsRpcUrl(null);
   }
@@ -99,8 +115,8 @@ export default class NetworksTab extends PureComponent {
       rpcUrl,
       providerType: currentProviderType,
     } = network;
-
-    console.log("toni debug network display", { network, selectRpcUrl });
+    //TODO changing urls
+    const tolarLabel = this.getNetworkName(labelKey);
     const listItemNetworkIsSelected = selectRpcUrl && selectRpcUrl === rpcUrl;
     const listItemUrlIsProviderUrl = rpcUrl === providerUrl;
     const listItemTypeIsProviderNonRpcType =
@@ -133,7 +149,7 @@ export default class NetworksTab extends PureComponent {
               !displayNetworkListItemAsSelected,
           })}
         >
-          {label || labelKey}
+          {tolarLabel || label || labelKey}
           {currentProviderType !== "rpc" && (
             <LockIcon width="14px" height="17px" fill="#cdcdcd" />
           )}
@@ -161,7 +177,6 @@ export default class NetworksTab extends PureComponent {
         })}
       >
         {networksToRender.map((network) => {
-          console.log("toni debug display network", network);
           return this.renderNetworkListItem(network, selectedNetwork.rpcUrl);
         })}
         {networksTabIsInAddMode && (
@@ -206,10 +221,10 @@ export default class NetworksTab extends PureComponent {
 
     const envIsPopup = getEnvironmentType() === ENVIRONMENT_TYPE_POPUP;
     const shouldRenderNetworkForm =
-      networksTabIsInAddMode ||
-      !envIsPopup ||
-      (envIsPopup && !networkDefaultedToProvider);
-
+      (networksTabIsInAddMode ||
+        !envIsPopup ||
+        (envIsPopup && !networkDefaultedToProvider)) &&
+      (label || labelKey);
     return (
       <div className="networks-tab__content">
         {this.renderNetworksList()}
@@ -218,7 +233,7 @@ export default class NetworksTab extends PureComponent {
             rpcUrls={networksToRender.map((network) => network.rpcUrl)}
             setRpcTarget={setRpcTarget}
             editRpc={editRpc}
-            networkName={label || (labelKey && t(labelKey)) || ""}
+            networkName={this.getNetworkName(labelKey) || label || labelKey}
             rpcUrl={rpcUrl}
             chainId={chainId}
             ticker={ticker}

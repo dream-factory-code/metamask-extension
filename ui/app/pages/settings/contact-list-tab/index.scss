@@ -213,7 +213,7 @@
       opacity: 0.5;
       background-repeat: no-repeat;
 
-      [dir='rtl'] & {
+      [dir="rtl"] & {
         transform: rotate(180deg);
       }
     }
@@ -223,7 +223,7 @@
 .address-book-add-button {
   &__button {
     position: absolute;
-    top: 10px;
+    top: 80px;
     right: 16px;
     height: 56px;
     width: 56px;

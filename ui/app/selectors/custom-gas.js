@@ -68,11 +68,6 @@ export function getDefaultActiveButtonIndex(
   gasPrice
 ) {
   return gasButtonInfo.findIndex(({ priceInHexWei }) => {
-    // console.log("TOni debug custom gas price", {
-    //   gasPrice,
-    //   priceInHexWei,
-    //   customGasPriceInHex,
-    // });
     return priceInHexWei === addHexPrefix(customGasPriceInHex || gasPrice);
   });
 }
@@ -156,12 +151,7 @@ export function getRenderableConvertedCurrencyFee(
     convertedCurrency,
     conversionRate
   );
-  console.log("TONI DEBUG error  getRenderableConvertedCurrencyFee ", {
-    estimate,
-    gasLimit,
-    convertedCurrency,
-    conversionRate,
-  });
+
   return formatCurrency(feeInCurrency, convertedCurrency);
 }
 
@@ -299,7 +289,7 @@ export function getRenderableEstimateDataForSmallButtonsFromGWEI(state) {
   const isMainnet = getIsMainnet(state);
   const showFiat = isMainnet || Boolean(showFiatInTestnets);
   const gasLimit =
-    state.metamask.send.tx.gas || getCustomGasLimit(state) || 21000; // toni gas hax"0x5208";
+    state.metamask.send.tx.gas || getCustomGasLimit(state) || 21000;
 
   const { conversionRate } = state.metamask;
   const currentCurrency = getCurrentCurrency(state);

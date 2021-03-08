@@ -256,7 +256,6 @@ export default class TransactionStateManager extends EventEmitter {
   */
   updateTxParams(txId, txParams) {
     const txMeta = this.getTx(txId);
-    console.log("toni debug set gas", txMeta.txParams, txParams);
     txMeta.txParams = { ...txMeta.txParams, ...txParams };
     this.updateTx(txMeta, `txStateManager#updateTxParams`);
   }
@@ -417,7 +416,12 @@ export default class TransactionStateManager extends EventEmitter {
     should update the status of the tx to 'confirmed'.
     @param {number} txId - the txMeta Id
   */
-  setTxStatusConfirmed(txId) {
+  setTxStatusConfirmed(txId, hash) {
+    const txMeta = this.getTx(txId);
+    if (hash) {
+      txMeta.hash = hash;
+      this.updateTx(txMeta, "transactions:tx-state-manager#confirm - add hash");
+    }
     this._setTxStatus(txId, "confirmed");
   }
 
@@ -437,10 +441,16 @@ export default class TransactionStateManager extends EventEmitter {
   */
   setTxStatusFailed(txId, err) {
     const error = err || new Error("Internal metamask failure");
+    let message;
+    try {
+      message = JSON.parse(err.message.replace(/[^{]*/, "")).error.message;
+    } catch (e) {
+      message = error.toString();
+    }
 
     const txMeta = this.getTx(txId);
     txMeta.err = {
-      message: error.toString(),
+      message,
       rpc: error.value,
       stack: error.stack,
     };

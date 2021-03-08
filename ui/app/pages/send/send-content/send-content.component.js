@@ -21,7 +21,6 @@ export default class SendContent extends Component {
   };
 
   updateGas = (updateData) => {
-    console.log("toni debug update txData updateGas", updateData);
     return this.props.updateGas(updateData);
   };
 

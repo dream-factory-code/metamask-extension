@@ -36,7 +36,6 @@ export default class AddContact extends PureComponent {
   constructor(props) {
     super(props);
     this.dValidate = debounce((a) => {
-      console.log("toni debug validate", a);
       this.validate(a).then();
     }, 1000);
   }
@@ -64,21 +63,13 @@ export default class AddContact extends PureComponent {
     try {
       const valid = this.isValidTolarAddressFormat(address);
       await validateTolarAddress(address);
-      // &&
-      // (await validateTolarAddress(address));
-      //  const validEnsAddress = isValidDomainName(address);
-      console.log("TONI debug validate address", {
-        address,
-        valid,
-        //validEnsAddress,
-      });
+
       if (valid || address === "") {
         this.setState({ error: "", ethAddress: address, tolAddress: address });
       } else {
         this.setState({ error: "Invalid Address" });
       }
     } catch (e) {
-      console.log("TONI debug validate address error", e);
       this.setState({ error: "Invalid Address" });
     }
   };
@@ -94,7 +85,6 @@ export default class AddContact extends PureComponent {
         onPaste={(text) => this.setState({ ethAddress: text })}
         onReset={() => this.setState({ ethAddress: "", ensAddress: "" })}
         updateEnsResolution={(address) => {
-          console.log("toni debug validate update ens resolution", address);
           return this.setState({
             ensAddress: address,
             error: "",
@@ -102,10 +92,6 @@ export default class AddContact extends PureComponent {
           });
         }}
         updateEnsResolutionError={(message) => {
-          console.log(
-            "toni debug validate update ens resolution error",
-            message
-          );
           return this.setState({ ensError: message });
         }}
       />

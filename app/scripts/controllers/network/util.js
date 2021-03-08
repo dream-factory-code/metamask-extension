@@ -3,7 +3,6 @@ import { NETWORK_TO_NAME_MAP } from "./enums";
 export const getNetworkDisplayName = (key) => NETWORK_TO_NAME_MAP[key];
 
 export function formatTxMetaForRpcResult(txMeta) {
-  console.log("TONI debug format txmeta for rpc result", txMeta);
   return {
     blockHash: txMeta.txReceipt ? txMeta.txReceipt.blockHash : null,
     blockNumber: txMeta.txReceipt ? txMeta.txReceipt.blockNumber : null,

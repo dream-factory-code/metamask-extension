@@ -18,6 +18,7 @@ class JsonImportSubview extends Component {
     isEmpty: true,
   };
 
+  isLoading = false;
   inputRef = React.createRef();
 
   render() {
@@ -26,7 +27,13 @@ class JsonImportSubview extends Component {
 
     return (
       <div className="new-account-import-form__json">
+        {this.isLoading && (
+          <div className="import-key-indicator">
+            <i className="fas fa-spinner fa-pulse"></i>
+          </div>
+        )}
         <p>{this.context.t("usedByClients")}</p>
+
         {/* <a className="warning" href={HELP_LINK} target="_blank" rel="noopener noreferrer">{this.context.t('fileImportFail')}</a> */}
         <FileInput
           readAs="text"
@@ -48,6 +55,7 @@ class JsonImportSubview extends Component {
           onChange={() => this.checkInputEmpty()}
           ref={this.inputRef}
         />
+
         <div className="new-account-create-form__buttons">
           <Button
             type="default"
@@ -103,8 +111,11 @@ class JsonImportSubview extends Component {
     }
 
     const password = this.inputRef.current.value;
-
-    importNewJsonAccount([fileContents, password])
+    this.isLoading = true;
+    const delay = (time) =>
+      new Promise((resolve) => setTimeout(() => resolve(), time));
+    delay(20)
+      .then(() => importNewJsonAccount([fileContents, password]))
       .then(({ selectedAddress }) => {
         if (selectedAddress) {
           history.push(mostRecentOverviewPage);
@@ -127,8 +138,12 @@ class JsonImportSubview extends Component {
           });
           setSelectedAddress(firstAddress);
         }
+        this.isLoading = false;
       })
-      .catch((err) => err && displayWarning(err.message || err));
+      .catch((err) => {
+        this.isLoading = false;
+        return err && displayWarning(err.message || err);
+      });
   }
 
   checkInputEmpty() {
@@ -161,7 +176,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    displayWarning: (warning) => dispatch(actions.displayWarning(warning)),
+    displayWarning: (warning) => {
+      return dispatch(actions.displayWarning(warning));
+    },
     importNewJsonAccount: (options) =>
       dispatch(actions.importNewAccount("JSON File", options)),
     setSelectedAddress: (address) =>

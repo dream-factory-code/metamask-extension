@@ -26,7 +26,7 @@ const mapStateToProps = (state, ownProps) => {
 
   const newGasFee = getHexGasTotal({
     gasPrice: defaultNewGasPrice,
-    gasLimit: 21000 /* TOni gas hax'0x5208'*/,
+    gasLimit: 21000,
   });
 
   return {

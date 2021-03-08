@@ -78,9 +78,6 @@ export function tryUnlockMetamask(password) {
         dispatch(hideLoadingIndication());
       })
       .catch((err) => {
-        console.log(
-          "TONI debug ERROR on seed phrase verifying hiding loading indicator"
-        );
         dispatch(unlockFailed(err.message));
         dispatch(hideLoadingIndication());
         return Promise.reject(err);
@@ -105,18 +102,11 @@ export function createNewVaultAndRestore(password, seed) {
     })
       .then(() => dispatch(unMarkPasswordForgotten()))
       .then(() => {
-        console.log(
-          "TONI debug loading indicator createNewVaultAndRestore sucess"
-        );
-
         dispatch(showAccountsPage());
         dispatch(hideLoadingIndication());
         return vault;
       })
       .catch((err) => {
-        console.log(
-          "TONI debug loading indicator createNewVaultAndRestore error"
-        );
         dispatch(displayWarning(err.message));
         dispatch(hideLoadingIndication());
         return Promise.reject(err);
@@ -127,24 +117,14 @@ export function createNewVaultAndRestore(password, seed) {
 export function createNewVaultAndGetSeedPhrase(password) {
   return async (dispatch) => {
     dispatch(showLoadingIndication());
-    console.log("TONI debug show loading indicator");
     try {
       const a = await createNewVault(password);
-      console.log(
-        "TONI debug loading indicator createNewVault and verifySeedPhrase error vaultCreated, check for verifySeedPhrase"
-      );
+
       const seedWords = await verifySeedPhrase();
-      console.log(
-        "TONI debug loading indicator createNewVault and verifySeedPhrase sucess"
-      );
+
       dispatch(hideLoadingIndication());
       return seedWords;
     } catch (error) {
-      console.log(
-        "TONI debug loading indicator createNewVault and verifySeedPhrase error",
-        error
-      );
-
       dispatch(hideLoadingIndication());
       dispatch(displayWarning(error.message));
       throw new Error(error.message);
@@ -186,7 +166,6 @@ export function submitPassword(password) {
 export function createNewVault(password) {
   return new Promise((resolve, reject) => {
     background.createNewVaultAndKeychain(password, (error) => {
-      console.log("TONI debug error", error);
       if (error) {
         reject(error);
         return;
@@ -321,20 +300,17 @@ export function removeAccount(address) {
 export function importNewAccount(strategy, args) {
   return async (dispatch) => {
     let newState;
-    dispatch(
-      showLoadingIndication("This may take a while, please be patient.")
-    );
+
     try {
       log.debug(`background.importAccountWithStrategy`);
       await promisifiedBackground.importAccountWithStrategy(strategy, args);
       log.debug(`background.getState`);
       newState = await promisifiedBackground.getState();
     } catch (err) {
-      dispatch(hideLoadingIndication());
       dispatch(displayWarning(err.message));
       throw err;
     }
-    dispatch(hideLoadingIndication());
+
     dispatch(updateMetamaskState(newState));
     if (newState.selectedAddress) {
       dispatch({
@@ -636,7 +612,6 @@ export function signTypedMsg(msgData) {
 export function signTx(txData) {
   return async (dispatch, getState) => {
     const state = getState();
-    console.log("TONI debug send txData action", txData);
     // const signedTx =
     dispatch(showLoadingIndication());
     try {
@@ -645,36 +620,14 @@ export function signTx(txData) {
         txData.sender_address
       );
 
-      console.log("TONI send tx state, signedTx test", { result, state });
       dispatch(hideLoadingIndication());
       dispatch(showConfTxPage());
       // dispatch(showConfTxPage());
     } catch (err) {
-      console.log("TONI debug send txData error", err);
       dispatch(hideLoadingIndication());
 
       dispatch(displayWarning(err.message));
     }
-
-    // let a = new Web3TolarAccounts(state.metamask.rpcTarget);
-    // const params = Object.values(txData);
-    //   global.ethQuery.sendAsync(
-    //     { method: "tx_sendSignedTransaction", params: [txData] },
-    //     (err) => {
-    //       if (err) {
-    //         dispatch(displayWarning(err.message));
-    //       }
-    //     }
-    //   );
-    //   dispatch(showConfTxPage());
-    // };
-
-    // global.ethQuery.sendTransaction(txData, (err) => {
-    //   if (err) {
-    //     dispatch(displayWarning(err.message));
-    //   }
-    // });
-    // dispatch(showConfTxPage());
   };
 }
 
@@ -766,10 +719,6 @@ export function updateSendTokenBalance({ sendToken, tokenContract, address }) {
 }
 
 export function updateSendErrors(errorObject) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_ERRORS}`,
-    errorObject
-  );
   return {
     type: actionConstants.UPDATE_SEND_ERRORS,
     value: errorObject,
@@ -777,10 +726,6 @@ export function updateSendErrors(errorObject) {
 }
 
 export function setSendTokenBalance(tokenBalance) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_TOKEN_BALANCE}`,
-    tokenBalance
-  );
   return {
     type: actionConstants.UPDATE_SEND_TOKEN_BALANCE,
     value: tokenBalance,
@@ -788,10 +733,6 @@ export function setSendTokenBalance(tokenBalance) {
 }
 
 export function updateSendHexData(value) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_HEX_DATA}`,
-    value
-  );
   return {
     type: actionConstants.UPDATE_SEND_HEX_DATA,
     value,
@@ -799,11 +740,6 @@ export function updateSendHexData(value) {
 }
 
 export function updateSendTo(to, nickname = "") {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_TO}`,
-    to,
-    nickname
-  );
   return {
     type: actionConstants.UPDATE_SEND_TO,
     value: { to, nickname },
@@ -811,10 +747,6 @@ export function updateSendTo(to, nickname = "") {
 }
 
 export function updateSendAmount(amount) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_AMOUNT}`,
-    amount
-  );
   return {
     type: actionConstants.UPDATE_SEND_AMOUNT,
     value: amount,
@@ -836,7 +768,6 @@ export function setMaxModeTo(bool) {
 }
 
 export function updateSend(newSend) {
-  console.log(`TONI debug send state ${actionConstants.UPDATE_SEND}`, newSend);
   return {
     type: actionConstants.UPDATE_SEND,
     value: newSend,
@@ -844,10 +775,6 @@ export function updateSend(newSend) {
 }
 
 export function updateSendToken(token) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_TOKEN}`,
-    token
-  );
   return {
     type: actionConstants.UPDATE_SEND_TOKEN,
     value: token,
@@ -855,17 +782,12 @@ export function updateSendToken(token) {
 }
 
 export function clearSend() {
-  console.log(`TONI debug send state ${actionConstants.CLEAR_SEND}`);
   return {
     type: actionConstants.CLEAR_SEND,
   };
 }
 
 export function updateSendEnsResolution(ensResolution) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_ENS_RESOLUTION}`,
-    ensResolution
-  );
   return {
     type: actionConstants.UPDATE_SEND_ENS_RESOLUTION,
     payload: ensResolution,
@@ -873,10 +795,6 @@ export function updateSendEnsResolution(ensResolution) {
 }
 
 export function updateSendEnsResolutionError(errorMessage) {
-  console.log(
-    `TONI debug send state ${actionConstants.UPDATE_SEND_ENS_RESOLUTION_ERROR}`,
-    errorMessage
-  );
   return {
     type: actionConstants.UPDATE_SEND_ENS_RESOLUTION_ERROR,
     payload: errorMessage,
@@ -978,8 +896,6 @@ export function updateAndApproveTx(txData) {
 }
 
 export function completedTx(id) {
-  // TODO TONI complete the transaction, check if this gets activated upon sending sign tx,
-  console.log("TONI debug completedTx");
   return (dispatch, getState) => {
     const state = getState();
     const {
@@ -989,7 +905,6 @@ export function completedTx(id) {
       unapprovedTypedMessages,
       network,
     } = state.metamask;
-    // TODO toni visit txHelper
     const unconfirmedActions = txHelper(
       unapprovedTxs,
       unapprovedMsgs,
@@ -1415,7 +1330,6 @@ export function showAccountsPage() {
 }
 
 export function showConfTxPage({ id } = {}) {
-  console.log("TONI debug showConfTxPage", id);
   return {
     type: actionConstants.SHOW_CONF_TX_PAGE,
     id,
@@ -1607,7 +1521,6 @@ export function createRetryTransaction(txId, customGasPrice, customGasLimit) {
 //
 
 export function setProviderType(type) {
-  console.log("TONI debug setProviderType", type);
   return async (dispatch, getState) => {
     const { type: currentProviderType } = getState().metamask.provider;
     log.debug(`background.setProviderType`, type);
@@ -1625,8 +1538,6 @@ export function setProviderType(type) {
 }
 
 export function updateProviderType(type) {
-  console.log("TONI debug updateProviderType", type);
-
   return {
     type: actionConstants.SET_PROVIDER_TYPE,
     value: type,
@@ -1634,7 +1545,6 @@ export function updateProviderType(type) {
 }
 
 export function setPreviousProvider(type) {
-  console.log("TONI debug setPerviousProvider", type);
   return {
     type: actionConstants.SET_PREVIOUS_PROVIDER,
     value: type,
@@ -1714,13 +1624,6 @@ export function editRpc(
 }
 
 export function setRpcTarget(newRpc, chainId, ticker = "ETH", nickname) {
-  console.log(
-    "TONI debug setRpcTarget",
-    newRpc,
-    chainId,
-    (ticker = "ETH"),
-    nickname
-  );
   return async (dispatch) => {
     log.debug(
       `background.setRpcTarget: ${newRpc} ${chainId} ${ticker} ${nickname}`
@@ -1822,7 +1725,6 @@ export async function paginate(page) {
 }
 
 export function paginate2(page) {
-  console.log("TONI pagination action call");
   return (dispatch) => {
     dispatch(showLoadingIndication());
     return new Promise((resolve, reject) => {
@@ -1840,7 +1742,6 @@ export function paginate2(page) {
           resolve(page);
         });
       } catch (e) {
-        console.log("TONI debug pagination action", e);
         reject(e);
       }
     })
@@ -1854,12 +1755,6 @@ export function paginate2(page) {
         dispatch(hideLoadingIndication());
         return Promise.reject(err);
       });
-  };
-
-  console.debug("TONI debug state tx_page_change", page);
-  return {
-    type: actionConstants.TX_PAGE_CHANGE,
-    payload: page,
   };
 }
 
@@ -1961,7 +1856,9 @@ export function hideLoadingIndication() {
 export function displayWarning(text) {
   return {
     type: actionConstants.DISPLAY_WARNING,
-    value: text,
+    value: text.includes(`Cannot read property 'state' of undefined`)
+      ? ""
+      : text,
   };
 }
 
@@ -2051,7 +1948,6 @@ export function setAccountLabel(account, label) {
 
     return new Promise((resolve, reject) => {
       background.setAccountLabel(account, label, (err) => {
-        console.log("toni debug set account label", account, label, err);
         dispatch(hideLoadingIndication());
 
         if (err) {
@@ -2581,7 +2477,6 @@ export function setSeedPhraseBackedUp(seedPhraseBackupState) {
 }
 
 export function initializeThreeBox() {
-  console.log("TONI debug loader, initializeThreeBox");
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       background.initializeThreeBox((err) => {

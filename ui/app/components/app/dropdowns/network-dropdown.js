@@ -189,11 +189,11 @@ class NetworkDropdown extends Component {
     let name;
 
     if (providerName === "mainnet") {
-      name = "Main Net" || this.context.t("mainnet");
+      name = "Main Net";
     } else if (providerName === "stagingnet") {
-      name = "Staging Net" || this.context.t("stagingnet");
+      name = "Staging Net";
     } else if (providerName === "testnet") {
-      name = "Test Net" || this.context.t("testnet");
+      name = "Test Net";
     }
     //  else if (providerName === 'rinkeby') {
     //   name = this.context.t('rinkeby')
@@ -254,7 +254,7 @@ class NetworkDropdown extends Component {
           </div>
           <div className="network-dropdown-divider" />
           <div className="network-dropdown-content">
-            {/* {" " || this.context.t("defaultNetwork")} */}
+            {this.context.t("defaultNetwork").replace("Ether", "Tolar")}
           </div>
         </div>
         <DropdownMenuItem
@@ -278,7 +278,7 @@ class NetworkDropdown extends Component {
               color: providerType === "mainnet" ? "#ffffff" : "#9b9b9b",
             }}
           >
-            {"Main Net" || this.context.t("mainnet")}
+            {"Main Net"}
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -302,7 +302,7 @@ class NetworkDropdown extends Component {
               color: providerType === "stagingnet" ? "#ffffff" : "#9b9b9b",
             }}
           >
-            {"Staging Net" || this.context.t("staginnet")}
+            {"Staging Net"}
           </span>
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -326,7 +326,7 @@ class NetworkDropdown extends Component {
               color: providerType === "testnet" ? "#ffffff" : "#9b9b9b",
             }}
           >
-            {this.context.t("testnet") || "Test Net"}
+            {"Test Net"}
           </span>
         </DropdownMenuItem>
         {/* <DropdownMenuItem

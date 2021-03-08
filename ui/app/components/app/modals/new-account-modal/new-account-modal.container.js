@@ -32,11 +32,10 @@ function mergeProps(stateProps, dispatchProps) {
     onSave: (newAccountName) => {
       return createAccount(newAccountName)
         .then((newAccountAddress) => {
-          console.log("TONI debug account create", newAccountAddress);
           return onCreateNewAccount(newAccountAddress);
         })
         .catch((e) => {
-          console.log("TONI debug account create error", e);
+          console.error(e);
         });
     },
   };

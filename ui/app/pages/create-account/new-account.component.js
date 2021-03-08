@@ -19,11 +19,6 @@ export default class NewAccountCreateForm extends Component {
     const { history, createAccount, mostRecentOverviewPage } = this.props;
 
     const createClick = (_) => {
-      console.log(
-        "TONI DEBUG account create",
-        newAccountName || defaultAccountName
-      );
-
       createAccount(newAccountName || defaultAccountName)
         .then(() => {
           this.context.metricsEvent({
@@ -36,7 +31,6 @@ export default class NewAccountCreateForm extends Component {
           history.push(mostRecentOverviewPage);
         })
         .catch((e) => {
-          console.log("TONI DEBUG account create", e);
           this.context.metricsEvent({
             eventOpts: {
               category: "Accounts",

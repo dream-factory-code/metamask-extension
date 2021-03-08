@@ -36,7 +36,6 @@ export default class SendGasRow extends Component {
   renderAdvancedOptionsButton() {
     const { metricsEvent } = this.context;
     const { showCustomizeGasModal } = this.props;
-    //TODO TONI isMainnet hardcoded to false to override display gas controls behaviour
     const isMainnet = false;
 
     // Tests should behave in same way as mainnet, but are using Localhost
@@ -47,13 +46,6 @@ export default class SendGasRow extends Component {
       <div
         className="advanced-gas-options-btn"
         onClick={() => {
-          // metricsEvent({
-          //   eventOpts: {
-          //     category: 'Transactions',
-          //     action: 'Edit Screen',
-          //     name: 'Clicked "Advanced Options"',
-          //   },
-          // })
           showCustomizeGasModal();
         }}
       >
@@ -96,7 +88,6 @@ export default class SendGasRow extends Component {
       insufficientBalance,
     } = this.props;
     const { metricsEvent } = this.context;
-    //TODO TONI isMainnet hardcoded to false to override display gas controls behaviour
     const isMainnet = false;
     const gasPriceButtonGroup = (
       <div>
@@ -105,13 +96,6 @@ export default class SendGasRow extends Component {
           showCheck={false}
           {...gasPriceButtonGroupProps}
           handleGasPriceSelection={async (...args) => {
-            // metricsEvent({
-            //   eventOpts: {
-            //     category: 'Transactions',
-            //     action: 'Edit Screen',
-            //     name: 'Changed Gas Button',
-            //   },
-            // })
             await gasPriceButtonGroupProps.handleGasPriceSelection(...args);
             if (maxModeOn) {
               this.setMaxAmount();

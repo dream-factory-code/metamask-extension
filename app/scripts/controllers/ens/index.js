@@ -26,7 +26,6 @@ export default class EnsController {
 
     this.store = new ObservableStore(initState);
     networkStore.subscribe((network) => {
-      console.log("Toni debug state", initState);
       this.store.putState(initState);
       if (Ens.getNetworkEnsSupport(network)) {
         this._ens = new Ens({

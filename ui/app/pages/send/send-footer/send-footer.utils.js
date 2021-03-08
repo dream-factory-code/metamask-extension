@@ -9,7 +9,6 @@ export function addHexPrefixToObjectValues(obj) {
 }
 export function constructTolarTxParams(opts) {
   let { from, to, gas, gasPrice, data = "", amount } = opts;
-  // TODO toni fix gas Price;
   const tx = {
     sender_address: from,
     receiver_address: to,
@@ -19,7 +18,6 @@ export function constructTolarTxParams(opts) {
     gas_price: gasPrice,
     data,
   };
-  console.log("TONI debug  constructTxParams tolar", opts);
   return tx;
 }
 export function constructTxParams({
@@ -43,15 +41,6 @@ export function constructTxParams({
     txParams.value = amount;
     txParams.to = to;
   }
-  console.log("TONI debug  constructTxParams", {
-    sendToken,
-    data,
-    to,
-    amount,
-    from,
-    gas,
-    gasPrice,
-  });
 
   return addHexPrefixToObjectValues(txParams);
 }

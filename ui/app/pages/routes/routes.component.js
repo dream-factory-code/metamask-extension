@@ -185,7 +185,6 @@ export default class Routes extends Component {
 
   onInitializationUnlockPage() {
     const { location } = this.props;
-    // TODO TONI fix loader
 
     return Boolean(
       matchPath(location.pathname, {
@@ -365,11 +364,11 @@ export default class Routes extends Component {
   getNetworkName() {
     switch (this.props.provider.type) {
       case "mainnet":
-        return "Main Net" || this.context.t("mainnet");
+        return "Main Net";
       case "stagingnet":
-        return "Staging Net" || this.context.t("stagingnet");
+        return "Staging Net";
       case "testnet":
-        return "Test Net" || this.context.t("testnet");
+        return "Test Net";
       // case "rinkeby":
       //   return this.context.t("rinkeby");
       case "localhost":

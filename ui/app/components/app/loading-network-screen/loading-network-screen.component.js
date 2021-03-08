@@ -34,13 +34,12 @@ export default class LoadingNetworkScreen extends PureComponent {
   };
 
   getConnectingLabel = function (loadingMessage) {
-    // console.log("TONI debug loadin message", loadingMessage);
     if (loadingMessage) {
       return loadingMessage;
     }
     const { provider, providerId } = this.props;
     const providerName = provider.type;
-
+    // TODO changing urls
     let name;
     if (providerName === "mainnet") {
       name = "Connecting to Main Net" || this.context.t("connectingToMainnet");
@@ -70,11 +69,7 @@ export default class LoadingNetworkScreen extends PureComponent {
       setProviderArgs,
       setProviderType,
     } = this.props;
-    // console.log("TONI debug remderErrorScreen Content", {
-    //   showNetworkDropdown,
-    //   setProviderArgs,
-    //   setProviderType,
-    // });
+
     return (
       <div className="loading-overlay__error-screen">
         <span className="loading-overlay__emoji">&#128542;</span>
@@ -136,11 +131,6 @@ export default class LoadingNetworkScreen extends PureComponent {
 
   render() {
     const { lastSelectedProvider, setProviderType } = this.props;
-    console.log(
-      "TONI debug loading screen render",
-      lastSelectedProvider,
-      setProviderType
-    );
 
     return (
       <LoadingScreen

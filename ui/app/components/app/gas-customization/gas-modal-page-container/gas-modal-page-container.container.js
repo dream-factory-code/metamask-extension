@@ -79,14 +79,14 @@ const mapStateToProps = (state, ownProps) => {
   const txParams = selectedTransaction?.txParams
     ? selectedTransaction.txParams
     : {
-        gas: send.gasLimit || 21000, //toni gas hax"0x5208",
+        gas: send.gasLimit || 21000,
         gasPrice: send.gasPrice || getFastPriceEstimateInHexWEI(state, true),
         value: sendToken ? "0x0" : send.amount,
       };
   const { gasPrice: currentGasPrice, gas: currentGasLimit, value } = txParams;
   const customModalGasPriceInHex = getCustomGasPrice(state) || currentGasPrice;
   const customModalGasLimitInHex =
-    getCustomGasLimit(state) || currentGasLimit || 21000; // TONI gas hax "0x5208";
+    getCustomGasLimit(state) || currentGasLimit || 21000;
 
   const customGasTotal = calcGasTotal(
     customModalGasLimitInHex,
@@ -374,10 +374,6 @@ function addHexWEIsToRenderableFiat(
     convertedCurrency,
     conversionRate
   );
-  console.log(
-    "TONI DEBUG error  addHexWEIsToRenderableFiat",
-    { aHexWEI, bHexWEI, convertedCurrency, conversionRate },
-    { ethTotal }
-  );
+
   return formatCurrency(ethTotal, convertedCurrency);
 }

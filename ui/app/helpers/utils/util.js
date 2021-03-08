@@ -72,10 +72,10 @@ export function addressSummary(
   if (!address) {
     return "";
   }
-  let checked = checksumAddress(address);
-  if (!includeHex) {
-    checked = ethUtil.stripHexPrefix(checked);
-  }
+  let checked = address; //checksumAddress(address);
+  // if (!includeHex) {
+  //   checked = ethUtil.stripHexPrefix(checked);
+  // }
   return checked
     ? `${checked.slice(0, firstSegLength)}...${checked.slice(
         checked.length - lastSegLength
@@ -404,10 +404,6 @@ export function checkExistingAddresses(address, list = []) {
  * @returns {string} The number in decimal form, with <= precision significant digits and no decimal trailing zeros
  */
 export function toPrecisionWithoutTrailingZeros(n, precision) {
-  // console.log("toni debug edit toPrecisionWithoutTrailingZeros", {
-  //   n,
-  //   precision,
-  // });
   return new BigNumber(n)
     .toPrecision(precision)
     .replace(/(\.[0-9]*[1-9])0*|(\.0*)/u, "$1");

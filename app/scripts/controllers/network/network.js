@@ -99,11 +99,6 @@ export default class NetworkController extends EventEmitter {
 
   // return the proxies so the references will always be good
   getProviderAndBlockTracker() {
-    console.log(
-      "TONI getProviderAndBlockTracker",
-      { _providerProxy: this._providerProxy },
-      { _blockTracker: this._blockTrackerProxy }
-    );
     const provider = this._providerProxy;
     const blockTracker = this._blockTrackerProxy;
     return { provider, blockTracker };
@@ -150,9 +145,6 @@ export default class NetworkController extends EventEmitter {
       return;
     }
     const { type } = this.providerStore.getState();
-    console.log(
-      "TONI TODO replace EthQuery with web3t or implement custom tolar methods"
-    );
     const ethQuery = new EthQuery(this._provider);
     const initialNetwork = this.getNetworkState();
     ethQuery.sendAsync({ method: "net_version" }, (err, network) => {
@@ -222,7 +214,6 @@ export default class NetworkController extends EventEmitter {
   }
 
   _configureProvider(opts) {
-    console.log("TONI configureProvider with opts", opts);
     const { type, rpcTarget, chainId, ticker, nickname } = opts;
     // infura type-based endpoints
     // const isInfura = INFURA_PROVIDER_TYPES.includes(type)
@@ -231,6 +222,7 @@ export default class NetworkController extends EventEmitter {
     // if (isInfura) {
     if (isTolar) {
       // this._configureInfuraProvider(opts)
+      //TODO changing urls
       const tolarRpc = `https://${NETWORK_TYPE_TO_SUBDOMAIN_MAP[type].subdomain}.dream-factory.hr`;
       this._configureStandardProvider({
         rpcUrl: tolarRpc,
@@ -295,13 +287,6 @@ export default class NetworkController extends EventEmitter {
   }
 
   _configureStandardProvider({ rpcUrl, chainId, ticker, nickname }) {
-    console.log(
-      "TONI configure standard provider with url",
-      rpcUrl,
-      chainId,
-      ticker,
-      nickname
-    );
     log.info("NetworkController - configureStandardProvider", rpcUrl);
     const networkClient = createJsonRpcClient({ rpcUrl });
     //networkClient.blockTracker = new TolarBlockTracker({provider:networkClient._provider})

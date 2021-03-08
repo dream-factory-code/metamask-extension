@@ -195,7 +195,6 @@ export function getLatestSubmittedTxWithNonce(
 }
 
 export async function isSmartContractAddress(address) {
-  console.log("TONI DEBUG getCode", address);
   const code = await global.eth.getCode(address);
   // Geth will return '0x', and ganache-core v2.2.1 will return '0x0'
   const codeIsEmpty = !code || code === "0x" || code === "0x0";
@@ -252,6 +251,6 @@ export function getBlockExplorerUrlForTx(networkId, hash = "", rpcPrefs = {}) {
     return `${rpcPrefs.blockExplorerUrl.replace(/\/+$/u, "")}/tx/${hash}`;
   }
   const prefix = getEtherscanNetworkPrefix(networkId);
-  console.log("TONI TODO this should boint to some transaction", prefix);
+  // TODO changing urls
   return `https://${prefix}.dream-factory.hr/transaction/${hash}`;
 }

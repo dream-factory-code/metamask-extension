@@ -46,15 +46,6 @@ export default class EnsInput extends Component {
 
   componentDidMount() {
     const { network } = this.props;
-    // TODO TONI: check if tolar supports ens
-    // const networkHasEnsSupport = getNetworkEnsSupport(network)
-    //this.setState({ ensResolution: ZERO_ADDRESS })
-
-    // if (networkHasEnsSupport) {
-    //   const provider = global.ethereumProvider
-    //   this.ens = new ENS({ provider, network })
-    //   this.checkName = debounce(this.lookupEnsName, 200)
-    // }
   }
 
   // If an address is sent without a nickname, meaning not from ENS or from
@@ -62,13 +53,6 @@ export default class EnsInput extends Component {
   componentDidUpdate(prevProps) {
     const { input } = this.state;
     const { network } = this.props;
-    // TODO TONI: check if tolar supports ens
-
-    // if (prevProps.network !== network) {
-    //   const provider = global.ethereumProvider
-    //   this.ens = new ENS({ provider, network })
-    //   this.onChange({ target: { value: input } })
-    // }
   }
 
   resetInput = () => {
@@ -83,28 +67,7 @@ export default class EnsInput extends Component {
     // updateEnsResolutionError('')
   };
 
-  lookupEnsName = (ensName) => {
-    // const recipient = ensName.trim()
-    // log.info(`ENS attempting to resolve name: ${recipient}`)
-    // this.ens.lookup(recipient)
-    //   .then((address) => {
-    //     if (address === ZERO_ADDRESS) {
-    //       throw new Error(this.context.t('noAddressForName'))
-    //     }
-    //     if (address === ZERO_X_ERROR_ADDRESS) {
-    //       throw new Error(this.context.t('ensRegistrationError'))
-    //     }
-    //     this.props.updateEnsResolution(address)
-    //   })
-    //   .catch((reason) => {
-    //     if (isValidDomainName(recipient) && reason.message === 'ENS name not defined.') {
-    //       this.props.updateEnsResolutionError(this.context.t('ensNotFoundOnCurrentNetwork'))
-    //     } else {
-    //       log.error(reason)
-    //       this.props.updateEnsResolutionError(reason.message)
-    //     }
-    //   })
-  };
+  lookupEnsName = (ensName) => {};
 
   onPaste = (event) => {
     event.clipboardData.items[0].getAsString((text) => {
@@ -127,26 +90,7 @@ export default class EnsInput extends Component {
 
     this.setState({ input }, () => onChange(input));
 
-    // Empty ENS state if input is empty
-    // maybe scan ENS
-
-    // if (
-    //   !networkHasEnsSupport &&
-    //   !isValidAddress(input) &&
-    //   !isValidAddressHead(input)
-    // ) {
-    //   updateEnsResolution("");
-    //   updateEnsResolutionError(
-    //     networkHasEnsSupport ? "" : "Network does not support ENS"
-    //   );
-    //   return;
-    // }
-
-    // if (isValidDomainName(input)) {
-    //   this.lookupEnsName(input);
-    // } else
     const isValidTolarAddress = (address) => {
-      console.log("Toni debug isValidTolarAddress");
       if (!/^54|^0x54/.test(address)) return false;
       const cleanAddress = address.replace(/^0x54/, "");
       return cleanAddress.length === 50;
@@ -155,10 +99,6 @@ export default class EnsInput extends Component {
     if (onValidAddressTyped && isValidTolarAddress(input)) {
       onValidAddressTyped(input.toLowerCase());
     }
-    // } else {
-    //   updateEnsResolution("");
-    //   updateEnsResolutionError("");
-    // }
   };
 
   render() {

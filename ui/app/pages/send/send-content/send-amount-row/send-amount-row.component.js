@@ -128,7 +128,7 @@ export default class SendAmountRow extends Component {
         showError={inError}
         errorType="amount"
       >
-        {gasTotal && <AmountMaxButton inError={inError} />}
+        {/* {gasTotal && <AmountMaxButton inError={inError} />} */}
         {this.renderInput()}
       </SendRowWrapper>
     );

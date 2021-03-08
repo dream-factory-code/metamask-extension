@@ -20,12 +20,7 @@ export default class SendRowWrapper extends Component {
       ? children[1] || children[0]
       : children;
     const customLabelContent = children.length > 1 ? children[0] : null;
-    console.log(
-      "TONI debug render assets row",
-      { label },
-      { formField },
-      { customLabelContent }
-    );
+
     return (
       <div className="send-v2__form-row">
         <div className="send-v2__form-label">

@@ -200,13 +200,7 @@ export function getFormattedTokenFiatAmount(
     numberOfDecimals: 2,
     conversionRate: currentTokenToFiatRate,
   });
-  console.log("TONI DEBUG error   getFormattedTokenFiatAmount ", {
-    contractExchangeRate,
-    conversionRate,
-    currentCurrency,
-    tokenAmount,
-    tokenSymbol,
-  });
+
   return `${formatCurrency(
     currentTokenInFiat,
     currentCurrency

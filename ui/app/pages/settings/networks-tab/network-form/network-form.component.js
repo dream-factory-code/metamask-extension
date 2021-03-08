@@ -278,7 +278,7 @@ export default class NetworkForm extends PureComponent {
     const { t } = this.context;
     return (
       <div className="networks-tab__network-form-row--warning">
-        {t("onlyAddTrustedNetworks")}
+        {t("onlyAddTrustedNetworks").replace("Ethereum", "Tolar")}
       </div>
     );
   }
@@ -318,20 +318,20 @@ export default class NetworkForm extends PureComponent {
           this.setStateWithValue("rpcUrl", this.validateUrlRpcUrl),
           rpcUrl
         )}
-        {this.renderFormTextField(
+        {/* {this.renderFormTextField(
           "chainId",
           "chainId",
           this.setStateWithValue("chainId", this.validateChainId),
           chainId,
           "optionalChainId"
-        )}
-        {this.renderFormTextField(
+        )} */}
+        {/* {this.renderFormTextField(
           "symbol",
           "network-ticker",
           this.setStateWithValue("ticker"),
           ticker,
           "optionalSymbol"
-        )}
+        )} */}
         {this.renderFormTextField(
           "blockExplorerUrl",
           "block-explorer-url",

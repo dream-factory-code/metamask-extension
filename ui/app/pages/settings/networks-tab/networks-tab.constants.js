@@ -3,7 +3,7 @@ const defaultNetworksData = [
     labelKey: "mainnet",
     iconColor: "#29B6AF",
     providerType: "mainnet",
-    rpcUrl: "https://mainnet-gateway-01.dev.tolar.io",
+    rpcUrl: "https://gateway.dev.tolar.io",
 
     ticker: "TOL",
     blockExplorerUrl: "https://explorer.tolar.io",
@@ -13,10 +13,10 @@ const defaultNetworksData = [
     labelKey: "testnet",
     iconColor: "#F6C343",
     providerType: "testnet",
-    rpcUrl: "https://testnet-gateway-01.dev.tolar.io",
+    rpcUrl: "https://testnet-gateway.dev.tolar.io",
     // chainId: '4',
     ticker: "TOL",
-    blockExplorerUrl: "https://testnet-explorer.dev.tolar.io",
+    blockExplorerUrl: "https://testnet-explorer.tolar.io",
   },
   {
     labelKey: "localhost",

@@ -195,7 +195,7 @@ export default class ExtensionPlatform {
     // TODO changing urls
     const networkIdToTypeMap = {
       mainnet: "explorer",
-      testnet: "testnet-explorer.dev",
+      testnet: "testnet-explorer",
     };
 
     const netId = txMeta.metamaskNetworkId;

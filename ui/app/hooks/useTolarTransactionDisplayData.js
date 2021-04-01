@@ -96,7 +96,7 @@ export function useTolarTransactionDisplayData(transaction) {
 
   const networkIdToTypeMap = {
     mainnet: "explorer",
-    testnet: "testnet-explorer.dev",
+    testnet: "testnet-explorer",
   };
 
   const network = transaction.network;

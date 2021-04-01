@@ -15,8 +15,8 @@ export const LOCALHOST = "localhost";
 export const MAINNET_NETWORK_ID = "1";
 export const TESTNET_NETWORK_ID = "3";
 
-export const MAINNET_SUBDOMAIN = "mainnet-gateway-01.dev";
-export const TESTNET_SUBDOMAIN = "testnet-gateway-01.dev";
+export const MAINNET_SUBDOMAIN = "gateway.dev";
+export const TESTNET_SUBDOMAIN = "testnet-gateway.dev";
 
 // export const MAINNET_CHAIN_ID = '0x1'
 // export const ROPSTEN_CHAIN_ID = '0x3'

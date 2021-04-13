@@ -7,7 +7,7 @@ export default function reduceMetamask(state = {}, action) {
     isInitialized: false,
     isUnlocked: false,
     isAccountMenuOpen: false,
-    rpcTarget: "https://tolar-test.tolar.io/",
+    rpcTarget: "https://testnet-gateway.dev.tolar.io",
     identities: {},
     unapprovedTxs: {},
     frequentRpcList: [],

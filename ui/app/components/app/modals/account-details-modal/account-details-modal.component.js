@@ -63,9 +63,7 @@ export default class AccountDetailsModal extends Component {
           className="account-details-modal__button"
           onClick={() => {
             global.platform.openTab({
-              url: `https://hashnet${
-                network !== "maninnet" ? "-" + network.replace(/net$/, "") : ""
-              }.tolar.io/address/${address}`,
+              url: getAccountLink(address, network, rpcPrefs),
             });
           }}
         >

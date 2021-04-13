@@ -200,7 +200,7 @@ export default class ExtensionPlatform {
 
     const netId = txMeta.metamaskNetworkId;
     const isTolar = Boolean(networkIdToTypeMap[netId]);
-    const prefix = networkIdToTypeMap[netId] || "hashnet";
+    const prefix = networkIdToTypeMap[netId] || "explorer";
     const hash = txMeta?.txParams?.body?.transaction_hash || txMeta?.hash || "";
 
     const url = isTolar

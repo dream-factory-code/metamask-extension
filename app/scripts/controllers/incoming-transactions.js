@@ -209,21 +209,20 @@ export default class IncomingTransactionsController {
 
   async _fetchTxs(address, fromBlock, networkType) {
     // TODO changing urls
-    let subdomain = NETWORK_TYPE_TO_SUBDOMAIN_MAP[MAINNET]?.subdomain;
+    // let subdomain = NETWORK_TYPE_TO_SUBDOMAIN_MAP[MAINNET]?.subdomain;
     // const currentNetworkID = NETWORK_TYPE_TO_ID_MAP[networkType]?.networkId
     //    const currentNetworkID = NETWORK_TYPE_TO_SUBDOMAIN_MAP[networkType]?.subdomain
-    const currentNetworkSubdomain =
-      NETWORK_TYPE_TO_SUBDOMAIN_MAP[networkType]?.subdomain;
+    // const currentNetworkSubdomain =
+    //   NETWORK_TYPE_TO_SUBDOMAIN_MAP[networkType]?.subdomain;
 
-    // if (!currentNetworkID) {
-    if (!currentNetworkSubdomain) {
-      return {};
-    }
-
-    if (networkType !== MAINNET) {
-      // etherscanSubdomain = `api-${networkType}`
-      subdomain = currentNetworkSubdomain;
-    }
+    // // if (!currentNetworkID) {
+    // if (!currentNetworkSubdomain && networkType !== "rpc") {
+    //   return {};
+    // }
+    // if (networkType !== MAINNET) {
+    //   // etherscanSubdomain = `api-${networkType}`
+    //   subdomain = currentNetworkSubdomain;
+    // }
 
     // const apiUrl = `https://${etherscanSubdomain}.etherscan.io`
     // const apiUrl = `https://${subdomain}.tolar.io`;

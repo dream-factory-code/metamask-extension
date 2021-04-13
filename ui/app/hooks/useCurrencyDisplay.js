@@ -93,5 +93,5 @@ export function parseTolarDisplay(val) {
 
   return bnVal.gt(new BN(1e15 + ""))
     ? `${bnVal.divRound(new BN(1e15 + "")).toNumber() / 1000} TOL`
-    : `${val} aTOL`;
+    : `${val || ""} aTOL`;
 }

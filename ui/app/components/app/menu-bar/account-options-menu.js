@@ -53,6 +53,7 @@ export default function AccountOptionsMenu({ anchorElement, onClose }) {
 
   const keyring = useSelector(getCurrentKeyring);
   const network = useSelector(getCurrentNetwork);
+
   const rpcPrefs = useSelector(getRpcPrefsForCurrentProvider);
   const selectedIdentity = useSelector(getSelectedIdentity);
   const { address } = selectedIdentity;
@@ -89,13 +90,9 @@ export default function AccountOptionsMenu({ anchorElement, onClose }) {
       </MenuItem>
       <MenuItem
         onClick={() => {
-          viewOnEtherscanEvent();
+          // viewOnEtherscanEvent();
           global.platform.openTab({
-            url: `https://hashnet${
-              network !== "maninnet" ? "-" + network.replace(/net$/, "") : ""
-            }.tolar.io/address/${
-              selectedIdentity.address
-            }` /*getAccountLink(address, network, rpcPrefs)*/,
+            url: getAccountLink(address, network, rpcPrefs),
           });
           onClose();
         }}

@@ -220,10 +220,9 @@ export default class NetworksTab extends PureComponent {
 
     const envIsPopup = getEnvironmentType() === ENVIRONMENT_TYPE_POPUP;
     const shouldRenderNetworkForm =
-      (networksTabIsInAddMode ||
-        !envIsPopup ||
-        (envIsPopup && !networkDefaultedToProvider)) &&
-      (label || labelKey);
+      networksTabIsInAddMode ||
+      !envIsPopup ||
+      (envIsPopup && !networkDefaultedToProvider);
     return (
       <div className="networks-tab__content">
         {this.renderNetworksList()}

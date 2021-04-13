@@ -62,27 +62,23 @@ export default class InfoTab extends PureComponent {
             {t("supportCenter")}
           </Button>
         </div> */}
+        <a href="https://tolar.io/" target="_blank" rel="noopener noreferrer">
+          <div className="info-tab__link-item">
+            <Button type="link" className="info-tab__link-text">
+              {t("visitWebSite")}
+            </Button>
+          </div>
+        </a>
         <div className="info-tab__link-item">
-          <Button
-            type="link"
-            href="https://tolar.io/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="info-tab__link-text"
-          >
-            {t("visitWebSite")}
-          </Button>
-        </div>
-        <div className="info-tab__link-item">
-          <Button
-            type="link"
+          <a
             href="mailto:info@tolar.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="info-tab__link-text"
           >
-            {t("contactUs")}
-          </Button>
+            <Button type="link" className="info-tab__link-text">
+              {t("contactUs")}
+            </Button>
+          </a>
         </div>
       </div>
     );

@@ -1,88 +1,88 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
-import MaterialTextField from '@material-ui/core/TextField'
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import MaterialTextField from "@material-ui/core/TextField";
 
 const inputLabelBase = {
-  transform: 'none',
-  transition: 'none',
-  position: 'initial',
-  color: '#5b5b5b',
-}
+  transform: "none",
+  transition: "none",
+  position: "initial",
+  color: "#5b5b5b",
+};
 
 const styles = {
   materialLabel: {
-    '&$materialFocused': {
-      color: '#aeaeae',
+    "&$materialFocused": {
+      color: "#aeaeae",
     },
-    '&$materialError': {
-      color: '#aeaeae',
+    "&$materialError": {
+      color: "#aeaeae",
     },
-    fontWeight: '400',
-    color: '#aeaeae',
+    fontWeight: "400",
+    color: "#aeaeae",
   },
   materialFocused: {},
   materialUnderline: {
-    '&:after': {
-      borderBottom: '2px solid #f7861c',
+    "&:after": {
+      borderBottom: "2px solid #13ceef",
     },
   },
   materialError: {},
   materialWhitePaddedRoot: {
-    color: '#aeaeae',
+    color: "#aeaeae",
   },
   materialWhitePaddedInput: {
-    padding: '8px',
+    padding: "8px",
 
-    '&::placeholder': {
-      color: '#aeaeae',
+    "&::placeholder": {
+      color: "#aeaeae",
     },
   },
   materialWhitePaddedFocused: {
-    color: '#fff',
+    color: "#fff",
   },
   materialWhitePaddedUnderline: {
-    '&:after': {
-      borderBottom: '2px solid #fff',
+    "&:after": {
+      borderBottom: "2px solid #fff",
     },
   },
   // Non-material styles
   formLabel: {
-    '&$formLabelFocused': {
-      color: '#5b5b5b',
+    "&$formLabelFocused": {
+      color: "#5b5b5b",
     },
-    '&$materialError': {
-      color: '#5b5b5b',
+    "&$materialError": {
+      color: "#5b5b5b",
     },
   },
   formLabelFocused: {},
   inputFocused: {},
   inputRoot: {
-    'label + &': {
-      marginTop: '9px',
+    "label + &": {
+      marginTop: "9px",
     },
-    border: '2px solid #BBC0C5',
-    height: '48px',
-    borderRadius: '6px',
-    padding: '0 16px',
-    display: 'flex',
-    alignItems: 'center',
-    '&$inputFocused': {
-      border: '1px solid #2f9ae0',
+    border: "2px solid #BBC0C5",
+    height: "48px",
+    borderRadius: "6px",
+    padding: "0 16px",
+    display: "flex",
+    alignItems: "center",
+    "&$inputFocused": {
+      border: "1px solid #2f9ae0",
     },
   },
   largeInputLabel: {
     ...inputLabelBase,
-    fontSize: '1rem',
+    fontSize: "1rem",
   },
   inputLabel: {
     ...inputLabelBase,
-    fontSize: '.75rem',
+    fontSize: ".75rem",
   },
   inputMultiline: {
-    lineHeight: 'initial !important',
+    lineHeight: "initial !important",
   },
-}
+};
 
 const getMaterialThemeInputProps = ({
   dir,
@@ -105,11 +105,16 @@ const getMaterialThemeInputProps = ({
       dir,
     },
   },
-})
+});
 
 const getMaterialWhitePaddedThemeInputProps = ({
   dir,
-  classes: { materialWhitePaddedRoot, materialWhitePaddedFocused, materialWhitePaddedInput, materialWhitePaddedUnderline },
+  classes: {
+    materialWhitePaddedRoot,
+    materialWhitePaddedFocused,
+    materialWhitePaddedInput,
+    materialWhitePaddedUnderline,
+  },
   startAdornment,
 }) => ({
   InputProps: {
@@ -124,11 +129,20 @@ const getMaterialWhitePaddedThemeInputProps = ({
       dir,
     },
   },
-})
+});
 
 const getBorderedThemeInputProps = ({
   dir,
-  classes: { formLabel, formLabelFocused, materialError, largeInputLabel, inputLabel, inputRoot, input, inputFocused },
+  classes: {
+    formLabel,
+    formLabelFocused,
+    materialError,
+    largeInputLabel,
+    inputLabel,
+    inputRoot,
+    input,
+    inputFocused,
+  },
   largeLabel,
   startAdornment,
 }) => ({
@@ -146,20 +160,20 @@ const getBorderedThemeInputProps = ({
     disableUnderline: true,
     classes: {
       root: inputRoot,
-      input: input,
+      input,
       focused: inputFocused,
     },
     inputProps: {
       dir,
     },
   },
-})
+});
 
 const themeToInputProps = {
-  'material': getMaterialThemeInputProps,
-  'bordered': getBorderedThemeInputProps,
-  'material-white-padded': getMaterialWhitePaddedThemeInputProps,
-}
+  material: getMaterialThemeInputProps,
+  bordered: getBorderedThemeInputProps,
+  "material-white-padded": getMaterialWhitePaddedThemeInputProps,
+};
 
 const TextField = ({
   error,
@@ -170,7 +184,12 @@ const TextField = ({
   dir,
   ...textFieldProps
 }) => {
-  const inputProps = themeToInputProps[theme]({ classes, startAdornment, largeLabel, dir })
+  const inputProps = themeToInputProps[theme]({
+    classes,
+    startAdornment,
+    largeLabel,
+    dir,
+  });
 
   return (
     <MaterialTextField
@@ -179,22 +198,22 @@ const TextField = ({
       {...inputProps}
       {...textFieldProps}
     />
-  )
-}
+  );
+};
 
 TextField.defaultProps = {
   error: null,
-  dir: 'auto',
-  theme: 'bordered',
-}
+  dir: "auto",
+  theme: "bordered",
+};
 
 TextField.propTypes = {
   error: PropTypes.string,
   classes: PropTypes.object,
   dir: PropTypes.string,
-  theme: PropTypes.oneOf(['bordered', 'material', 'material-white-padded']),
+  theme: PropTypes.oneOf(["bordered", "material", "material-white-padded"]),
   startAdornment: PropTypes.element,
   largeLabel: PropTypes.bool,
-}
+};
 
-export default withStyles(styles)(TextField)
+export default withStyles(styles)(TextField);

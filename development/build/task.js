@@ -1,5 +1,6 @@
 const EventEmitter = require('events')
-const { spawn } = require('child_process')
+//const { spawn } = require('child_process')
+const spawn = require("cross-spawn");
 
 const tasks = {}
 const taskEvents = new EventEmitter()
@@ -7,7 +8,6 @@ const taskEvents = new EventEmitter()
 module.exports = { detectAndRunEntryTask, tasks, taskEvents, createTask, runTask, composeSeries, composeParallel, runInChildProcess }
 
 const { setupTaskDisplay } = require('./display')
-
 
 function detectAndRunEntryTask () {
   // get requested task name and execute

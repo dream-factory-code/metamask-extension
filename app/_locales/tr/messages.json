@@ -25,7 +25,7 @@
     "description": "The description of the application"
   },
   "appName": {
-    "message": "MetaMask",
+    "message": "Taquin",
     "description": "The name of the application"
   },
   "approve": {
@@ -50,7 +50,7 @@
     "message": "Blockies Identicon kullan"
   },
   "builtInCalifornia": {
-    "message": "MetaMask California'da tasarlandı ve yaratıldı"
+    "message": "Taquin California'da tasarlandı ve yaratıldı"
   },
   "buyCoinSwitch": {
     "message": "CoinSwitch'de satın al"
@@ -208,7 +208,7 @@
     "message": "Hesap Al"
   },
   "importAccountMsg": {
-    "message": " Alınan hesaplar orjinal kaynakifadenizle yarattığınız MetaMask hesabınızla ilişkilendirilmez. Alınan hesaplar ile ilgili daha fazla bilgi edinin "
+    "message": " Alınan hesaplar orjinal kaynakifadenizle yarattığınız Taquin hesabınızla ilişkilendirilmez. Alınan hesaplar ile ilgili daha fazla bilgi edinin "
   },
   "imported": {
     "message": "Alındı",
@@ -275,8 +275,8 @@
   "message": {
     "message": "Mesaj"
   },
-  "metamaskDescription": {
-    "message": "MetaMask Ethereum için güvenli bir kimlik kasasıdır."
+  "TaquinDescription": {
+    "message": "Taquin Ethereum için güvenli bir kimlik kasasıdır."
   },
   "myAccounts": {
     "message": "Hesaplarım"
@@ -285,7 +285,7 @@
     "message": "En az bir jeton seçilmeli"
   },
   "needEtherInWallet": {
-    "message": "MetaMask kullanarak merkezi olamayan uygulamalarla etkileşmek için cüzdanınızda Ether bulunmalıdır."
+    "message": "Taquin kullanarak merkezi olamayan uygulamalarla etkileşmek için cüzdanınızda Ether bulunmalıdır."
   },
   "needImportFile": {
     "message": "Almak için bir dosya seçmelisiniz.",
@@ -497,7 +497,7 @@
     "message": "Cüzdan Kaynağı"
   },
   "welcome": {
-    "message": "MetaMask'ya Hoşgeldiniz"
+    "message": "Taquin'ya Hoşgeldiniz"
   },
   "yourSigRequested": {
     "message": "İmzanız isteniyor"

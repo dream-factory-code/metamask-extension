@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-
+  position: relative;
   &__completed-transactions {
     display: flex;
     flex-direction: column;
@@ -48,4 +48,17 @@
     margin: 16px auto;
     max-width: 200px;
   }
+}
+
+.tx-loading-indicator {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 60px;
 }

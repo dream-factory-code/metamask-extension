@@ -1,16 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import {
-  decGWEIToHexWEI,
-} from '../../../../../helpers/utils/conversions.util'
-import Loading from '../../../../ui/loading-screen'
-import GasPriceChart from '../../gas-price-chart'
-import AdvancedGasInputs from '../../advanced-gas-inputs'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { decGWEIToHexWEI } from "../../../../../helpers/utils/conversions.util";
+import Loading from "../../../../ui/loading-screen";
+import GasPriceChart from "../../gas-price-chart";
+import AdvancedGasInputs from "../../advanced-gas-inputs";
 
 export default class AdvancedTabContent extends Component {
   static contextTypes = {
     t: PropTypes.func,
-  }
+  };
 
   static propTypes = {
     updateCustomGasPrice: PropTypes.func,
@@ -26,32 +24,35 @@ export default class AdvancedTabContent extends Component {
     customPriceIsSafe: PropTypes.bool,
     isSpeedUp: PropTypes.bool,
     isEthereumNetwork: PropTypes.bool,
-  }
+  };
 
-  renderDataSummary (transactionFee, timeRemaining) {
+  renderDataSummary(transactionFee, timeRemaining) {
     return (
       <div className="advanced-tab__transaction-data-summary">
         <div className="advanced-tab__transaction-data-summary__titles">
-          <span>{ this.context.t('newTransactionFee') }</span>
-          <span>~{ this.context.t('transactionTime') }</span>
+          <span>{this.context.t("newTransactionFee")}</span>
+          <span>~{this.context.t("transactionTime")}</span>
         </div>
         <div className="advanced-tab__transaction-data-summary__container">
           <div className="advanced-tab__transaction-data-summary__fee">
             {transactionFee}
           </div>
-          <div className="advanced-tab__transaction-data-summary__time-remaining">{timeRemaining}</div>
+          <div className="advanced-tab__transaction-data-summary__time-remaining">
+            {timeRemaining}
+          </div>
         </div>
       </div>
-    )
+    );
   }
 
   onGasChartUpdate = (price) => {
-    const { updateCustomGasPrice } = this.props
-    updateCustomGasPrice(decGWEIToHexWEI(price))
-  }
+    const { updateCustomGasPrice } = this.props;
 
-  render () {
-    const { t } = this.context
+    updateCustomGasPrice(price /*decGWEIToHexWEI(price)*/);
+  };
+
+  render() {
+    const { t } = this.context;
     const {
       updateCustomGasPrice,
       updateCustomGasLimit,
@@ -65,11 +66,11 @@ export default class AdvancedTabContent extends Component {
       isSpeedUp,
       transactionFee,
       isEthereumNetwork,
-    } = this.props
+    } = this.props;
 
     return (
       <div className="advanced-tab">
-        { this.renderDataSummary(transactionFee, timeRemaining) }
+        {this.renderDataSummary(transactionFee, timeRemaining)}
         <div className="advanced-tab__fee-chart">
           <div className="advanced-tab__gas-inputs">
             <AdvancedGasInputs
@@ -82,24 +83,31 @@ export default class AdvancedTabContent extends Component {
               isSpeedUp={isSpeedUp}
             />
           </div>
-          { isEthereumNetwork
-            ? (
-              <div>
-                <div className="advanced-tab__fee-chart__title">{ t('liveGasPricePredictions') }</div>
-                {!gasEstimatesLoading
-                  ? <GasPriceChart {...gasChartProps} updateCustomGasPrice={this.onGasChartUpdate} />
-                  : <Loading />
-                }
-                <div className="advanced-tab__fee-chart__speed-buttons">
-                  <span>{ t('slower') }</span>
-                  <span>{ t('faster') }</span>
-                </div>
+          {isEthereumNetwork ? (
+            <div>
+              <div className="advanced-tab__fee-chart__title">
+                {t("liveGasPricePredictions")}
               </div>
-            )
-            : <div className="advanced-tab__fee-chart__title">{ t('chartOnlyAvailableEth') }</div>
-          }
+              {gasEstimatesLoading ? (
+                <Loading />
+              ) : (
+                <GasPriceChart
+                  {...gasChartProps}
+                  updateCustomGasPrice={this.onGasChartUpdate}
+                />
+              )}
+              <div className="advanced-tab__fee-chart__speed-buttons">
+                <span>{t("slower")}</span>
+                <span>{t("faster")}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="advanced-tab__fee-chart__title">
+              {t("chartOnlyAvailableEth")}
+            </div>
+          )}
         </div>
       </div>
-    )
+    );
   }
 }

@@ -1,14 +1,14 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import validUrl from 'valid-url'
-import TextField from '../../../../components/ui/text-field'
-import Button from '../../../../components/ui/button'
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import validUrl from "valid-url";
+import TextField from "../../../../components/ui/text-field";
+import Button from "../../../../components/ui/button";
 
 export default class NetworkForm extends PureComponent {
   static contextTypes = {
     t: PropTypes.func.isRequired,
     metricsEvent: PropTypes.func.isRequired,
-  }
+  };
 
   static propTypes = {
     editRpc: PropTypes.func.isRequired,
@@ -25,7 +25,7 @@ export default class NetworkForm extends PureComponent {
     blockExplorerUrl: PropTypes.string,
     rpcPrefs: PropTypes.object,
     rpcUrls: PropTypes.array,
-  }
+  };
 
   state = {
     rpcUrl: this.props.rpcUrl,
@@ -34,10 +34,13 @@ export default class NetworkForm extends PureComponent {
     networkName: this.props.networkName,
     blockExplorerUrl: this.props.blockExplorerUrl,
     errors: {},
-  }
+  };
 
-  componentDidUpdate (prevProps) {
-    const { rpcUrl: prevRpcUrl, networksTabIsInAddMode: prevAddMode } = prevProps
+  componentDidUpdate(prevProps) {
+    const {
+      rpcUrl: prevRpcUrl,
+      networksTabIsInAddMode: prevAddMode,
+    } = prevProps;
     const {
       rpcUrl,
       chainId,
@@ -45,44 +48,58 @@ export default class NetworkForm extends PureComponent {
       networkName,
       networksTabIsInAddMode,
       blockExplorerUrl,
-    } = this.props
+    } = this.props;
 
     if (!prevAddMode && networksTabIsInAddMode) {
       this.setState({
-        rpcUrl: '',
-        chainId: '',
-        ticker: '',
-        networkName: '',
-        blockExplorerUrl: '',
+        rpcUrl: "",
+        chainId: "",
+        ticker: "",
+        networkName: "",
+        blockExplorerUrl: "",
         errors: {},
-      })
+      });
     } else if (prevRpcUrl !== rpcUrl) {
-      this.setState({ rpcUrl, chainId, ticker, networkName, blockExplorerUrl, errors: {} })
+      this.setState({
+        rpcUrl,
+        chainId,
+        ticker,
+        networkName,
+        blockExplorerUrl,
+        errors: {},
+      });
     }
   }
 
-  componentWillUnmount () {
-    this.props.onClear()
+  componentWillUnmount() {
+    this.props.onClear();
     this.setState({
-      rpcUrl: '',
-      chainId: '',
-      ticker: '',
-      networkName: '',
-      blockExplorerUrl: '',
+      rpcUrl: "",
+      chainId: "",
+      ticker: "",
+      networkName: "",
+      blockExplorerUrl: "",
       errors: {},
-    })
+    });
   }
 
-  resetForm () {
+  resetForm() {
     const {
       rpcUrl,
       chainId,
       ticker,
       networkName,
       blockExplorerUrl,
-    } = this.props
+    } = this.props;
 
-    this.setState({ rpcUrl, chainId, ticker, networkName, blockExplorerUrl, errors: {} })
+    this.setState({
+      rpcUrl,
+      chainId,
+      ticker,
+      networkName,
+      blockExplorerUrl,
+      errors: {},
+    });
   }
 
   onSubmit = () => {
@@ -93,63 +110,60 @@ export default class NetworkForm extends PureComponent {
       rpcPrefs = {},
       onClear,
       networksTabIsInAddMode,
-    } = this.props
+    } = this.props;
     const {
       networkName,
       rpcUrl,
       chainId,
       ticker,
       blockExplorerUrl,
-    } = this.state
+    } = this.state;
     if (propsRpcUrl && rpcUrl !== propsRpcUrl) {
       editRpc(propsRpcUrl, rpcUrl, chainId, ticker, networkName, {
         blockExplorerUrl: blockExplorerUrl || rpcPrefs.blockExplorerUrl,
         ...rpcPrefs,
-      })
+      });
     } else {
       setRpcTarget(rpcUrl, chainId, ticker, networkName, {
         blockExplorerUrl: blockExplorerUrl || rpcPrefs.blockExplorerUrl,
         ...rpcPrefs,
-      })
+      });
     }
 
     if (networksTabIsInAddMode) {
-      onClear()
+      onClear();
     }
-  }
+  };
 
   onCancel = () => {
-    const {
-      networksTabIsInAddMode,
-      onClear,
-    } = this.props
+    const { networksTabIsInAddMode, onClear } = this.props;
 
     if (networksTabIsInAddMode) {
-      onClear()
+      onClear();
     } else {
-      this.resetForm()
+      this.resetForm();
     }
-  }
+  };
 
   onDelete = () => {
-    const { showConfirmDeleteNetworkModal, rpcUrl, onClear } = this.props
+    const { showConfirmDeleteNetworkModal, rpcUrl, onClear } = this.props;
     showConfirmDeleteNetworkModal({
       target: rpcUrl,
       onConfirm: () => {
-        this.resetForm()
-        onClear()
+        this.resetForm();
+        onClear();
       },
-    })
-  }
+    });
+  };
 
-  stateIsUnchanged () {
+  stateIsUnchanged() {
     const {
       rpcUrl,
       chainId,
       ticker,
       networkName,
       blockExplorerUrl,
-    } = this.props
+    } = this.props;
 
     const {
       rpcUrl: stateRpcUrl,
@@ -157,7 +171,7 @@ export default class NetworkForm extends PureComponent {
       ticker: stateTicker,
       networkName: stateNetworkName,
       blockExplorerUrl: stateBlockExplorerUrl,
-    } = this.state
+    } = this.state;
 
     return (
       stateRpcUrl === rpcUrl &&
@@ -165,16 +179,24 @@ export default class NetworkForm extends PureComponent {
       stateTicker === ticker &&
       stateNetworkName === networkName &&
       stateBlockExplorerUrl === blockExplorerUrl
-    )
+    );
   }
 
-  renderFormTextField (fieldKey, textFieldId, onChange, value, optionalTextFieldKey) {
-    const { errors } = this.state
-    const { viewOnly } = this.props
+  renderFormTextField(
+    fieldKey,
+    textFieldId,
+    onChange,
+    value,
+    optionalTextFieldKey
+  ) {
+    const { errors } = this.state;
+    const { viewOnly } = this.props;
 
     return (
       <div className="networks-tab__network-form-row">
-        <div className="networks-tab__network-form-label">{this.context.t(optionalTextFieldKey || fieldKey)}</div>
+        <div className="networks-tab__network-form-label">
+          {this.context.t(optionalTextFieldKey || fieldKey)}
+        </div>
         <TextField
           type="text"
           id={textFieldId}
@@ -186,15 +208,15 @@ export default class NetworkForm extends PureComponent {
           error={errors[fieldKey]}
         />
       </div>
-    )
+    );
   }
 
   setStateWithValue = (stateKey, validator) => {
     return (e) => {
-      validator && validator(e.target.value, stateKey)
-      this.setState({ [stateKey]: e.target.value })
-    }
-  }
+      validator && validator(e.target.value, stateKey);
+      this.setState({ [stateKey]: e.target.value });
+    };
+  };
 
   setErrorTo = (errorKey, errorVal) => {
     this.setState({
@@ -202,132 +224,146 @@ export default class NetworkForm extends PureComponent {
         ...this.state.errors,
         [errorKey]: errorVal,
       },
-    })
-  }
+    });
+  };
 
   validateChainId = (chainId) => {
-    this.setErrorTo('chainId', !!chainId && Number.isNaN(parseInt(chainId))
-      ? `${this.context.t('invalidInput')} chainId`
-      : '',
-    )
-  }
+    // eslint-disable-next-line radix
+    this.setErrorTo(
+      "chainId",
+      Boolean(chainId) && Number.isNaN(parseInt(chainId))
+        ? `${this.context.t("invalidInput")} chainId`
+        : ""
+    );
+  };
 
   isValidWhenAppended = (url) => {
-    const appendedRpc = `http://${url}`
-    return validUrl.isWebUri(appendedRpc) && !url.match(/^https?:\/\/$/)
-  }
+    const appendedRpc = `http://${url}`;
+    return validUrl.isWebUri(appendedRpc) && !url.match(/^https?:\/\/$/u);
+  };
 
   validateBlockExplorerURL = (url, stateKey) => {
-    if (!validUrl.isWebUri(url) && url !== '') {
-      this.setErrorTo(stateKey, this.context.t(this.isValidWhenAppended(url) ? 'urlErrorMsg' : 'invalidBlockExplorerURL'))
+    if (!validUrl.isWebUri(url) && url !== "") {
+      this.setErrorTo(
+        stateKey,
+        this.context.t(
+          this.isValidWhenAppended(url)
+            ? "urlErrorMsg"
+            : "invalidBlockExplorerURL"
+        )
+      );
     } else {
-      this.setErrorTo(stateKey, '')
+      this.setErrorTo(stateKey, "");
     }
-  }
+  };
 
   validateUrlRpcUrl = (url, stateKey) => {
-    const { rpcUrls } = this.props
+    const { rpcUrls } = this.props;
 
-    if (!validUrl.isWebUri(url) && url !== '') {
-      this.setErrorTo(stateKey, this.context.t(this.isValidWhenAppended(url) ? 'urlErrorMsg' : 'invalidRPC'))
+    if (!validUrl.isWebUri(url) && url !== "") {
+      this.setErrorTo(
+        stateKey,
+        this.context.t(
+          this.isValidWhenAppended(url) ? "urlErrorMsg" : "invalidRPC"
+        )
+      );
     } else if (rpcUrls.includes(url)) {
-      this.setErrorTo(stateKey, this.context.t('urlExistsErrorMsg'))
+      this.setErrorTo(stateKey, this.context.t("urlExistsErrorMsg"));
     } else {
-      this.setErrorTo(stateKey, '')
+      this.setErrorTo(stateKey, "");
     }
-  }
+  };
 
-  renderWarning () {
-    const { t } = this.context
+  renderWarning() {
+    const { t } = this.context;
     return (
       <div className="networks-tab__network-form-row--warning">
-        {t('onlyAddTrustedNetworks')}
+        {t("onlyAddTrustedNetworks").replace("Ethereum", "Tolar")}
       </div>
-    )
+    );
   }
 
-  render () {
-    const { t } = this.context
-    const {
-      viewOnly,
-      isCurrentRpcTarget,
-      networksTabIsInAddMode,
-    } = this.props
+  render() {
+    const { t } = this.context;
+    const { viewOnly, isCurrentRpcTarget, networksTabIsInAddMode } = this.props;
     const {
       networkName,
       rpcUrl,
-      chainId = '',
+      chainId = "",
       ticker,
       blockExplorerUrl,
       errors,
-    } = this.state
+    } = this.state;
 
-    const isSubmitDisabled = viewOnly || this.stateIsUnchanged() || Object.values(errors).some((x) => x) || !rpcUrl
-    const deletable = !networksTabIsInAddMode && !isCurrentRpcTarget && !viewOnly
+    const isSubmitDisabled =
+      viewOnly ||
+      this.stateIsUnchanged() ||
+      Object.values(errors).some((x) => x) ||
+      !rpcUrl;
+    const deletable =
+      !networksTabIsInAddMode && !isCurrentRpcTarget && !viewOnly;
 
     return (
       <div className="networks-tab__network-form">
         {viewOnly ? null : this.renderWarning()}
         {this.renderFormTextField(
-          'networkName',
-          'network-name',
-          this.setStateWithValue('networkName'),
-          networkName,
+          "networkName",
+          "network-name",
+          this.setStateWithValue("networkName"),
+          networkName
         )}
         {this.renderFormTextField(
-          'rpcUrl',
-          'rpc-url',
-          this.setStateWithValue('rpcUrl', this.validateUrlRpcUrl),
-          rpcUrl,
+          "rpcUrl",
+          "rpc-url",
+          this.setStateWithValue("rpcUrl", this.validateUrlRpcUrl),
+          rpcUrl
         )}
-        {this.renderFormTextField(
-          'chainId',
-          'chainId',
-          this.setStateWithValue('chainId', this.validateChainId),
+        {/* {this.renderFormTextField(
+          "chainId",
+          "chainId",
+          this.setStateWithValue("chainId", this.validateChainId),
           chainId,
-          'optionalChainId',
-        )}
-        {this.renderFormTextField(
-          'symbol',
-          'network-ticker',
-          this.setStateWithValue('ticker'),
+          "optionalChainId"
+        )} */}
+        {/* {this.renderFormTextField(
+          "symbol",
+          "network-ticker",
+          this.setStateWithValue("ticker"),
           ticker,
-          'optionalSymbol',
-        )}
+          "optionalSymbol"
+        )} */}
         {this.renderFormTextField(
-          'blockExplorerUrl',
-          'block-explorer-url',
-          this.setStateWithValue('blockExplorerUrl', this.validateBlockExplorerURL),
+          "blockExplorerUrl",
+          "block-explorer-url",
+          this.setStateWithValue(
+            "blockExplorerUrl",
+            this.validateBlockExplorerURL
+          ),
           blockExplorerUrl,
-          'optionalBlockExplorerUrl',
+          "optionalBlockExplorerUrl"
         )}
         <div className="network-form__footer">
-          {
-            deletable && (
-              <Button
-                type="danger"
-                onClick={this.onDelete}
-              >
-                { t('delete') }
-              </Button>
-            )
-          }
+          {deletable && (
+            <Button type="danger" onClick={this.onDelete}>
+              {t("delete")}
+            </Button>
+          )}
           <Button
             type="default"
             onClick={this.onCancel}
             disabled={viewOnly || this.stateIsUnchanged()}
           >
-            { t('cancel') }
+            {t("cancel")}
           </Button>
           <Button
             type="secondary"
             disabled={isSubmitDisabled}
             onClick={this.onSubmit}
           >
-            { t('save') }
+            {t("save")}
           </Button>
         </div>
       </div>
-    )
+    );
   }
 }

@@ -67,11 +67,11 @@
 
   &__cached-balance,
   &__cached-star {
-    color: $web-orange;
+    color: #2fadd4;
   }
 
   &__cached-secondary-balance {
-    color: rgba(220, 153, 18, 0.6901960784313725);
+    color: #2fadd4;
     font-size: 16px;
     line-height: 23px;
   }
@@ -83,7 +83,7 @@
     color: $Grey-400;
   }
 
-  &__button {
+  .wallet-overview &__button {
     @extend %asset-buttons;
   }
 }
@@ -115,7 +115,7 @@
     color: $Grey-400;
   }
 
-  &__button {
+  .wallet-overview &__button {
     @extend %asset-buttons;
   }
 }

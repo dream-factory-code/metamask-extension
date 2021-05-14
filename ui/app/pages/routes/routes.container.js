@@ -1,33 +1,32 @@
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import { compose } from 'redux'
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { compose } from "redux";
 import {
   getNetworkIdentifier,
   hasPermissionRequests,
   getPreferences,
   submittedPendingTransactionsSelector,
-} from '../../selectors'
-import Routes from './routes.component'
+} from "../../selectors";
 import {
   hideSidebar,
   lockMetamask,
   setCurrentCurrency,
   setLastActiveTime,
   setMouseUserState,
-} from '../../store/actions'
-import { pageChanged } from '../../ducks/history/history'
+} from "../../store/actions";
+import { pageChanged } from "../../ducks/history/history";
+import Routes from "./routes.component";
 
-function mapStateToProps (state) {
-  const { appState } = state
+function mapStateToProps(state) {
+  const { appState } = state;
   const {
     sidebar,
     alertOpen,
     alertMessage,
     isLoading,
     loadingMessage,
-  } = appState
-  const { autoLockTimeLimit = 0 } = getPreferences(state)
-
+  } = appState;
+  const { autoLockTimeLimit = 0 } = getPreferences(state);
   return {
     sidebar,
     alertOpen,
@@ -45,18 +44,22 @@ function mapStateToProps (state) {
     providerId: getNetworkIdentifier(state),
     autoLockTimeLimit,
     hasPermissionsRequests: hasPermissionRequests(state),
-  }
+  };
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     lockMetaMask: () => dispatch(lockMetamask(false)),
     hideSidebar: () => dispatch(hideSidebar()),
-    setCurrentCurrencyToUSD: () => dispatch(setCurrentCurrency('usd')),
-    setMouseUserState: (isMouseUser) => dispatch(setMouseUserState(isMouseUser)),
+    setCurrentCurrencyToUSD: () => dispatch(setCurrentCurrency("usd")),
+    setMouseUserState: (isMouseUser) =>
+      dispatch(setMouseUserState(isMouseUser)),
     setLastActiveTime: () => dispatch(setLastActiveTime()),
     pageChanged: (path) => dispatch(pageChanged(path)),
-  }
+  };
 }
 
-export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Routes)
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(Routes);

@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
-import Identicon from '../../../../ui/identicon'
+import React from "react";
+import PropTypes from "prop-types";
+import classnames from "classnames";
+import Identicon from "../../../../ui/identicon";
 
 const ConfirmPageContainerSummary = (props) => {
   const {
@@ -15,47 +15,41 @@ const ConfirmPageContainerSummary = (props) => {
     identiconAddress,
     nonce,
     assetImage,
-  } = props
+  } = props;
 
   return (
-    <div className={classnames('confirm-page-container-summary', className)}>
+    <div className={classnames("confirm-page-container-summary", className)}>
       <div className="confirm-page-container-summary__action-row">
         <div className="confirm-page-container-summary__action">
-          { action }
+          SEND TOLAR{/*action*/}
         </div>
-        {
-          nonce && (
-            <div className="confirm-page-container-summary__nonce">
-              { `#${nonce}` }
-            </div>
-          )
-        }
+        {nonce && (
+          <div className="confirm-page-container-summary__nonce">
+            {`#${nonce}`}
+          </div>
+        )}
       </div>
       <div className="confirm-page-container-summary__title">
-        {
-          identiconAddress && (
-            <Identicon
-              className="confirm-page-container-summary__identicon"
-              diameter={36}
-              address={identiconAddress}
-              image={assetImage}
-            />
-          )
-        }
+        {identiconAddress && (
+          <Identicon
+            className="confirm-page-container-summary__identicon"
+            diameter={36}
+            address={identiconAddress}
+            image={assetImage}
+          />
+        )}
         <div className="confirm-page-container-summary__title-text">
-          { titleComponent || title }
+          {titleComponent || title}
         </div>
       </div>
-      {
-        hideSubtitle || (
-          <div className="confirm-page-container-summary__subtitle">
-            { subtitleComponent || subtitle }
-          </div>
-        )
-      }
+      {hideSubtitle || (
+        <div className="confirm-page-container-summary__subtitle">
+          {subtitleComponent || subtitle}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 ConfirmPageContainerSummary.propTypes = {
   action: PropTypes.string,
@@ -68,6 +62,6 @@ ConfirmPageContainerSummary.propTypes = {
   identiconAddress: PropTypes.string,
   nonce: PropTypes.string,
   assetImage: PropTypes.string,
-}
+};
 
-export default ConfirmPageContainerSummary
+export default ConfirmPageContainerSummary;

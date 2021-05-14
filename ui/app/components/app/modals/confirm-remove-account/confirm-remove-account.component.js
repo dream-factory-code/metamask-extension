@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Modal from '../../modal'
-import { addressSummary } from '../../../../helpers/utils/util'
-import Identicon from '../../../ui/identicon'
-import genAccountLink from '../../../../../lib/account-link'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Modal from "../../modal";
+import { addressSummary } from "../../../../helpers/utils/util";
+import Identicon from "../../../ui/identicon";
+import getAccountLink from "../../../../../lib/account-link";
 
 export default class ConfirmRemoveAccount extends Component {
   static propTypes = {
@@ -11,70 +11,72 @@ export default class ConfirmRemoveAccount extends Component {
     removeAccount: PropTypes.func.isRequired,
     identity: PropTypes.object.isRequired,
     network: PropTypes.string.isRequired,
-  }
+  };
 
   static contextTypes = {
     t: PropTypes.func,
-  }
+  };
 
   handleRemove = () => {
-    this.props.removeAccount(this.props.identity.address)
-      .then(() => this.props.hideModal())
-  }
+    this.props
+      .removeAccount(this.props.identity.address)
+      .then(() => this.props.hideModal());
+  };
 
   handleCancel = () => {
-    this.props.hideModal()
-  }
+    this.props.hideModal();
+  };
 
-  renderSelectedAccount () {
-    const { identity } = this.props
+  renderSelectedAccount() {
+    const { identity } = this.props;
     return (
       <div className="confirm-remove-account__account">
         <div className="confirm-remove-account__account__identicon">
-          <Identicon
-            address={identity.address}
-            diameter={32}
-          />
+          <Identicon address={identity.address} diameter={32} />
         </div>
         <div className="confirm-remove-account__account__name">
           <span className="confirm-remove-account__account__label">Name</span>
           <span className="account_value">{identity.name}</span>
         </div>
         <div className="confirm-remove-account__account__address">
-          <span className="confirm-remove-account__account__label">Public Address</span>
-          <span className="account_value">{ addressSummary(identity.address, 4, 4) }</span>
+          <span className="confirm-remove-account__account__label">
+            Public Address
+          </span>
+          <span className="account_value">
+            {addressSummary(identity.address, 4, 4)}
+          </span>
         </div>
-        <div className="confirm-remove-account__account__link">
+        {/* <div className="confirm-remove-account__account__link">
           <a
             className=""
-            href={genAccountLink(identity.address, this.props.network)}
+            href={getAccountLink(identity.address, this.props.network)}
             target="_blank"
             rel="noopener noreferrer"
-            title={this.context.t('etherscanView')}
+            title={this.context.t("etherscanView")}
           >
             <img src="images/popout.svg" />
           </a>
-        </div>
+        </div> */}
       </div>
-    )
+    );
   }
 
-  render () {
-    const { t } = this.context
+  render() {
+    const { t } = this.context;
 
     return (
       <Modal
-        headerText={`${t('removeAccount')}?`}
+        headerText={`${t("removeAccount")}?`}
         onClose={this.handleCancel}
         onSubmit={this.handleRemove}
         onCancel={this.handleCancel}
-        submitText={t('remove')}
-        cancelText={t('nevermind')}
+        submitText={t("remove")}
+        cancelText={t("nevermind")}
         submitType="secondary"
       >
         <div>
-          { this.renderSelectedAccount() }
-          <div className="confirm-remove-account__description">
+          {this.renderSelectedAccount()}
+          {/* <div className="confirm-remove-account__description">
             { t('removeAccountDescription') }
             <a
               className="confirm-remove-account__link"
@@ -84,9 +86,9 @@ export default class ConfirmRemoveAccount extends Component {
             >
               { t('learnMore') }
             </a>
-          </div>
+          </div> */}
         </div>
       </Modal>
-    )
+    );
   }
 }

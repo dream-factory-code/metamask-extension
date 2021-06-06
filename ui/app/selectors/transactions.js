@@ -14,14 +14,14 @@ import txHelper from "../../lib/tx-helper";
 import { getSelectedAddress } from ".";
 
 export const incomingTxListSelector = (state) => {
-  // const { showIncomingTransactions } = state.metamask.featureFlags
+  // const { showIncomingTransactions } = state.taquin.featureFlags
   // if (!showIncomingTransactions) {
   //   return []
   // }
-  const { network } = state.metamask;
+  const { network } = state.taquin;
   const selectedAddress = getSelectedAddress(state);
 
-  return Object.values(state.metamask.incomingTransactions).filter(
+  return Object.values(state.taquin.incomingTransactions).filter(
     (txStateObject) =>
       (txStateObject.sender_address === selectedAddress ||
         txStateObject.receiver_address === selectedAddress) &&
@@ -30,20 +30,20 @@ export const incomingTxListSelector = (state) => {
 };
 
 export const incomingTxPaginationSelector = (state) => {
-  return state.metamask.incomingTransactionsPagination;
+  return state.taquin.incomingTransactionsPagination;
 };
-export const unapprovedMsgsSelector = (state) => state.metamask.unapprovedMsgs;
+export const unapprovedMsgsSelector = (state) => state.taquin.unapprovedMsgs;
 export const currentNetworkTxListSelector = (state) =>
-  state.metamask.currentNetworkTxList;
+  state.taquin.currentNetworkTxList;
 export const unapprovedPersonalMsgsSelector = (state) =>
-  state.metamask.unapprovedPersonalMsgs;
+  state.taquin.unapprovedPersonalMsgs;
 export const unapprovedDecryptMsgsSelector = (state) =>
-  state.metamask.unapprovedDecryptMsgs;
+  state.taquin.unapprovedDecryptMsgs;
 export const unapprovedEncryptionPublicKeyMsgsSelector = (state) =>
-  state.metamask.unapprovedEncryptionPublicKeyMsgs;
+  state.taquin.unapprovedEncryptionPublicKeyMsgs;
 export const unapprovedTypedMessagesSelector = (state) =>
-  state.metamask.unapprovedTypedMessages;
-export const networkSelector = (state) => state.metamask.network;
+  state.taquin.unapprovedTypedMessages;
+export const networkSelector = (state) => state.taquin.network;
 
 export const selectedAddressTxListSelector = createSelector(
   getSelectedAddress,
@@ -171,9 +171,8 @@ const insertTransactionByTime = (transactions, transaction) => {
  * array of transactionGroups.
  */
 const insertTransactionGroupByTime = (transactionGroups, transactionGroup) => {
-  const {
-    primaryTransaction: { time: groupToInsertTime } = {},
-  } = transactionGroup;
+  const { primaryTransaction: { time: groupToInsertTime } = {} } =
+    transactionGroup;
 
   let insertIndex = transactionGroups.length;
 
@@ -253,18 +252,16 @@ export const nonceSortedTransactionsSelector = createSelector(
         insertTransactionByTime(nonceProps.transactions, transaction);
 
         if (status in PRIORITY_STATUS_HASH) {
-          const {
-            primaryTransaction: { time: primaryTxTime = 0 } = {},
-          } = nonceProps;
+          const { primaryTransaction: { time: primaryTxTime = 0 } = {} } =
+            nonceProps;
 
           if (status === CONFIRMED_STATUS || txTime > primaryTxTime) {
             nonceProps.primaryTransaction = transaction;
           }
         }
 
-        const {
-          initialTransaction: { time: initialTxTime = 0 } = {},
-        } = nonceProps;
+        const { initialTransaction: { time: initialTxTime = 0 } = {} } =
+          nonceProps;
 
         // Used to display the transaction action, since we don't want to overwrite the action if
         // it was replaced with a cancel attempt transaction.

@@ -33,7 +33,7 @@ import {
   getCustomNonceValue,
   getIsMainnet,
   getKnownMethodData,
-  getMetaMaskAccounts,
+  getTaquinAccounts,
   getUseNonceField,
   getPreferences,
   transactionFeeSelector,
@@ -66,7 +66,7 @@ const mapStateToProps = (state, ownProps) => {
   const { id: paramsTransactionId } = params;
   const { showFiatInTestnets } = getPreferences(state);
   const isMainnet = getIsMainnet(state);
-  const { confirmTransaction, metamask } = state;
+  const { confirmTransaction, taquin } = state;
   const {
     ensResolutionsByAddress,
     conversionRate,
@@ -77,7 +77,7 @@ const mapStateToProps = (state, ownProps) => {
     unapprovedTxs,
     metaMetricsSendCount,
     nextNonce,
-  } = metamask;
+  } = taquin;
   const { tokenData, txData, tokenProps, nonce } = confirmTransaction;
   const {
     txParams = {},
@@ -100,7 +100,7 @@ const mapStateToProps = (state, ownProps) => {
     },
   } = (transaction && transaction.txParams) || txParams;
 
-  const accounts = getMetaMaskAccounts(state);
+  const accounts = getTaquinAccounts(state);
   const assetImage = assetImages[txParamsToAddress];
 
   const { balance } = accounts[fromAddress];
@@ -119,18 +119,15 @@ const mapStateToProps = (state, ownProps) => {
   const isTxReprice = Boolean(lastGasPrice);
   const transactionStatus = transaction ? transaction.status : "";
 
-  const {
-    hexTransactionAmount,
-    hexTransactionFee,
-    hexTransactionTotal,
-  } = transactionFeeSelector(state, transaction);
+  const { hexTransactionAmount, hexTransactionFee, hexTransactionTotal } =
+    transactionFeeSelector(state, transaction);
 
   if (transaction && transaction.simulationFails) {
     txData.simulationFails = transaction.simulationFails;
   }
 
   const currentNetworkUnapprovedTxs = Object.keys(unapprovedTxs)
-    .filter((key) => unapprovedTxs[key].metamaskNetworkId === network)
+    .filter((key) => unapprovedTxs[key].taquinNetworkId === network)
     .reduce((acc, key) => ({ ...acc, [key]: unapprovedTxs[key] }), {});
   const unapprovedTxCount = valuesFor(currentNetworkUnapprovedTxs).length;
 

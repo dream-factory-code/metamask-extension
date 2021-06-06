@@ -39,12 +39,12 @@ export function MetaMetricsProvider({ children }) {
   const activeCurrency = useSelector(getSendToken)?.symbol;
   const accountType = useSelector(getAccountType);
   const confirmTransactionOrigin = txData.origin;
-  const metaMetricsId = useSelector((state) => state.metamask.metaMetricsId);
+  const metaMetricsId = useSelector((state) => state.taquin.metaMetricsId);
   const participateInMetaMetrics = useSelector(
-    (state) => state.metamask.participateInMetaMetrics
+    (state) => state.taquin.participateInMetaMetrics
   );
   const metaMetricsSendCount = useSelector(
-    (state) => state.metamask.metaMetricsSendCount
+    (state) => state.taquin.metaMetricsSendCount
   );
   const numberOfTokens = useSelector(getNumberOfTokens);
   const numberOfAccounts = useSelector(getNumberOfAccounts);

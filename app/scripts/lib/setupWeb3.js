@@ -7,9 +7,9 @@
 import Web3 from "@dreamfactoryhr/web3t/dist/web3.min";
 
 const shouldLogUsage = ![
-  "docs.metamask.io",
-  "metamask.github.io",
-  "metamask.io",
+  "docs.taquin.io",
+  "taquin.github.io",
+  "taquin.io",
 ].includes(window.location.hostname);
 
 export default function setupWeb3(log) {
@@ -21,9 +21,9 @@ export default function setupWeb3(log) {
 
   const web3 = new Web3(window.ethereum);
   web3.setProvider = function () {
-    log.debug("MetaMask - overrode web3.setProvider");
+    log.debug("Taquin - overrode web3.setProvider");
   };
-  log.debug("MetaMask - injected web3");
+  log.debug("Taquin - injected web3");
 
   Object.defineProperty(window.ethereum, "_web3Ref", {
     enumerable: false,
@@ -40,7 +40,7 @@ export default function setupWeb3(log) {
       // show warning once on web3 access
       if (!hasBeenWarned) {
         console.warn(
-          `MetaMask: We will stop injecting web3 in Q4 2020.\nPlease see this article for more information: https://medium.com/metamask/no-longer-injecting-web3-js-4a899ad6e59e`
+          `Taquin: We will stop injecting web3 in Q4 2020.\nPlease see this article for more information: https://medium.com/taquin/no-longer-injecting-web3-js-4a899ad6e59e`
         );
         hasBeenWarned = true;
       }
@@ -48,7 +48,7 @@ export default function setupWeb3(log) {
       // if (shouldLogUsage) {
       //   const name = stringifyKey(key)
       //   window.ethereum.request({
-      //     method: 'metamask_logInjectedWeb3Usage',
+      //     method: 'taquin_logInjectedWeb3Usage',
       //     params: [{ action: 'window.web3 get', name }],
       //   })
       // }
@@ -60,7 +60,7 @@ export default function setupWeb3(log) {
       const name = stringifyKey(key);
       // if (shouldLogUsage) {
       //   window.ethereum.request({
-      //     method: 'metamask_logInjectedWeb3Usage',
+      //     method: 'taquin_logInjectedWeb3Usage',
       //     params: [{ action: 'window.web3 set', name }],
       //   })
       // }

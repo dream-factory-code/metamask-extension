@@ -22,7 +22,7 @@ import {
   getSelectedAddress,
 } from "../selectors";
 import { switchedToUnconnectedAccount } from "../ducks/alerts/unconnected-account";
-import { getUnconnectedAccountAlertEnabledness } from "../ducks/metamask/metamask";
+import { getUnconnectedAccountAlertEnabledness } from "../ducks/taquin/taquin";
 import * as actionConstants from "./actionConstants";
 // import { dropdownIndicatorCSS } from "react-select/src/components/indicators";
 
@@ -41,7 +41,7 @@ export function goHome() {
 
 // async actions
 
-export function tryUnlockMetamask(password) {
+export function tryUnlockTaquin(password) {
   return (dispatch) => {
     dispatch(showLoadingIndication());
     dispatch(unlockInProgress());
@@ -59,7 +59,7 @@ export function tryUnlockMetamask(password) {
     })
       .then(() => {
         dispatch(unlockSucceeded());
-        return forceUpdateMetamaskState(dispatch);
+        return forceUpdateTaquinState(dispatch);
       })
       .then(() => {
         return new Promise((resolve, reject) => {
@@ -138,7 +138,7 @@ export function unlockAndGetSeedPhrase(password) {
     try {
       await submitPassword(password);
       const seedWords = await verifySeedPhrase();
-      await forceUpdateMetamaskState(dispatch);
+      await forceUpdateTaquinState(dispatch);
       dispatch(hideLoadingIndication());
       return seedWords;
     } catch (error) {
@@ -284,7 +284,7 @@ export function removeAccount(address) {
           resolve(account);
         });
       });
-      await forceUpdateMetamaskState(dispatch);
+      await forceUpdateTaquinState(dispatch);
     } catch (error) {
       dispatch(displayWarning(error.message));
       throw error;
@@ -311,7 +311,7 @@ export function importNewAccount(strategy, args) {
       throw err;
     }
 
-    dispatch(updateMetamaskState(newState));
+    dispatch(updateTaquinState(newState));
     if (newState.selectedAddress) {
       dispatch({
         type: actionConstants.SHOW_ACCOUNT_DETAIL,
@@ -325,7 +325,7 @@ export function importNewAccount(strategy, args) {
 export function addNewAccount() {
   log.debug(`background.addNewAccount`);
   return async (dispatch, getState) => {
-    const oldIdentities = getState().metamask.identities;
+    const oldIdentities = getState().taquin.identities;
     dispatch(showLoadingIndication());
 
     let newIdentities;
@@ -340,7 +340,7 @@ export function addNewAccount() {
       (address) => !oldIdentities[address]
     );
     dispatch(hideLoadingIndication());
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
     return newAccountAddress;
   };
 }
@@ -363,7 +363,7 @@ export function checkHardwareStatus(deviceName, hdPath) {
     }
 
     dispatch(hideLoadingIndication());
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
     return unlocked;
   };
 }
@@ -381,7 +381,7 @@ export function forgetDevice(deviceName) {
     }
 
     dispatch(hideLoadingIndication());
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
   };
 }
 
@@ -403,7 +403,7 @@ export function connectHardware(deviceName, page, hdPath) {
       throw error;
     }
     dispatch(hideLoadingIndication());
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
 
     return accounts;
   };
@@ -489,8 +489,8 @@ export function signMsg(msgData) {
       throw error;
     }
     dispatch(hideLoadingIndication());
-    dispatch(updateMetamaskState(newState));
-    dispatch(completedTx(msgData.metamaskId));
+    dispatch(updateTaquinState(newState));
+    dispatch(completedTx(msgData.taquinId));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
   };
@@ -512,8 +512,8 @@ export function signPersonalMsg(msgData) {
       throw error;
     }
     dispatch(hideLoadingIndication());
-    dispatch(updateMetamaskState(newState));
-    dispatch(completedTx(msgData.metamaskId));
+    dispatch(updateTaquinState(newState));
+    dispatch(completedTx(msgData.taquinId));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
   };
@@ -535,8 +535,8 @@ export function decryptMsgInline(decryptedMsgData) {
       throw error;
     }
 
-    dispatch(updateMetamaskState(newState));
-    return newState.unapprovedDecryptMsgs[decryptedMsgData.metamaskId];
+    dispatch(updateTaquinState(newState));
+    return newState.unapprovedDecryptMsgs[decryptedMsgData.taquinId];
   };
 }
 
@@ -556,8 +556,8 @@ export function decryptMsg(decryptedMsgData) {
       throw error;
     }
     dispatch(hideLoadingIndication());
-    dispatch(updateMetamaskState(newState));
-    dispatch(completedTx(decryptedMsgData.metamaskId));
+    dispatch(updateTaquinState(newState));
+    dispatch(completedTx(decryptedMsgData.taquinId));
     dispatch(closeCurrentNotificationWindow());
     return decryptedMsgData;
   };
@@ -579,8 +579,8 @@ export function encryptionPublicKeyMsg(msgData) {
       throw error;
     }
     dispatch(hideLoadingIndication());
-    dispatch(updateMetamaskState(newState));
-    dispatch(completedTx(msgData.metamaskId));
+    dispatch(updateTaquinState(newState));
+    dispatch(completedTx(msgData.taquinId));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
   };
@@ -602,8 +602,8 @@ export function signTypedMsg(msgData) {
       throw error;
     }
     dispatch(hideLoadingIndication());
-    dispatch(updateMetamaskState(newState));
-    dispatch(completedTx(msgData.metamaskId));
+    dispatch(updateTaquinState(newState));
+    dispatch(completedTx(msgData.taquinId));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
   };
@@ -815,7 +815,7 @@ export function signTokenTx(tokenAddress, toAddress, amount, txData) {
   };
 }
 
-const updateMetamaskStateFromBackground = () => {
+const updateTaquinStateFromBackground = () => {
   log.debug(`background.getState`);
 
   return new Promise((resolve, reject) => {
@@ -848,8 +848,8 @@ export function updateTransaction(txData) {
         resolve(txData);
       });
     })
-      .then(() => updateMetamaskStateFromBackground())
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then(() => updateTaquinStateFromBackground())
+      .then((newState) => dispatch(updateTaquinState(newState)))
       .then(() => {
         dispatch(showConfTxPage({ id: txData.id }));
         dispatch(hideLoadingIndication());
@@ -877,8 +877,8 @@ export function updateAndApproveTx(txData) {
         resolve(txData);
       });
     })
-      .then(() => updateMetamaskStateFromBackground())
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then(() => updateTaquinStateFromBackground())
+      .then((newState) => dispatch(updateTaquinState(newState)))
       .then(() => {
         dispatch(clearSend());
         dispatch(completedTx(txData.id));
@@ -904,7 +904,7 @@ export function completedTx(id) {
       unapprovedPersonalMsgs,
       unapprovedTypedMessages,
       network,
-    } = state.metamask;
+    } = state.taquin;
     const unconfirmedActions = txHelper(
       unapprovedTxs,
       unapprovedMsgs,
@@ -950,7 +950,7 @@ export function cancelMsg(msgData) {
     } finally {
       dispatch(hideLoadingIndication());
     }
-    dispatch(updateMetamaskState(newState));
+    dispatch(updateTaquinState(newState));
     dispatch(completedTx(msgData.id));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
@@ -967,7 +967,7 @@ export function cancelPersonalMsg(msgData) {
     } finally {
       dispatch(hideLoadingIndication());
     }
-    dispatch(updateMetamaskState(newState));
+    dispatch(updateTaquinState(newState));
     dispatch(completedTx(msgData.id));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
@@ -984,7 +984,7 @@ export function cancelDecryptMsg(msgData) {
     } finally {
       dispatch(hideLoadingIndication());
     }
-    dispatch(updateMetamaskState(newState));
+    dispatch(updateTaquinState(newState));
     dispatch(completedTx(msgData.id));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
@@ -1003,7 +1003,7 @@ export function cancelEncryptionPublicKeyMsg(msgData) {
     } finally {
       dispatch(hideLoadingIndication());
     }
-    dispatch(updateMetamaskState(newState));
+    dispatch(updateTaquinState(newState));
     dispatch(completedTx(msgData.id));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
@@ -1020,7 +1020,7 @@ export function cancelTypedMsg(msgData) {
     } finally {
       dispatch(hideLoadingIndication());
     }
-    dispatch(updateMetamaskState(newState));
+    dispatch(updateTaquinState(newState));
     dispatch(completedTx(msgData.id));
     dispatch(closeCurrentNotificationWindow());
     return msgData;
@@ -1040,11 +1040,9 @@ export function cancelTx(txData) {
         resolve();
       });
     })
-      .then(() => updateMetamaskStateFromBackground())
+      .then(() => updateTaquinStateFromBackground())
       .then((newState) => {
-        return dispatch(
-          updateMetamaskState({ ...newState, unapprovedTxs: {} })
-        );
+        return dispatch(updateTaquinState({ ...newState, unapprovedTxs: {} }));
       })
       .then(() => {
         dispatch(clearSend());
@@ -1081,8 +1079,8 @@ export function cancelTxs(txDataList) {
     );
 
     await Promise.all(cancellations);
-    const newState = await updateMetamaskStateFromBackground();
-    dispatch(updateMetamaskState(newState));
+    const newState = await updateTaquinStateFromBackground();
+    dispatch(updateTaquinState(newState));
     dispatch(clearSend());
 
     txIds.forEach((id) => {
@@ -1113,7 +1111,7 @@ export function markPasswordForgotten() {
       // TODO: handle errors
       dispatch(hideLoadingIndication());
       dispatch(forgotPassword());
-      await forceUpdateMetamaskState(dispatch);
+      await forceUpdateTaquinState(dispatch);
     }
   };
 }
@@ -1125,7 +1123,7 @@ export function unMarkPasswordForgotten() {
         dispatch(forgotPassword(false));
         resolve();
       });
-    }).then(() => forceUpdateMetamaskState(dispatch));
+    }).then(() => forceUpdateTaquinState(dispatch));
   };
 }
 
@@ -1166,15 +1164,13 @@ export function unlockSucceeded(message) {
   };
 }
 
-export function updateMetamaskState(newState) {
+export function updateTaquinState(newState) {
   return (dispatch, getState) => {
-    const { metamask: currentState } = getState();
+    const { taquin: currentState } = getState();
 
     const { currentLocale, selectedAddress } = currentState;
-    const {
-      currentLocale: newLocale,
-      selectedAddress: newSelectedAddress,
-    } = newState;
+    const { currentLocale: newLocale, selectedAddress: newSelectedAddress } =
+      newState;
 
     if (currentLocale && newLocale && currentLocale !== newLocale) {
       dispatch(updateCurrentLocale(newLocale));
@@ -1184,7 +1180,7 @@ export function updateMetamaskState(newState) {
     }
 
     dispatch({
-      type: actionConstants.UPDATE_METAMASK_STATE,
+      type: actionConstants.UPDATE_TAQUIN_STATE,
       value: newState,
     });
   };
@@ -1202,26 +1198,26 @@ const backgroundSetLocked = () => {
   });
 };
 
-export function lockMetamask() {
+export function lockTaquin() {
   log.debug(`background.setLocked`);
 
   return (dispatch) => {
     dispatch(showLoadingIndication());
 
     return backgroundSetLocked()
-      .then(() => updateMetamaskStateFromBackground())
+      .then(() => updateTaquinStateFromBackground())
       .catch((error) => {
         dispatch(displayWarning(error.message));
         return Promise.reject(error);
       })
       .then((newState) => {
-        dispatch(updateMetamaskState(newState));
+        dispatch(updateTaquinState(newState));
         dispatch(hideLoadingIndication());
-        dispatch({ type: actionConstants.LOCK_METAMASK });
+        dispatch({ type: actionConstants.LOCK_TAQUIN });
       })
       .catch(() => {
         dispatch(hideLoadingIndication());
-        dispatch({ type: actionConstants.LOCK_METAMASK });
+        dispatch({ type: actionConstants.LOCK_TAQUIN });
       });
   };
 }
@@ -1253,14 +1249,12 @@ export function showAccountDetail(address) {
     log.debug(`background.setSelectedAddress`);
 
     const state = getState();
-    const unconnectedAccountAccountAlertIsEnabled = getUnconnectedAccountAlertEnabledness(
-      state
-    );
+    const unconnectedAccountAccountAlertIsEnabled =
+      getUnconnectedAccountAlertEnabledness(state);
     const activeTabOrigin = state.activeTab.origin;
     const selectedAddress = getSelectedAddress(state);
-    const permittedAccountsForCurrentTab = getPermittedAccountsForCurrentTab(
-      state
-    );
+    const permittedAccountsForCurrentTab =
+      getPermittedAccountsForCurrentTab(state);
     const currentTabIsConnectedToPreviousAddress =
       Boolean(activeTabOrigin) &&
       permittedAccountsForCurrentTab.includes(selectedAddress);
@@ -1304,7 +1298,7 @@ export function addPermittedAccount(origin, address) {
         resolve();
       });
     });
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
   };
 }
 
@@ -1319,7 +1313,7 @@ export function removePermittedAccount(origin, address) {
         resolve();
       });
     });
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
   };
 }
 
@@ -1406,9 +1400,9 @@ export function removeSuggestedTokens() {
         resolve(suggestedTokens);
       });
     })
-      .then(() => updateMetamaskStateFromBackground())
+      .then(() => updateTaquinStateFromBackground())
       .then((suggestedTokens) =>
-        dispatch(updateMetamaskState({ ...suggestedTokens }))
+        dispatch(updateTaquinState({ ...suggestedTokens }))
       );
   };
 }
@@ -1455,7 +1449,7 @@ export function createCancelTransaction(txId, customGasPrice) {
         }
       );
     })
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then((newState) => dispatch(updateTaquinState(newState)))
       .then(() => newTxId);
   };
 }
@@ -1483,7 +1477,7 @@ export function createSpeedUpTransaction(txId, customGasPrice, customGasLimit) {
         }
       );
     })
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then((newState) => dispatch(updateTaquinState(newState)))
       .then(() => newTx);
   };
 }
@@ -1511,7 +1505,7 @@ export function createRetryTransaction(txId, customGasPrice, customGasLimit) {
         }
       );
     })
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then((newState) => dispatch(updateTaquinState(newState)))
       .then(() => newTx);
   };
 }
@@ -1522,7 +1516,7 @@ export function createRetryTransaction(txId, customGasPrice, customGasLimit) {
 
 export function setProviderType(type) {
   return async (dispatch, getState) => {
-    const { type: currentProviderType } = getState().metamask.provider;
+    const { type: currentProviderType } = getState().taquin.provider;
     log.debug(`background.setProviderType`, type);
 
     try {
@@ -1665,7 +1659,7 @@ export function addToAddressBook(recipient, nickname = "", memo = "") {
   log.debug(`background.addToAddressBook`);
 
   return async (dispatch, getState) => {
-    const chainId = getState().metamask.network;
+    const chainId = getState().taquin.network;
 
     let set;
     try {
@@ -1745,8 +1739,8 @@ export function paginate2(page) {
         reject(e);
       }
     })
-      .then(() => updateMetamaskStateFromBackground())
-      .then((newState) => dispatch(updateMetamaskState(newState)))
+      .then(() => updateTaquinStateFromBackground())
+      .then((newState) => dispatch(updateTaquinState(newState)))
       .then(() => {
         dispatch(hideLoadingIndication());
         return txData;
@@ -2092,7 +2086,7 @@ export function setMouseUserState(isMouseUser) {
   };
 }
 
-export async function forceUpdateMetamaskState(dispatch) {
+export async function forceUpdateTaquinState(dispatch) {
   log.debug(`background.getState`);
 
   let newState;
@@ -2103,7 +2097,7 @@ export async function forceUpdateMetamaskState(dispatch) {
     throw error;
   }
 
-  dispatch(updateMetamaskState(newState));
+  dispatch(updateTaquinState(newState));
   return newState;
 }
 
@@ -2272,7 +2266,7 @@ export function requestAccountsPermissionWithId(origin) {
     const id = await promisifiedBackground.requestAccountsPermissionWithId(
       origin
     );
-    await forceUpdateMetamaskState(dispatch);
+    await forceUpdateTaquinState(dispatch);
     return id;
   };
 }
@@ -2301,7 +2295,7 @@ export function rejectPermissionsRequest(requestId) {
           reject(err);
           return;
         }
-        forceUpdateMetamaskState(dispatch).then(resolve).catch(reject);
+        forceUpdateTaquinState(dispatch).then(resolve).catch(reject);
       });
     });
   };
@@ -2400,7 +2394,7 @@ export function getContractMethodData(data = "") {
   return (dispatch, getState) => {
     const prefixedData = ethUtil.addHexPrefix(data);
     const fourBytePrefix = prefixedData.slice(0, 10);
-    const { knownMethodData } = getState().metamask;
+    const { knownMethodData } = getState().taquin;
 
     if (
       (knownMethodData &&
@@ -2436,7 +2430,7 @@ export function loadingTokenParamsFinished() {
 
 export function getTokenParams(tokenAddress) {
   return (dispatch, getState) => {
-    const existingTokens = getState().metamask.tokens;
+    const existingTokens = getState().taquin.tokens;
     const existingToken = existingTokens.find(
       ({ address }) => tokenAddress === address
     );
@@ -2470,7 +2464,7 @@ export function setSeedPhraseBackedUp(seedPhraseBackupState) {
           reject(err);
           return;
         }
-        forceUpdateMetamaskState(dispatch).then(resolve).catch(reject);
+        forceUpdateTaquinState(dispatch).then(resolve).catch(reject);
       });
     });
   };
@@ -2583,7 +2577,7 @@ export function setNextNonce(nextNonce) {
 
 export function getNextNonce() {
   return (dispatch, getState) => {
-    const address = getState().metamask.selectedAddress;
+    const address = getState().taquin.selectedAddress;
     return new Promise((resolve, reject) => {
       background.getNextNonce(address, (err, nextNonce) => {
         if (err) {
@@ -2607,22 +2601,23 @@ export function setRequestAccountTabIds(requestAccountTabIds) {
 
 export function getRequestAccountTabIds() {
   return async (dispatch) => {
-    const requestAccountTabIds = await promisifiedBackground.getRequestAccountTabIds();
+    const requestAccountTabIds =
+      await promisifiedBackground.getRequestAccountTabIds();
     dispatch(setRequestAccountTabIds(requestAccountTabIds));
   };
 }
 
-export function setOpenMetamaskTabsIDs(openMetaMaskTabIDs) {
+export function setOpenTaquinTabsIDs(openTaquinTabIDs) {
   return {
-    type: actionConstants.SET_OPEN_METAMASK_TAB_IDS,
-    value: openMetaMaskTabIDs,
+    type: actionConstants.SET_OPEN_TAQUIN_TAB_IDS,
+    value: openTaquinTabIDs,
   };
 }
 
-export function getOpenMetamaskTabsIds() {
+export function getOpenTaquinTabsIds() {
   return async (dispatch) => {
-    const openMetaMaskTabIDs = await promisifiedBackground.getOpenMetamaskTabsIds();
-    dispatch(setOpenMetamaskTabsIDs(openMetaMaskTabIDs));
+    const openTaquinTabIDs = await promisifiedBackground.getOpenTaquinTabsIds();
+    dispatch(setOpenTaquinTabsIDs(openTaquinTabIDs));
   };
 }
 

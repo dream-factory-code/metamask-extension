@@ -21,7 +21,7 @@ import { getTokenData, sumHexes } from "../../helpers/utils/transactions.util";
 import { conversionUtil } from "../../helpers/utils/conversion-util";
 
 // Actions
-const createActionType = (action) => `metamask/confirm-transaction/${action}`;
+const createActionType = (action) => `taquin/confirm-transaction/${action}`;
 
 const UPDATE_TX_DATA = createActionType("UPDATE_TX_DATA");
 const CLEAR_TX_DATA = createActionType("CLEAR_TX_DATA");
@@ -120,11 +120,8 @@ export default function reducer(state = initState, action = {}) {
       };
     }
     case UPDATE_TRANSACTION_FEES: {
-      const {
-        fiatTransactionFee,
-        ethTransactionFee,
-        hexTransactionFee,
-      } = action.payload;
+      const { fiatTransactionFee, ethTransactionFee, hexTransactionFee } =
+        action.payload;
       return {
         ...state,
         fiatTransactionFee: fiatTransactionFee || state.fiatTransactionFee,
@@ -133,11 +130,8 @@ export default function reducer(state = initState, action = {}) {
       };
     }
     case UPDATE_TRANSACTION_TOTALS: {
-      const {
-        fiatTransactionTotal,
-        ethTransactionTotal,
-        hexTransactionTotal,
-      } = action.payload;
+      const { fiatTransactionTotal, ethTransactionTotal, hexTransactionTotal } =
+        action.payload;
       return {
         ...state,
         fiatTransactionTotal:
@@ -290,10 +284,8 @@ export function updateGasAndCalculate({ gasLimit, gasPrice }) {
 }
 
 function increaseFromLastGasPrice(txData) {
-  const {
-    lastGasPrice,
-    txParams: { gasPrice: previousGasPrice } = {},
-  } = txData;
+  const { lastGasPrice, txParams: { gasPrice: previousGasPrice } = {} } =
+    txData;
 
   // Set the minimum to a 10% increase from the lastGasPrice.
   const minimumGasPrice = increaseLastGasPrice(lastGasPrice);
@@ -394,9 +386,8 @@ export function updateTxDataAndCalculate(txData) {
 export function setTransactionToConfirm(transactionId) {
   return (dispatch, getState) => {
     const state = getState();
-    const unconfirmedTransactionsHash = unconfirmedTransactionsHashSelector(
-      state
-    );
+    const unconfirmedTransactionsHash =
+      unconfirmedTransactionsHashSelector(state);
     const transaction = unconfirmedTransactionsHash[transactionId];
 
     if (!transaction) {

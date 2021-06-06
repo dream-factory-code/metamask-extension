@@ -19,10 +19,10 @@ const notToggleElementClassnames = [
 
 function mapStateToProps(state) {
   return {
-    provider: state.metamask.provider,
-    frequentRpcListDetail: state.metamask.frequentRpcListDetail || [],
+    provider: state.taquin.provider,
+    frequentRpcListDetail: state.taquin.frequentRpcListDetail || [],
     networkDropdownOpen: state.appState.networkDropdownOpen,
-    network: state.metamask.network,
+    network: state.taquin.network,
   };
 }
 
@@ -218,9 +218,8 @@ class NetworkDropdown extends Component {
         onClickOutside={(event) => {
           const { classList } = event.target;
           const isInClassList = (className) => classList.contains(className);
-          const notToggleElementIndex = notToggleElementClassnames.findIndex(
-            isInClassList
-          );
+          const notToggleElementIndex =
+            notToggleElementClassnames.findIndex(isInClassList);
 
           if (notToggleElementIndex === -1) {
             this.props.hideNetworkDropdown();

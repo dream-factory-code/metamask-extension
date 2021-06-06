@@ -190,7 +190,7 @@ export default class ExtensionPlatform {
   _showConfirmedTransaction(txMeta) {
     this._subscribeToNotificationClicked();
 
-    // const url = explorerLink(txMeta.hash, txMeta.metamaskNetworkId)
+    // const url = explorerLink(txMeta.hash, txMeta.taquinNetworkId)
     // const nonce = parseInt(txMeta.txParams.nonce, 16)
     // TODO changing urls
     const networkIdToTypeMap = {
@@ -198,7 +198,7 @@ export default class ExtensionPlatform {
       testnet: "testnet-explorer",
     };
 
-    const netId = txMeta.metamaskNetworkId;
+    const netId = txMeta.taquinNetworkId;
     const isTolar = Boolean(networkIdToTypeMap[netId]);
     const prefix = networkIdToTypeMap[netId] || "explorer";
     const hash = txMeta?.txParams?.body?.transaction_hash || txMeta?.hash || "";

@@ -24,51 +24,51 @@ import { ALERT_STATE } from "./app/ducks/alerts/unconnected-account";
 import {
   getUnconnectedAccountAlertEnabledness,
   getUnconnectedAccountAlertShown,
-} from "./app/ducks/metamask/metamask";
+} from "./app/ducks/taquin/taquin";
 
-log.setLevel(global.METAMASK_DEBUG ? "debug" : "warn");
+log.setLevel(global.TAQUIN_DEBUG ? "debug" : "warn");
 
-export default function launchMetamaskUi(opts, cb) {
+export default function launchTaquinUi(opts, cb) {
   const { backgroundConnection } = opts;
   actions._setBackgroundConnection(backgroundConnection);
   // check if we are unlocked first
-  backgroundConnection.getState(function (err, metamaskState) {
+  backgroundConnection.getState(function (err, taquinState) {
     if (err) {
       cb(err);
       return;
     }
-    startApp(metamaskState, backgroundConnection, opts).then((store) => {
+    startApp(taquinState, backgroundConnection, opts).then((store) => {
       setupDebuggingHelpers(store);
       cb(null, store);
     });
   });
 }
 
-async function startApp(metamaskState, backgroundConnection, opts) {
+async function startApp(taquinState, backgroundConnection, opts) {
   // parse opts
-  if (!metamaskState.featureFlags) {
-    metamaskState.featureFlags = {};
+  if (!taquinState.featureFlags) {
+    taquinState.featureFlags = {};
   }
 
-  const currentLocaleMessages = metamaskState.currentLocale
-    ? await fetchLocale(metamaskState.currentLocale)
+  const currentLocaleMessages = taquinState.currentLocale
+    ? await fetchLocale(taquinState.currentLocale)
     : {};
   const enLocaleMessages = await fetchLocale("en");
 
   await loadRelativeTimeFormatLocaleData("en");
-  if (metamaskState.currentLocale) {
-    await loadRelativeTimeFormatLocaleData(metamaskState.currentLocale);
+  if (taquinState.currentLocale) {
+    await loadRelativeTimeFormatLocaleData(taquinState.currentLocale);
   }
 
-  if (metamaskState.textDirection === "rtl") {
+  if (taquinState.textDirection === "rtl") {
     await switchDirection("rtl");
   }
 
   const draftInitialState = {
     activeTab: opts.activeTab,
 
-    // metamaskState represents the cross-tab state
-    metamask: metamaskState,
+    // taquinState represents the cross-tab state
+    taquin: taquinState,
 
     // appState represents the current tab's popup state
     appState: {},
@@ -81,16 +81,13 @@ async function startApp(metamaskState, backgroundConnection, opts) {
 
   if (getEnvironmentType() === ENVIRONMENT_TYPE_POPUP) {
     const { origin } = draftInitialState.activeTab;
-    const permittedAccountsForCurrentTab = getPermittedAccountsForCurrentTab(
-      draftInitialState
-    );
+    const permittedAccountsForCurrentTab =
+      getPermittedAccountsForCurrentTab(draftInitialState);
     const selectedAddress = getSelectedAddress(draftInitialState);
-    const unconnectedAccountAlertShownOrigins = getUnconnectedAccountAlertShown(
-      draftInitialState
-    );
-    const unconnectedAccountAlertIsEnabled = getUnconnectedAccountAlertEnabledness(
-      draftInitialState
-    );
+    const unconnectedAccountAlertShownOrigins =
+      getUnconnectedAccountAlertShown(draftInitialState);
+    const unconnectedAccountAlertIsEnabled =
+      getUnconnectedAccountAlertEnabledness(draftInitialState);
 
     if (
       origin &&
@@ -110,13 +107,13 @@ async function startApp(metamaskState, backgroundConnection, opts) {
 
   // if unconfirmed txs, start on txConf page
   const unapprovedTxsAll = txHelper(
-    metamaskState.unapprovedTxs,
-    metamaskState.unapprovedMsgs,
-    metamaskState.unapprovedPersonalMsgs,
-    metamaskState.unapprovedDecryptMsgs,
-    metamaskState.unapprovedEncryptionPublicKeyMsgs,
-    metamaskState.unapprovedTypedMessages,
-    metamaskState.network
+    taquinState.unapprovedTxs,
+    taquinState.unapprovedMsgs,
+    taquinState.unapprovedPersonalMsgs,
+    taquinState.unapprovedDecryptMsgs,
+    taquinState.unapprovedEncryptionPublicKeyMsgs,
+    taquinState.unapprovedTypedMessages,
+    taquinState.network
   );
   const numberOfUnapprivedTx = unapprovedTxsAll.length;
   if (numberOfUnapprivedTx > 0) {
@@ -128,11 +125,11 @@ async function startApp(metamaskState, backgroundConnection, opts) {
   }
 
   backgroundConnection.on("update", function (state) {
-    store.dispatch(actions.updateMetamaskState(state));
+    store.dispatch(actions.updateTaquinState(state));
   });
 
-  // global metamask api - used by tooling
-  global.metamask = {
+  // global taquin api - used by tooling
+  global.taquin = {
     updateCurrentLocale: (code) => {
       store.dispatch(actions.updateCurrentLocale(code));
     },

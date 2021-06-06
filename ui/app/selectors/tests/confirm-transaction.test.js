@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from "assert";
 import {
   unconfirmedTransactionsCountSelector,
   tokenAmountAndToAddressSelector,
@@ -6,162 +6,158 @@ import {
   sendTokenTokenAmountAndToAddressSelector,
   contractExchangeRateSelector,
   conversionRateSelector,
-} from '../confirm-transaction'
+} from "../confirm-transaction";
 
-describe('Confirm Transaction Selector', function () {
-
-  describe('unconfirmedTransactionsCountSelector', function () {
-
+describe("Confirm Transaction Selector", function () {
+  describe("unconfirmedTransactionsCountSelector", function () {
     const state = {
-      metamask: {
+      taquin: {
         unapprovedTxs: {
           1: {
-            metamaskNetworkId: 'test',
+            taquinNetworkId: "test",
           },
           2: {
-            metmaskNetworkId: 'other network',
+            metmaskNetworkId: "other network",
           },
         },
         unapprovedMsgCount: 1,
         unapprovedPersonalMsgCount: 1,
         unapprovedTypedMessagesCount: 1,
-        network: 'test',
+        network: "test",
       },
-    }
+    };
 
-    it('returns number of txs in unapprovedTxs state with the same network plus unapproved signing method counts', function () {
-      assert.equal(unconfirmedTransactionsCountSelector(state), 4)
-    })
+    it("returns number of txs in unapprovedTxs state with the same network plus unapproved signing method counts", function () {
+      assert.equal(unconfirmedTransactionsCountSelector(state), 4);
+    });
+  });
 
-  })
-
-  describe('tokenAmountAndToAddressSelector', function () {
-
+  describe("tokenAmountAndToAddressSelector", function () {
     const state = {
       confirmTransaction: {
         tokenData: {
-          name: 'transfer',
+          name: "transfer",
           params: [
             {
-              name: '_to',
-              value: '0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc',
-              type: 'address',
+              name: "_to",
+              value: "0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc",
+              type: "address",
             },
             {
-              name: '_value',
-              value: '1',
-              type: 'uint256',
+              name: "_value",
+              value: "1",
+              type: "uint256",
             },
           ],
         },
         tokenProps: {
-          tokenDecimals: '2',
-          tokenSymbol: 'META',
+          tokenDecimals: "2",
+          tokenSymbol: "META",
         },
       },
-    }
+    };
 
-    it('returns calculated token amount based on token value and token decimals and recipient address', function () {
-      assert.deepEqual(tokenAmountAndToAddressSelector(state),
-        { toAddress: '0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc', tokenAmount: 0.01 })
-    })
+    it("returns calculated token amount based on token value and token decimals and recipient address", function () {
+      assert.deepEqual(tokenAmountAndToAddressSelector(state), {
+        toAddress: "0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc",
+        tokenAmount: 0.01,
+      });
+    });
+  });
 
-  })
-
-  describe('approveTokenAmountAndToAddressSelector', function () {
-
+  describe("approveTokenAmountAndToAddressSelector", function () {
     const state = {
       confirmTransaction: {
         tokenData: {
-          name: 'approve',
+          name: "approve",
           params: [
             {
-              name: '_spender',
-              value: '0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc',
-              type: 'address',
+              name: "_spender",
+              value: "0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc",
+              type: "address",
             },
             {
-              name: '_value',
-              value: '1',
-              type: 'uint256',
+              name: "_value",
+              value: "1",
+              type: "uint256",
             },
           ],
         },
         tokenProps: {
-          tokenDecimals: '2',
-          tokenSymbol: 'META',
+          tokenDecimals: "2",
+          tokenSymbol: "META",
         },
       },
-    }
+    };
 
-    it('returns token amount and recipient for approve token allocation spending', function () {
-      assert.deepEqual(approveTokenAmountAndToAddressSelector(state),
-        { toAddress: '0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc', tokenAmount: 0.01 })
-    })
+    it("returns token amount and recipient for approve token allocation spending", function () {
+      assert.deepEqual(approveTokenAmountAndToAddressSelector(state), {
+        toAddress: "0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc",
+        tokenAmount: 0.01,
+      });
+    });
+  });
 
-  })
-
-  describe('sendTokenTokenAmountAndToAddressSelector', function () {
-
+  describe("sendTokenTokenAmountAndToAddressSelector", function () {
     const state = {
       confirmTransaction: {
         tokenData: {
-          name: 'transfer',
+          name: "transfer",
           params: [
             {
-              name: '_to',
-              value: '0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc',
-              type: 'address',
+              name: "_to",
+              value: "0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc",
+              type: "address",
             },
             {
-              name: '_value',
-              value: '1',
-              type: 'uint256',
+              name: "_value",
+              value: "1",
+              type: "uint256",
             },
           ],
         },
         tokenProps: {
-          tokenDecimals: '2',
-          tokenSymbol: 'META',
+          tokenDecimals: "2",
+          tokenSymbol: "META",
         },
       },
-    }
+    };
 
-    it('returns token address and calculated token amount', function () {
-      assert.deepEqual(sendTokenTokenAmountAndToAddressSelector(state),
-        { toAddress: '0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc', tokenAmount: 0.01 })
-    })
+    it("returns token address and calculated token amount", function () {
+      assert.deepEqual(sendTokenTokenAmountAndToAddressSelector(state), {
+        toAddress: "0x0dcd5d886577d5081b0c52e242ef29e70be3e7bc",
+        tokenAmount: 0.01,
+      });
+    });
+  });
 
-  })
-
-  describe('contractExchangeRateSelector', function () {
-
+  describe("contractExchangeRateSelector", function () {
     const state = {
-      metamask: {
+      taquin: {
         contractExchangeRates: {
-          '0xTokenAddress': '10',
+          "0xTokenAddress": "10",
         },
       },
       confirmTransaction: {
         txData: {
           txParams: {
-            to: '0xTokenAddress',
+            to: "0xTokenAddress",
           },
         },
       },
-    }
+    };
 
-    it('returns contract exchange rate in metamask state based on confirm transaction txParams token recipient', function () {
-      assert.equal(contractExchangeRateSelector(state), 10)
-    })
-  })
+    it("returns contract exchange rate in taquin state based on confirm transaction txParams token recipient", function () {
+      assert.equal(contractExchangeRateSelector(state), 10);
+    });
+  });
 
-  describe('conversionRateSelector', function () {
-    it('returns conversionRate from state', function () {
+  describe("conversionRateSelector", function () {
+    it("returns conversionRate from state", function () {
       const state = {
-        metamask: { conversionRate: 556.12 },
-      }
-      assert.equal(conversionRateSelector(state), 556.12)
-    })
-  })
-})
+        taquin: { conversionRate: 556.12 },
+      };
+      assert.equal(conversionRateSelector(state), 556.12);
+    });
+  });
+});

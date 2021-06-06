@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from "assert";
 
 import SendReducer, {
   openToDropdown,
@@ -6,78 +6,81 @@ import SendReducer, {
   updateSendErrors,
   showGasButtonGroup,
   hideGasButtonGroup,
-} from './send.duck'
+} from "./send.duck";
 
-describe('Send Duck', function () {
+describe("Send Duck", function () {
   const mockState = {
     mockProp: 123,
-  }
+  };
   const initState = {
     toDropdownOpen: false,
     errors: {},
     gasButtonGroupShown: true,
-  }
-  const OPEN_TO_DROPDOWN = 'metamask/send/OPEN_TO_DROPDOWN'
-  const CLOSE_TO_DROPDOWN = 'metamask/send/CLOSE_TO_DROPDOWN'
-  const UPDATE_SEND_ERRORS = 'metamask/send/UPDATE_SEND_ERRORS'
-  const RESET_SEND_STATE = 'metamask/send/RESET_SEND_STATE'
-  const SHOW_GAS_BUTTON_GROUP = 'metamask/send/SHOW_GAS_BUTTON_GROUP'
-  const HIDE_GAS_BUTTON_GROUP = 'metamask/send/HIDE_GAS_BUTTON_GROUP'
+  };
+  const OPEN_TO_DROPDOWN = "taquin/send/OPEN_TO_DROPDOWN";
+  const CLOSE_TO_DROPDOWN = "taquin/send/CLOSE_TO_DROPDOWN";
+  const UPDATE_SEND_ERRORS = "taquin/send/UPDATE_SEND_ERRORS";
+  const RESET_SEND_STATE = "taquin/send/RESET_SEND_STATE";
+  const SHOW_GAS_BUTTON_GROUP = "taquin/send/SHOW_GAS_BUTTON_GROUP";
+  const HIDE_GAS_BUTTON_GROUP = "taquin/send/HIDE_GAS_BUTTON_GROUP";
 
-  describe('SendReducer()', function () {
-    it('should initialize state', function () {
-      assert.deepEqual(SendReducer(undefined, {}), initState)
-    })
+  describe("SendReducer()", function () {
+    it("should initialize state", function () {
+      assert.deepEqual(SendReducer(undefined, {}), initState);
+    });
 
-    it('should return state unchanged if it does not match a dispatched actions type', function () {
+    it("should return state unchanged if it does not match a dispatched actions type", function () {
       assert.deepEqual(
         SendReducer(mockState, {
-          type: 'someOtherAction',
-          value: 'someValue',
+          type: "someOtherAction",
+          value: "someValue",
         }),
-        mockState,
-      )
-    })
+        mockState
+      );
+    });
 
-    it('should set toDropdownOpen to true when receiving a OPEN_TO_DROPDOWN action', function () {
+    it("should set toDropdownOpen to true when receiving a OPEN_TO_DROPDOWN action", function () {
       assert.deepEqual(
         SendReducer(mockState, {
           type: OPEN_TO_DROPDOWN,
         }),
-        { toDropdownOpen: true, ...mockState },
-      )
-    })
+        { toDropdownOpen: true, ...mockState }
+      );
+    });
 
-    it('should set toDropdownOpen to false when receiving a CLOSE_TO_DROPDOWN action', function () {
+    it("should set toDropdownOpen to false when receiving a CLOSE_TO_DROPDOWN action", function () {
       assert.deepEqual(
         SendReducer(mockState, {
           type: CLOSE_TO_DROPDOWN,
         }),
-        { toDropdownOpen: false, ...mockState },
-      )
-    })
+        { toDropdownOpen: false, ...mockState }
+      );
+    });
 
-    it('should set gasButtonGroupShown to true when receiving a SHOW_GAS_BUTTON_GROUP action', function () {
+    it("should set gasButtonGroupShown to true when receiving a SHOW_GAS_BUTTON_GROUP action", function () {
       assert.deepEqual(
-        SendReducer({ ...mockState, gasButtonGroupShown: false }, { type: SHOW_GAS_BUTTON_GROUP }),
-        { gasButtonGroupShown: true, ...mockState },
-      )
-    })
+        SendReducer(
+          { ...mockState, gasButtonGroupShown: false },
+          { type: SHOW_GAS_BUTTON_GROUP }
+        ),
+        { gasButtonGroupShown: true, ...mockState }
+      );
+    });
 
-    it('should set gasButtonGroupShown to false when receiving a HIDE_GAS_BUTTON_GROUP action', function () {
+    it("should set gasButtonGroupShown to false when receiving a HIDE_GAS_BUTTON_GROUP action", function () {
       assert.deepEqual(
         SendReducer(mockState, { type: HIDE_GAS_BUTTON_GROUP }),
-        { gasButtonGroupShown: false, ...mockState },
-      )
-    })
+        { gasButtonGroupShown: false, ...mockState }
+      );
+    });
 
-    it('should extend send.errors with the value of a UPDATE_SEND_ERRORS action', function () {
+    it("should extend send.errors with the value of a UPDATE_SEND_ERRORS action", function () {
       const modifiedMockState = {
         ...mockState,
         errors: {
           someError: false,
         },
-      }
+      };
       assert.deepEqual(
         SendReducer(modifiedMockState, {
           type: UPDATE_SEND_ERRORS,
@@ -89,37 +92,40 @@ describe('Send Duck', function () {
             someError: false,
             someOtherError: true,
           },
-        },
-      )
-    })
+        }
+      );
+    });
 
-    it('should return the initial state in response to a RESET_SEND_STATE action', function () {
+    it("should return the initial state in response to a RESET_SEND_STATE action", function () {
       assert.deepEqual(
         SendReducer(mockState, {
           type: RESET_SEND_STATE,
         }),
-        initState,
-      )
-    })
-  })
+        initState
+      );
+    });
+  });
 
-  describe('openToDropdown', function () {
-    assert.deepEqual(openToDropdown(), { type: OPEN_TO_DROPDOWN })
-  })
+  describe("openToDropdown", function () {
+    assert.deepEqual(openToDropdown(), { type: OPEN_TO_DROPDOWN });
+  });
 
-  describe('closeToDropdown', function () {
-    assert.deepEqual(closeToDropdown(), { type: CLOSE_TO_DROPDOWN })
-  })
+  describe("closeToDropdown", function () {
+    assert.deepEqual(closeToDropdown(), { type: CLOSE_TO_DROPDOWN });
+  });
 
-  describe('showGasButtonGroup', function () {
-    assert.deepEqual(showGasButtonGroup(), { type: SHOW_GAS_BUTTON_GROUP })
-  })
+  describe("showGasButtonGroup", function () {
+    assert.deepEqual(showGasButtonGroup(), { type: SHOW_GAS_BUTTON_GROUP });
+  });
 
-  describe('hideGasButtonGroup', function () {
-    assert.deepEqual(hideGasButtonGroup(), { type: HIDE_GAS_BUTTON_GROUP })
-  })
+  describe("hideGasButtonGroup", function () {
+    assert.deepEqual(hideGasButtonGroup(), { type: HIDE_GAS_BUTTON_GROUP });
+  });
 
-  describe('updateSendErrors', function () {
-    assert.deepEqual(updateSendErrors('mockErrorObject'), { type: UPDATE_SEND_ERRORS, value: 'mockErrorObject' })
-  })
-})
+  describe("updateSendErrors", function () {
+    assert.deepEqual(updateSendErrors("mockErrorObject"), {
+      type: UPDATE_SEND_ERRORS,
+      value: "mockErrorObject",
+    });
+  });
+});

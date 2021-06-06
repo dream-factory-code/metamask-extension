@@ -41,30 +41,30 @@ import setupWeb3 from "./lib/setupWeb3";
 
 restoreContextAfterImports();
 
-log.setDefaultLevel(process.env.METAMASK_DEBUG ? "debug" : "warn");
+log.setDefaultLevel(process.env.TAQUIN_DEBUG ? "debug" : "warn");
 
 //
 // setup plugin communication
 //
 
 // setup background connection
-const metamaskStream = new LocalMessageDuplexStream({
+const taquinStream = new LocalMessageDuplexStream({
   name: "inpage",
   target: "contentscript",
 });
 
 initProvider({
-  connectionStream: metamaskStream,
+  connectionStream: taquinStream,
 });
 
 // TODO:deprecate:2020
 // Setup web3
 
 if (typeof window.web3 !== "undefined") {
-  throw new Error(`MetaMask detected another web3.
-     MetaMask will not work reliably with another web3 extension.
-     This usually happens if you have two MetaMasks installed,
-     or MetaMask and another web3 extension. Please remove one
+  throw new Error(`Taquin detected another web3.
+     Taquin will not work reliably with another web3 extension.
+     This usually happens if you have two Taquins installed,
+     or Taquin and another web3 extension. Please remove one
      and try again.`);
 }
 

@@ -9,28 +9,26 @@ import { isEthereumNetwork } from "../../selectors";
 
 // Actions
 const BASIC_GAS_ESTIMATE_LOADING_FINISHED =
-  "metamask/gas/BASIC_GAS_ESTIMATE_LOADING_FINISHED";
+  "taquin/gas/BASIC_GAS_ESTIMATE_LOADING_FINISHED";
 const BASIC_GAS_ESTIMATE_LOADING_STARTED =
-  "metamask/gas/BASIC_GAS_ESTIMATE_LOADING_STARTED";
+  "taquin/gas/BASIC_GAS_ESTIMATE_LOADING_STARTED";
 const GAS_ESTIMATE_LOADING_FINISHED =
-  "metamask/gas/GAS_ESTIMATE_LOADING_FINISHED";
-const GAS_ESTIMATE_LOADING_STARTED =
-  "metamask/gas/GAS_ESTIMATE_LOADING_STARTED";
-const RESET_CUSTOM_GAS_STATE = "metamask/gas/RESET_CUSTOM_GAS_STATE";
-const RESET_CUSTOM_DATA = "metamask/gas/RESET_CUSTOM_DATA";
-const SET_BASIC_GAS_ESTIMATE_DATA = "metamask/gas/SET_BASIC_GAS_ESTIMATE_DATA";
-const SET_CUSTOM_GAS_ERRORS = "metamask/gas/SET_CUSTOM_GAS_ERRORS";
-const SET_CUSTOM_GAS_LIMIT = "metamask/gas/SET_CUSTOM_GAS_LIMIT";
-const SET_CUSTOM_GAS_PRICE = "metamask/gas/SET_CUSTOM_GAS_PRICE";
-const SET_CUSTOM_GAS_TOTAL = "metamask/gas/SET_CUSTOM_GAS_TOTAL";
-const SET_PRICE_AND_TIME_ESTIMATES =
-  "metamask/gas/SET_PRICE_AND_TIME_ESTIMATES";
+  "taquin/gas/GAS_ESTIMATE_LOADING_FINISHED";
+const GAS_ESTIMATE_LOADING_STARTED = "taquin/gas/GAS_ESTIMATE_LOADING_STARTED";
+const RESET_CUSTOM_GAS_STATE = "taquin/gas/RESET_CUSTOM_GAS_STATE";
+const RESET_CUSTOM_DATA = "taquin/gas/RESET_CUSTOM_DATA";
+const SET_BASIC_GAS_ESTIMATE_DATA = "taquin/gas/SET_BASIC_GAS_ESTIMATE_DATA";
+const SET_CUSTOM_GAS_ERRORS = "taquin/gas/SET_CUSTOM_GAS_ERRORS";
+const SET_CUSTOM_GAS_LIMIT = "taquin/gas/SET_CUSTOM_GAS_LIMIT";
+const SET_CUSTOM_GAS_PRICE = "taquin/gas/SET_CUSTOM_GAS_PRICE";
+const SET_CUSTOM_GAS_TOTAL = "taquin/gas/SET_CUSTOM_GAS_TOTAL";
+const SET_PRICE_AND_TIME_ESTIMATES = "taquin/gas/SET_PRICE_AND_TIME_ESTIMATES";
 const SET_API_ESTIMATES_LAST_RETRIEVED =
-  "metamask/gas/SET_API_ESTIMATES_LAST_RETRIEVED";
+  "taquin/gas/SET_API_ESTIMATES_LAST_RETRIEVED";
 const SET_BASIC_API_ESTIMATES_LAST_RETRIEVED =
-  "metamask/gas/SET_BASIC_API_ESTIMATES_LAST_RETRIEVED";
+  "taquin/gas/SET_BASIC_API_ESTIMATES_LAST_RETRIEVED";
 const SET_BASIC_PRICE_ESTIMATES_LAST_RETRIEVED =
-  "metamask/gas/SET_BASIC_PRICE_ESTIMATES_LAST_RETRIEVED";
+  "taquin/gas/SET_BASIC_PRICE_ESTIMATES_LAST_RETRIEVED";
 
 const initState = {
   customData: {
@@ -400,10 +398,8 @@ export function fetchGasEstimates(blockTime) {
       return Promise.resolve(null);
     }
 
-    const {
-      priceAndTimeEstimatesLastRetrieved,
-      priceAndTimeEstimates,
-    } = state.gas;
+    const { priceAndTimeEstimatesLastRetrieved, priceAndTimeEstimates } =
+      state.gas;
     const timeLastRetrieved =
       priceAndTimeEstimatesLastRetrieved ||
       loadLocalStorageData("GAS_API_ESTIMATES_LAST_RETRIEVED") ||

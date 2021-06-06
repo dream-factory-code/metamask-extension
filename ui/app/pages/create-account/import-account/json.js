@@ -5,12 +5,12 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import FileInput from "react-simple-file-input";
 import * as actions from "../../../store/actions";
-import { getMetaMaskAccounts } from "../../../selectors";
+import { getTaquinAccounts } from "../../../selectors";
 import Button from "../../../components/ui/button";
 import { getMostRecentOverviewPage } from "../../../ducks/history/history";
 
 const HELP_LINK =
-  "https://metamask.zendesk.com/hc/en-us/articles/360015489331-Importing-an-Account";
+  "https://taquin.zendesk.com/hc/en-us/articles/360015489331-Importing-an-Account";
 
 class JsonImportSubview extends Component {
   state = {
@@ -169,7 +169,7 @@ JsonImportSubview.propTypes = {
 const mapStateToProps = (state) => {
   return {
     error: state.appState.warning,
-    firstAddress: Object.keys(getMetaMaskAccounts(state))[0],
+    firstAddress: Object.keys(getTaquinAccounts(state))[0],
     mostRecentOverviewPage: getMostRecentOverviewPage(state),
   };
 };

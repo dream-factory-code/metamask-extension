@@ -1,7 +1,6 @@
 import * as actionConstants from "../../store/actionConstants";
 
 // actionConstants
-const SET_THREEBOX_LAST_UPDATED = "metamask/app/SET_THREEBOX_LAST_UPDATED";
 
 export default function reduceApp(state = {}, action) {
   // default state
@@ -49,7 +48,7 @@ export default function reduceApp(state = {}, action) {
     show3BoxModalAfterImport: false,
     threeBoxLastUpdated: null,
     requestAccountTabs: {},
-    openMetaMaskTabs: {},
+    openTaquinTabs: {},
     currentWindowTab: {},
     ...state,
   };
@@ -154,7 +153,7 @@ export default function reduceApp(state = {}, action) {
         warning: null,
       };
 
-    case actionConstants.LOCK_METAMASK:
+    case actionConstants.LOCK_TAQUIN:
       return {
         ...appState,
         warning: null,
@@ -337,22 +336,16 @@ export default function reduceApp(state = {}, action) {
         loadingMethodData: false,
       };
 
-    case SET_THREEBOX_LAST_UPDATED:
-      return {
-        ...appState,
-        threeBoxLastUpdated: action.value,
-      };
-
     case actionConstants.SET_REQUEST_ACCOUNT_TABS:
       return {
         ...appState,
         requestAccountTabs: action.value,
       };
 
-    case actionConstants.SET_OPEN_METAMASK_TAB_IDS:
+    case actionConstants.SET_OPEN_TAQUIN_TAB_IDS:
       return {
         ...appState,
-        openMetaMaskTabs: action.value,
+        openTaquinTabs: action.value,
       };
 
     case actionConstants.SET_CURRENT_WINDOW_TAB:
@@ -364,12 +357,4 @@ export default function reduceApp(state = {}, action) {
     default:
       return appState;
   }
-}
-
-// Action Creators
-export function setThreeBoxLastUpdated(lastUpdated) {
-  return {
-    type: SET_THREEBOX_LAST_UPDATED,
-    value: lastUpdated,
-  };
 }

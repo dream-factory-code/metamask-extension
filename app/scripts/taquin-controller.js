@@ -1,6 +1,6 @@
 /**
- * @file      The central metamask controller. Aggregates other controllers and exports an api.
- * @copyright Copyright (c) 2018 MetaMask
+ * @file      The central taquin controller. Aggregates other controllers and exports an api.
+ * @copyright Copyright (c) 2018 Taquin
  * @license   MIT
  */
 
@@ -83,11 +83,11 @@ export default class TaquinController extends EventEmitter {
     const initState = opts.initState || {};
     this.recordFirstTimeInfo(initState);
     // this keeps track of how many "controllerStream" connections are open
-    // the only thing that uses controller connections are open metamask UI instances
+    // the only thing that uses controller connections are open taquin UI instances
     this.activeControllerConnections = 0;
 
     this.getRequestAccountTabIds = opts.getRequestAccountTabIds;
-    this.getOpenMetamaskTabsIds = opts.getOpenMetamaskTabsIds;
+    this.getOpenTaquinTabsIds = opts.getOpenTaquinTabsIds;
 
     // observable state store
     this.store = new ComposableObservableStore(initState);
@@ -317,7 +317,6 @@ export default class TaquinController extends EventEmitter {
       AccountTracker: this.accountTracker.store,
       TxController: this.txController.memStore,
       CachedBalancesController: this.cachedBalancesController.store,
-      //  TokenRatesController: this.tokenRatesController.store,
       MessageManager: this.messageManager.memStore,
       PersonalMessageManager: this.personalMessageManager.memStore,
       DecryptMessageManager: this.decryptMessageManager.memStore,
@@ -326,13 +325,11 @@ export default class TaquinController extends EventEmitter {
       KeyringController: this.keyringController.memStore,
       PreferencesController: this.preferencesController.store,
       AddressBookController: this.addressBookController,
-      //  CurrencyController: this.currencyRateController,
       AlertController: this.alertController.store,
       OnboardingController: this.onboardingController.store,
       IncomingTransactionsController: this.incomingTransactionsController.store,
       PermissionsController: this.permissionsController.permissions,
       PermissionsMetadata: this.permissionsController.store,
-      // ThreeBoxController: this.threeBoxController.store,
       // ENS Controller
       EnsController: this.ensController.store,
     });
@@ -356,12 +353,12 @@ export default class TaquinController extends EventEmitter {
     const providerOpts = {
       static: {
         eth_syncing: false,
-        web3_clientVersion: `MetaMask/v${version}`,
+        web3_clientVersion: `Taquin/v${version}`,
       },
       version,
       // account mgmt
       getAccounts: async ({ origin }) => {
-        if (origin === "metamask") {
+        if (origin === "taquin") {
           const selectedAddress =
             this.preferencesController.getSelectedAddress();
           return selectedAddress ? [selectedAddress] : [];
@@ -424,7 +421,7 @@ export default class TaquinController extends EventEmitter {
   //=============================================================================
 
   /**
-   * The metamask-state of the various controllers, made available to the UI
+   * The taquin-state of the various controllers, made available to the UI
    *
    * @returns {Object} - status
    */
@@ -453,9 +450,7 @@ export default class TaquinController extends EventEmitter {
       alertController,
       permissionsController,
       preferencesController,
-      threeBoxController,
       txController,
-      incomingTransactionsController,
     } = this;
 
     return {
@@ -474,7 +469,7 @@ export default class TaquinController extends EventEmitter {
       unMarkPasswordForgotten: this.unMarkPasswordForgotten.bind(this),
       safelistPhishingDomain: this.safelistPhishingDomain.bind(this),
       getRequestAccountTabIds: (cb) => cb(null, this.getRequestAccountTabIds()),
-      getOpenMetamaskTabsIds: (cb) => cb(null, this.getOpenMetamaskTabsIds()),
+      getOpenTaquinTabsIds: (cb) => cb(null, this.getOpenTaquinTabsIds()),
 
       // primary HD keyring management
       addNewAccount: nodeify(this.addNewAccount, this),
@@ -763,7 +758,7 @@ export default class TaquinController extends EventEmitter {
         keyringController.getKeyringsByType("Tolar Keyring")[0];
 
       if (!primaryKeyring) {
-        throw new Error("MetamaskController - No Tolar Keyring found");
+        throw new Error("TaquinController - No Tolar Keyring found");
       }
 
       // seek out the first zero balance
@@ -977,7 +972,7 @@ export default class TaquinController extends EventEmitter {
         break;
       default:
         throw new Error(
-          "MetamaskController:getKeyringForDevice - Unknown device"
+          "TaquinController:getKeyringForDevice - Unknown device"
         );
     }
     let keyring = await this.keyringController.getKeyringsByType(
@@ -1092,7 +1087,7 @@ export default class TaquinController extends EventEmitter {
     const primaryKeyring =
       this.keyringController.getKeyringsByType("Tolar Keyring")[0];
     if (!primaryKeyring) {
-      throw new Error("MetamaskController - No HD Key Tree found");
+      throw new Error("TaquinController - No HD Key Tree found");
     }
     const { keyringController } = this;
     const oldAccounts = await keyringController.getAccounts();
@@ -1126,14 +1121,14 @@ export default class TaquinController extends EventEmitter {
     const primaryKeyring =
       this.keyringController.getKeyringsByType("Tolar Keyring")[0];
     if (!primaryKeyring) {
-      throw new Error("MetamaskController - No HD Key Tree found");
+      throw new Error("TaquinController - No HD Key Tree found");
     }
     const serialized = await primaryKeyring.serialize();
     const seedWords = serialized.mnemonic;
 
     const accounts = await primaryKeyring.getAccounts();
     if (accounts.length < 1) {
-      throw new Error("MetamaskController - No accounts found");
+      throw new Error("TaquinController - No accounts found");
     }
 
     try {
@@ -1246,11 +1241,11 @@ export default class TaquinController extends EventEmitter {
    * @returns {Promise<Object>} - Full state update.
    */
   signMessage(msgParams) {
-    log.info("MetaMaskController - signMessage");
-    const msgId = msgParams.metamaskId;
+    log.info("TaquinController - signMessage");
+    const msgId = msgParams.taquinId;
 
     // sets the status op the message to 'approved'
-    // and removes the metamaskId for signing
+    // and removes the taquinId for signing
     return this.messageManager
       .approveMessage(msgParams)
       .then((cleanMsgParams) => {
@@ -1310,10 +1305,10 @@ export default class TaquinController extends EventEmitter {
    * @returns {Promise<Object>} - A full state update.
    */
   signPersonalMessage(msgParams) {
-    log.info("MetaMaskController - signPersonalMessage");
-    const msgId = msgParams.metamaskId;
+    log.info("TaquinController - signPersonalMessage");
+    const msgId = msgParams.taquinId;
     // sets the status op the message to 'approved'
-    // and removes the metamaskId for signing
+    // and removes the taquinId for signing
     return this.personalMessageManager
       .approveMessage(msgParams)
       .then((cleanMsgParams) => {
@@ -1368,9 +1363,9 @@ export default class TaquinController extends EventEmitter {
    * @returns {Promise<Object>} - A full state update.
    */
   async decryptMessageInline(msgParams) {
-    log.info("MetaMaskController - decryptMessageInline");
+    log.info("TaquinController - decryptMessageInline");
     // decrypt the message inline
-    const msgId = msgParams.metamaskId;
+    const msgId = msgParams.taquinId;
     const msg = this.decryptMessageManager.getMsg(msgId);
     try {
       const stripped = ethUtil.stripHexPrefix(msgParams.data);
@@ -1394,10 +1389,10 @@ export default class TaquinController extends EventEmitter {
    * @returns {Promise<Object>} - A full state update.
    */
   async decryptMessage(msgParams) {
-    log.info("MetaMaskController - decryptMessage");
-    const msgId = msgParams.metamaskId;
+    log.info("TaquinController - decryptMessage");
+    const msgId = msgParams.taquinId;
     // sets the status op the message to 'approved'
-    // and removes the metamaskId for decryption
+    // and removes the taquinId for decryption
     try {
       const cleanMsgParams = await this.decryptMessageManager.approveMessage(
         msgParams
@@ -1414,7 +1409,7 @@ export default class TaquinController extends EventEmitter {
       // tells the listener that the message has been decrypted and can be returned to the dapp
       this.decryptMessageManager.setMsgStatusDecrypted(msgId, rawMess);
     } catch (error) {
-      log.info("MetaMaskController - eth_decrypt failed.", error);
+      log.info("TaquinController - eth_decrypt failed.", error);
       this.decryptMessageManager.errorMessage(msgId, error);
     }
     return this.getState();
@@ -1461,10 +1456,10 @@ export default class TaquinController extends EventEmitter {
    * @returns {Promise<Object>} - A full state update.
    */
   async encryptionPublicKey(msgParams) {
-    log.info("MetaMaskController - encryptionPublicKey");
-    const msgId = msgParams.metamaskId;
+    log.info("TaquinController - encryptionPublicKey");
+    const msgId = msgParams.taquinId;
     // sets the status op the message to 'approved'
-    // and removes the metamaskId for decryption
+    // and removes the taquinId for decryption
     try {
       const params = await this.encryptionPublicKeyManager.approveMessage(
         msgParams
@@ -1479,10 +1474,7 @@ export default class TaquinController extends EventEmitter {
       // and can be returned to the dapp
       this.encryptionPublicKeyManager.setMsgStatusReceived(msgId, publicKey);
     } catch (error) {
-      log.info(
-        "MetaMaskController - eth_getEncryptionPublicKey failed.",
-        error
-      );
+      log.info("TaquinController - eth_getEncryptionPublicKey failed.", error);
       this.encryptionPublicKeyManager.errorMessage(msgId, error);
     }
     return this.getState();
@@ -1529,8 +1521,8 @@ export default class TaquinController extends EventEmitter {
    * @returns {Object|undefined} - Full state update.
    */
   async signTypedMessage(msgParams) {
-    log.info("MetaMaskController - eth_signTypedData");
-    const msgId = msgParams.metamaskId;
+    log.info("TaquinController - eth_signTypedData");
+    const msgId = msgParams.taquinId;
     const { version } = msgParams;
     try {
       const cleanMsgParams = await this.typedMessageManager.approveMessage(
@@ -1552,7 +1544,7 @@ export default class TaquinController extends EventEmitter {
       this.typedMessageManager.setMsgStatusSigned(msgId, signature);
       return this.getState();
     } catch (error) {
-      log.info("MetaMaskController - eth_signTypedData failed.", error);
+      log.info("TaquinController - eth_signTypedData failed.", error);
       this.typedMessageManager.errorMessage(msgId, error);
       return undefined;
     }
@@ -1581,7 +1573,7 @@ export default class TaquinController extends EventEmitter {
    * transaction.
    * @param {number} originalTxId - the id of the txMeta that you want to attempt to cancel
    * @param {string} [customGasPrice] - the hex value to use for the cancel transaction
-   * @returns {Object} - MetaMask state
+   * @returns {Object} - Taquin state
    */
   async createCancelTransaction(originalTxId, customGasPrice) {
     await this.txController.createCancelTransaction(
@@ -1671,7 +1663,7 @@ export default class TaquinController extends EventEmitter {
     const { hostname } = new URL(sender.url);
     // Check if new connection is blocked if phishing detection is on
     if (usePhishDetect && this.phishingController.test(hostname)) {
-      log.debug("MetaMask - sending phishing warning for", hostname);
+      log.debug("Taquin - sending phishing warning for", hostname);
       this.sendPhishingWarning(connectionStream, hostname);
       return;
     }
@@ -1755,7 +1747,7 @@ export default class TaquinController extends EventEmitter {
    * @param {boolean} isInternal - True if this is a connection with an internal process
    */
   setupProviderConnection(outStream, sender, isInternal) {
-    const origin = isInternal ? "metamask" : new URL(sender.url).origin;
+    const origin = isInternal ? "taquin" : new URL(sender.url).origin;
     let extensionId;
     if (sender.id !== extension.runtime.id) {
       extensionId = sender.id;
@@ -1859,7 +1851,7 @@ export default class TaquinController extends EventEmitter {
         this.preferencesController
       )
     );
-    // forward to metamask primary provider
+    // forward to taquin primary provider
     engine.push(providerAsMiddleware(provider));
     return engine;
   }
@@ -1888,7 +1880,7 @@ export default class TaquinController extends EventEmitter {
   }
 
   /**
-   * Adds a reference to a connection by origin. Ignores the 'metamask' origin.
+   * Adds a reference to a connection by origin. Ignores the 'taquin' origin.
    * Caller must ensure that the returned id is stored such that the reference
    * can be deleted later.
    *
@@ -1898,7 +1890,7 @@ export default class TaquinController extends EventEmitter {
    * @returns {string} - The connection's id (so that it can be deleted later)
    */
   addConnection(origin, { engine }) {
-    if (origin === "metamask") {
+    if (origin === "taquin") {
       return null;
     }
 
@@ -1999,7 +1991,7 @@ export default class TaquinController extends EventEmitter {
   // misc
 
   /**
-   * A method for emitting the full MetaMask state to all registered listeners.
+   * A method for emitting the full Taquin state to all registered listeners.
    * @private
    */
   privateSendUpdate() {
@@ -2051,9 +2043,9 @@ export default class TaquinController extends EventEmitter {
       throw new Error("Must provide action and name.");
     }
 
-    const metamaskState = await this.getState();
+    const taquinState = await this.getState();
     const version = this.platform.getVersion();
-    backgroundMetaMetricsEvent(metamaskState, version, {
+    backgroundMetaMetricsEvent(taquinState, version, {
       customVariables,
       eventOpts: {
         action,
@@ -2181,10 +2173,6 @@ export default class TaquinController extends EventEmitter {
   async delCustomRpc(rpcTarget) {
     await this.preferencesController.removeFromFrequentRpcList(rpcTarget);
   }
-
-  // async initializeThreeBox() {
-  //   await this.threeBoxController.init();
-  // }
 
   /**
    * Sets whether or not to use the blockie identicon format.
@@ -2335,7 +2323,7 @@ export default class TaquinController extends EventEmitter {
 
   // TODO: Replace isClientOpen methods with `controllerConnectionChanged` events.
   /**
-   * A method for recording whether the MetaMask user interface is open or not.
+   * A method for recording whether the Taquin user interface is open or not.
    * @private
    * @param {boolean} open
    */
@@ -2362,7 +2350,7 @@ export default class TaquinController extends EventEmitter {
   }
 
   /**
-   * Locks MetaMask
+   * Locks Taquin
    */
   setLocked() {
     return this.keyringController.setLocked();

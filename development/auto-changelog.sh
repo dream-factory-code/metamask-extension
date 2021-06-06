@@ -4,7 +4,7 @@ set -e
 set -u
 set -o pipefail
 
-readonly URL='https://github.com/MetaMask/metamask-extension'
+readonly URL='https://github.com/Taquin/taquin-extension'
 
 git fetch --tags
 

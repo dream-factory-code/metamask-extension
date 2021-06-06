@@ -1,9 +1,9 @@
 import * as actionConstants from "../../store/actionConstants";
 import { ALERT_TYPES } from "../../../../app/scripts/controllers/alert";
 
-export default function reduceMetamask(state = {}, action) {
+export default function reduceTaquin(state = {}, action) {
   //TODO changing urls
-  const metamaskState = {
+  const taquinState = {
     isInitialized: false,
     isUnlocked: false,
     isAccountMenuOpen: false,
@@ -66,18 +66,18 @@ export default function reduceMetamask(state = {}, action) {
     ...state,
   };
   switch (action.type) {
-    case actionConstants.UPDATE_METAMASK_STATE:
-      return { ...metamaskState, ...action.value };
+    case actionConstants.UPDATE_TAQUIN_STATE:
+      return { ...taquinState, ...action.value };
 
-    case actionConstants.LOCK_METAMASK:
+    case actionConstants.LOCK_TAQUIN:
       return {
-        ...metamaskState,
+        ...taquinState,
         isUnlocked: false,
       };
 
     case actionConstants.SET_RPC_TARGET:
       return {
-        ...metamaskState,
+        ...taquinState,
         provider: {
           type: "rpc",
           rpcTarget: action.value,
@@ -86,7 +86,7 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.SET_PROVIDER_TYPE:
       return {
-        ...metamaskState,
+        ...taquinState,
         provider: {
           type: action.value,
         },
@@ -94,7 +94,7 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.SHOW_ACCOUNT_DETAIL:
       return {
-        ...metamaskState,
+        ...taquinState,
         isUnlocked: true,
         isInitialized: true,
         selectedAddress: action.value,
@@ -104,13 +104,13 @@ export default function reduceMetamask(state = {}, action) {
       const { account } = action.value;
       const name = action.value.label;
       const id = {};
-      id[account] = { ...metamaskState.identities[account], name };
-      const identities = { ...metamaskState.identities, ...id };
-      return Object.assign(metamaskState, { identities });
+      id[account] = { ...taquinState.identities[account], name };
+      const identities = { ...taquinState.identities, ...id };
+      return Object.assign(taquinState, { identities });
     }
 
     case actionConstants.SET_CURRENT_FIAT:
-      return Object.assign(metamaskState, {
+      return Object.assign(taquinState, {
         currentCurrency: action.value.currentCurrency,
         conversionRate: action.value.conversionRate,
         conversionDate: action.value.conversionDate,
@@ -118,17 +118,17 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.UPDATE_TOKENS:
       return {
-        ...metamaskState,
+        ...taquinState,
         tokens: action.newTokens,
       };
 
-    // metamask.send
+    // taquin.send
     case actionConstants.UPDATE_GAS_LIMIT:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
-          tx: { ...metamaskState.send.tx, gas: action.value },
+          ...taquinState.send,
+          tx: { ...taquinState.send.tx, gas: action.value },
           gasLimit: action.value,
           gas_limit: action.value,
           // gasLimit: action.value,
@@ -136,56 +136,56 @@ export default function reduceMetamask(state = {}, action) {
       };
     case actionConstants.UPDATE_CUSTOM_NONCE:
       return {
-        ...metamaskState,
+        ...taquinState,
         customNonceValue: action.value,
       };
     case actionConstants.UPDATE_GAS_PRICE:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
-          tx: { ...metamaskState.send.tx, gas_price: action.value },
+          ...taquinState.send,
+          tx: { ...taquinState.send.tx, gas_price: action.value },
         },
       };
 
     case actionConstants.TOGGLE_ACCOUNT_MENU:
       return {
-        ...metamaskState,
-        isAccountMenuOpen: !metamaskState.isAccountMenuOpen,
+        ...taquinState,
+        isAccountMenuOpen: !taquinState.isAccountMenuOpen,
       };
 
     case actionConstants.UPDATE_GAS_TOTAL:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           gasTotal: action.value,
         },
       };
 
     case actionConstants.UPDATE_SEND_TOKEN_BALANCE:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           tokenBalance: action.value,
         },
       };
 
     case actionConstants.UPDATE_SEND_HEX_DATA:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           data: action.value,
         },
       };
 
     case actionConstants.UPDATE_SEND_TO:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           to: action.value.to,
           toNickname: action.value.nickname,
         },
@@ -193,33 +193,33 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.UPDATE_SEND_AMOUNT:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           amount: action.value,
         },
       };
 
     case actionConstants.UPDATE_MAX_MODE:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           maxModeOn: action.value,
         },
       };
 
     case actionConstants.UPDATE_SEND:
-      return Object.assign(metamaskState, {
+      return Object.assign(taquinState, {
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           ...action.value,
         },
       });
 
     case actionConstants.UPDATE_SEND_TOKEN: {
       const newSend = {
-        ...metamaskState.send,
+        ...taquinState.send,
         token: action.value,
       };
       // erase token-related state when switching back to native currency
@@ -243,16 +243,16 @@ export default function reduceMetamask(state = {}, action) {
           },
         });
       }
-      return Object.assign(metamaskState, {
+      return Object.assign(taquinState, {
         send: newSend,
       });
     }
 
     case actionConstants.UPDATE_SEND_ENS_RESOLUTION:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           ensResolution: action.payload,
           ensResolutionError: "",
         },
@@ -260,9 +260,9 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.UPDATE_SEND_ENS_RESOLUTION_ERROR:
       return {
-        ...metamaskState,
+        ...taquinState,
         send: {
-          ...metamaskState.send,
+          ...taquinState.send,
           ensResolution: null,
           ensResolutionError: action.payload,
         },
@@ -270,7 +270,7 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.CLEAR_SEND:
       return {
-        ...metamaskState,
+        ...taquinState,
         // reset unapprovedTxs because change in workflow
         unapprovedTxs: {},
         send: {
@@ -302,7 +302,7 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.UPDATE_TRANSACTION_PARAMS: {
       const { id: txId, value } = action;
-      let { currentNetworkTxList } = metamaskState;
+      let { currentNetworkTxList } = taquinState;
 
       currentNetworkTxList = currentNetworkTxList.map((tx) => {
         if (tx.id === txId) {
@@ -314,74 +314,74 @@ export default function reduceMetamask(state = {}, action) {
       });
 
       return {
-        ...metamaskState,
+        ...taquinState,
         currentNetworkTxList,
       };
     }
 
     case actionConstants.TX_PAGE_CHANGE:
       return {
-        ...metamaskState,
+        ...taquinState,
         transactionPagination: {
-          ...metamaskState.transactionPagination,
+          ...taquinState.transactionPagination,
           page: action.value,
         },
       };
 
     case actionConstants.SET_PARTICIPATE_IN_METAMETRICS:
       return {
-        ...metamaskState,
+        ...taquinState,
         participateInMetaMetrics: action.value,
       };
 
     case actionConstants.SET_METAMETRICS_SEND_COUNT:
       return {
-        ...metamaskState,
+        ...taquinState,
         metaMetricsSendCount: action.value,
       };
 
     case actionConstants.SET_USE_BLOCKIE:
       return {
-        ...metamaskState,
+        ...taquinState,
         useBlockie: action.value,
       };
 
     case actionConstants.UPDATE_FEATURE_FLAGS:
       return {
-        ...metamaskState,
+        ...taquinState,
         featureFlags: action.value,
       };
 
     case actionConstants.CLOSE_WELCOME_SCREEN:
       return {
-        ...metamaskState,
+        ...taquinState,
         welcomeScreenSeen: true,
       };
 
     case actionConstants.SET_CURRENT_LOCALE:
       return {
-        ...metamaskState,
+        ...taquinState,
         currentLocale: action.value.locale,
       };
 
     case actionConstants.SET_PENDING_TOKENS:
       return {
-        ...metamaskState,
+        ...taquinState,
         pendingTokens: { ...action.payload },
       };
 
     case actionConstants.CLEAR_PENDING_TOKENS: {
       return {
-        ...metamaskState,
+        ...taquinState,
         pendingTokens: {},
       };
     }
 
     case actionConstants.UPDATE_PREFERENCES: {
       return {
-        ...metamaskState,
+        ...taquinState,
         preferences: {
-          ...metamaskState.preferences,
+          ...taquinState.preferences,
           ...action.payload,
         },
       };
@@ -389,38 +389,38 @@ export default function reduceMetamask(state = {}, action) {
 
     case actionConstants.COMPLETE_ONBOARDING: {
       return {
-        ...metamaskState,
+        ...taquinState,
         completedOnboarding: true,
       };
     }
 
     case actionConstants.SET_FIRST_TIME_FLOW_TYPE: {
       return {
-        ...metamaskState,
+        ...taquinState,
         firstTimeFlowType: action.value,
       };
     }
 
     case actionConstants.SET_NEXT_NONCE: {
       return {
-        ...metamaskState,
+        ...taquinState,
         nextNonce: action.value,
       };
     }
 
     default:
-      return metamaskState;
+      return taquinState;
   }
 }
 
-export const getCurrentLocale = (state) => state.metamask.currentLocale;
+export const getCurrentLocale = (state) => state.taquin.currentLocale;
 
-export const getAlertEnabledness = (state) => state.metamask.alertEnabledness;
+export const getAlertEnabledness = (state) => state.taquin.alertEnabledness;
 
 export const getUnconnectedAccountAlertEnabledness = (state) =>
   getAlertEnabledness(state)[ALERT_TYPES.unconnectedAccount];
 
 export const getUnconnectedAccountAlertShown = (state) =>
-  state.metamask.unconnectedAccountAlertShownOrigins;
+  state.taquin.unconnectedAccountAlertShownOrigins;
 
-export const getTokens = (state) => state.metamask.tokens;
+export const getTokens = (state) => state.taquin.tokens;

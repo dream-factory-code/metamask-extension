@@ -27,7 +27,7 @@ import {
 } from "../../helpers/constants/routes";
 
 const LEARN_MORE_URL =
-  "https://metamask.zendesk.com/hc/en-us/articles/360045129011-Intro-to-MetaMask-v8-extension";
+  "https://taquin.zendesk.com/hc/en-us/articles/360045129011-Intro-to-Taquin-v8-extension";
 
 export default class Home extends PureComponent {
   static contextTypes = {

@@ -27,11 +27,9 @@ import LocalStore from "./lib/local-store";
 import ReadOnlyNetworkStore from "./lib/network-store";
 import createStreamSink from "./lib/createStreamSink";
 import NotificationManager from "./lib/notification-manager";
-import TaquinController from "./metamask-controller";
+import TaquinController from "./taquin-controller";
 import rawFirstTimeState from "./first-time-state";
-//import setupSentry from "./lib/setupSentry";
 import getFirstPreferredLangCode from "./lib/get-first-preferred-lang-code";
-import getObjStructure from "./lib/getObjStructure";
 import setupEnsIpfsResolver from "./lib/ens-ipfs/setup";
 
 import {
@@ -41,13 +39,13 @@ import {
 } from "./lib/enums";
 /* eslint-enable import/first */
 
-const firstTimeState = { ...rawFirstTimeState, ...global.METAMASK_TEST_CONFIG };
+const firstTimeState = { ...rawFirstTimeState, ...global.TAQUIN_TEST_CONFIG };
 
-log.setDefaultLevel(process.env.METAMASK_DEBUG ? "debug" : "warn");
+log.setDefaultLevel(process.env.TAQUIN_DEBUG ? "debug" : "warn");
 
 const platform = new ExtensionPlatform();
 const notificationManager = new NotificationManager();
-global.METAMASK_NOTIFIER = notificationManager;
+global.TAQUIN_NOTIFIER = notificationManager;
 
 // setup sentry error reporting
 const release = platform.getVersion();
@@ -55,7 +53,7 @@ const release = platform.getVersion();
 
 let popupIsOpen = false;
 let notificationIsOpen = false;
-const openMetamaskTabsIDs = {};
+const openTaquinTabsIDs = {};
 const requestAccountTabIds = {};
 
 // state persistence
@@ -63,8 +61,8 @@ const inTest = process.env.IN_TEST === "true";
 const localStore = inTest ? new ReadOnlyNetworkStore() : new LocalStore();
 let versionedData;
 
-if (inTest || process.env.METAMASK_DEBUG) {
-  global.metamaskGetState = localStore.get.bind(localStore);
+if (inTest || process.env.TAQUIN_DEBUG) {
+  global.taquinGetState = localStore.get.bind(localStore);
 }
 
 // initialization flow
@@ -149,8 +147,8 @@ function setupController(initState, initLangCode) {
     getRequestAccountTabIds: () => {
       return requestAccountTabIds;
     },
-    getOpenMetamaskTabsIds: () => {
-      return openMetamaskTabsIDs;
+    getOpenTaquinTabsIds: () => {
+      return openTaquinTabsIDs;
     },
   });
 
@@ -201,18 +199,18 @@ function setupController(initState, initLangCode) {
   extension.runtime.onConnect.addListener(connectRemote);
   extension.runtime.onConnectExternal.addListener(connectExternal);
 
-  const metamaskInternalProcessHash = {
+  const taquinInternalProcessHash = {
     [ENVIRONMENT_TYPE_POPUP]: true,
     [ENVIRONMENT_TYPE_NOTIFICATION]: true,
     [ENVIRONMENT_TYPE_FULLSCREEN]: true,
   };
 
-  const metamaskBlockedPorts = ["trezor-connect"];
+  const taquinBlockedPorts = ["trezor-connect"];
 
   const isClientOpenStatus = () => {
     return (
       popupIsOpen ||
-      Boolean(Object.keys(openMetamaskTabsIDs).length) ||
+      Boolean(Object.keys(openTaquinTabsIDs).length) ||
       notificationIsOpen
     );
   };
@@ -226,13 +224,13 @@ function setupController(initState, initLangCode) {
 
   function connectRemote(remotePort) {
     const processName = remotePort.name;
-    const isMetaMaskInternalProcess = metamaskInternalProcessHash[processName];
+    const isTaquinInternalProcess = taquinInternalProcessHash[processName];
 
-    if (metamaskBlockedPorts.includes(remotePort.name)) {
+    if (taquinBlockedPorts.includes(remotePort.name)) {
       return;
     }
 
-    if (isMetaMaskInternalProcess) {
+    if (isTaquinInternalProcess) {
       const portStream = new PortStream(remotePort);
       // communication with popup
       controller.isClientOpen = true;
@@ -258,10 +256,10 @@ function setupController(initState, initLangCode) {
 
       if (processName === ENVIRONMENT_TYPE_FULLSCREEN) {
         const tabId = remotePort.sender.tab.id;
-        openMetamaskTabsIDs[tabId] = true;
+        openTaquinTabsIDs[tabId] = true;
 
         endOfStream(portStream, () => {
-          delete openMetamaskTabsIDs[tabId];
+          delete openTaquinTabsIDs[tabId];
           controller.isClientOpen = isClientOpenStatus();
         });
       }
@@ -347,10 +345,10 @@ function setupController(initState, initLangCode) {
  */
 async function triggerUi() {
   const tabs = await platform.getActiveTabs();
-  const currentlyActiveMetamaskTab = Boolean(
-    tabs.find((tab) => openMetamaskTabsIDs[tab.id])
+  const currentlyActiveTaquinTab = Boolean(
+    tabs.find((tab) => openTaquinTabsIDs[tab.id])
   );
-  if (!popupIsOpen && !currentlyActiveMetamaskTab) {
+  if (!popupIsOpen && !currentlyActiveTaquinTab) {
     await notificationManager.showPopup();
   }
 }
@@ -371,11 +369,11 @@ async function openPopup() {
   });
 }
 
-// On first install, open a new tab with MetaMask
+// On first install, open a new tab with Taquin
 extension.runtime.onInstalled.addListener(({ reason }) => {
   if (
     reason === "install" &&
-    !(process.env.METAMASK_DEBUG || process.env.IN_TEST)
+    !(process.env.TAQUIN_DEBUG || process.env.IN_TEST)
   ) {
     platform.openExtensionInBrowser();
   }

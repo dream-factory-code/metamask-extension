@@ -10,7 +10,7 @@ import {
   createSwappableProxy,
   createEventEmitterProxy,
 } from "swappable-obj-proxy";
-import createMetamaskMiddleware from "./createMetamaskMiddleware";
+import createTaquinMiddleware from "./createTaquinMiddleware";
 import createInfuraClient from "./createInfuraClient";
 import createTolarClient from "./createInfuraClient";
 
@@ -34,14 +34,14 @@ import TolarBlockTracker from "../../lib/tolar-block-tracker/tolar-block-tracker
 
 const networks = { networkList: {} };
 
-const env = process.env.METAMASK_ENV;
-const { METAMASK_DEBUG } = process.env;
+const env = process.env.TAQUIN_ENV;
+const { TAQUIN_DEBUG } = process.env;
 
 let defaultProviderConfigType;
 if (process.env.IN_TEST === "true") {
   // defaultProviderConfigType = LOCALHOST
   defaultProviderConfigType = MAINNET;
-} else if (METAMASK_DEBUG || env === "test") {
+} else if (TAQUIN_DEBUG || env === "test") {
   // defaultProviderConfigType = RINKEBY
   defaultProviderConfigType = MAINNET;
 } else {
@@ -83,13 +83,8 @@ export default class NetworkController extends EventEmitter {
 
   initializeProvider(providerParams) {
     this._baseProviderParams = providerParams;
-    const {
-      type,
-      rpcTarget,
-      chainId,
-      ticker,
-      nickname,
-    } = this.providerStore.getState();
+    const { type, rpcTarget, chainId, ticker, nickname } =
+      this.providerStore.getState();
 
     this._configureProvider({ type, rpcTarget, chainId, ticker, nickname });
     this.lookupNetwork();
@@ -305,11 +300,9 @@ export default class NetworkController extends EventEmitter {
   }
 
   _setNetworkClient({ networkMiddleware, blockTracker }) {
-    const metamaskMiddleware = createMetamaskMiddleware(
-      this._baseProviderParams
-    );
+    const taquinMiddleware = createTaquinMiddleware(this._baseProviderParams);
     const engine = new JsonRpcEngine();
-    engine.push(metamaskMiddleware);
+    engine.push(taquinMiddleware);
     engine.push(networkMiddleware);
     const provider = providerFromEngine(engine);
     this._setProviderAndBlockTracker({ provider, blockTracker });

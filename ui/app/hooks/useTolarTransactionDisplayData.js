@@ -28,7 +28,7 @@ import {
   PENDING_STATUS_HASH,
   TOKEN_CATEGORY_HASH,
 } from "../helpers/constants/transactions";
-import { getTokens } from "../ducks/metamask/metamask";
+import { getTokens } from "../ducks/taquin/taquin";
 import { useI18nContext } from "./useI18nContext";
 import { useTokenFiatAmount } from "./useTokenFiatAmount";
 import { useUserPreferencedCurrency } from "./useUserPreferencedCurrency";

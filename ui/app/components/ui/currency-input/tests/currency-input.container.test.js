@@ -1,34 +1,34 @@
-import assert from 'assert'
-import proxyquire from 'proxyquire'
+import assert from "assert";
+import proxyquire from "proxyquire";
 
-let mapStateToProps, mergeProps
+let mapStateToProps, mergeProps;
 
-proxyquire('../currency-input.container.js', {
-  'react-redux': {
+proxyquire("../currency-input.container.js", {
+  "react-redux": {
     connect: (ms, _, mp) => {
-      mapStateToProps = ms
-      mergeProps = mp
-      return () => ({})
+      mapStateToProps = ms;
+      mergeProps = mp;
+      return () => ({});
     },
   },
-})
+});
 
-describe('CurrencyInput container', function () {
-  describe('mapStateToProps()', function () {
+describe("CurrencyInput container", function () {
+  describe("mapStateToProps()", function () {
     const tests = [
       // Test # 1
       {
-        comment: 'should return correct props in mainnet',
+        comment: "should return correct props in mainnet",
         mockState: {
-          metamask: {
+          taquin: {
             conversionRate: 280.45,
-            currentCurrency: 'usd',
-            nativeCurrency: 'ETH',
+            currentCurrency: "usd",
+            nativeCurrency: "ETH",
             preferences: {
               showFiatInTestnets: false,
             },
             provider: {
-              type: 'mainnet',
+              type: "mainnet",
             },
             send: {
               maxModeOn: false,
@@ -37,25 +37,26 @@ describe('CurrencyInput container', function () {
         },
         expected: {
           conversionRate: 280.45,
-          currentCurrency: 'usd',
-          nativeCurrency: 'ETH',
+          currentCurrency: "usd",
+          nativeCurrency: "ETH",
           hideFiat: false,
           maxModeOn: false,
         },
       },
       // Test # 2
       {
-        comment: 'should return correct props when not in mainnet and showFiatInTestnets is false',
+        comment:
+          "should return correct props when not in mainnet and showFiatInTestnets is false",
         mockState: {
-          metamask: {
+          taquin: {
             conversionRate: 280.45,
-            currentCurrency: 'usd',
-            nativeCurrency: 'ETH',
+            currentCurrency: "usd",
+            nativeCurrency: "ETH",
             preferences: {
               showFiatInTestnets: false,
             },
             provider: {
-              type: 'rinkeby',
+              type: "rinkeby",
             },
             send: {
               maxModeOn: false,
@@ -64,25 +65,26 @@ describe('CurrencyInput container', function () {
         },
         expected: {
           conversionRate: 280.45,
-          currentCurrency: 'usd',
-          nativeCurrency: 'ETH',
+          currentCurrency: "usd",
+          nativeCurrency: "ETH",
           hideFiat: true,
           maxModeOn: false,
         },
       },
       // Test # 3
       {
-        comment: 'should return correct props when not in mainnet and showFiatInTestnets is true',
+        comment:
+          "should return correct props when not in mainnet and showFiatInTestnets is true",
         mockState: {
-          metamask: {
+          taquin: {
             conversionRate: 280.45,
-            currentCurrency: 'usd',
-            nativeCurrency: 'ETH',
+            currentCurrency: "usd",
+            nativeCurrency: "ETH",
             preferences: {
               showFiatInTestnets: true,
             },
             provider: {
-              type: 'rinkeby',
+              type: "rinkeby",
             },
             send: {
               maxModeOn: false,
@@ -91,25 +93,26 @@ describe('CurrencyInput container', function () {
         },
         expected: {
           conversionRate: 280.45,
-          currentCurrency: 'usd',
-          nativeCurrency: 'ETH',
+          currentCurrency: "usd",
+          nativeCurrency: "ETH",
           hideFiat: false,
           maxModeOn: false,
         },
       },
       // Test # 4
       {
-        comment: 'should return correct props when in mainnet and showFiatInTestnets is true',
+        comment:
+          "should return correct props when in mainnet and showFiatInTestnets is true",
         mockState: {
-          metamask: {
+          taquin: {
             conversionRate: 280.45,
-            currentCurrency: 'usd',
-            nativeCurrency: 'ETH',
+            currentCurrency: "usd",
+            nativeCurrency: "ETH",
             preferences: {
               showFiatInTestnets: true,
             },
             provider: {
-              type: 'mainnet',
+              type: "mainnet",
             },
             send: {
               maxModeOn: false,
@@ -118,71 +121,80 @@ describe('CurrencyInput container', function () {
         },
         expected: {
           conversionRate: 280.45,
-          currentCurrency: 'usd',
-          nativeCurrency: 'ETH',
+          currentCurrency: "usd",
+          nativeCurrency: "ETH",
           hideFiat: false,
           maxModeOn: false,
         },
       },
-    ]
+    ];
 
     tests.forEach(({ mockState, expected, comment }) => {
       it(comment, function () {
-        return assert.deepEqual(mapStateToProps(mockState), expected)
-      })
-    })
-  })
+        return assert.deepEqual(mapStateToProps(mockState), expected);
+      });
+    });
+  });
 
-  describe('mergeProps()', function () {
+  describe("mergeProps()", function () {
     const tests = [
       // Test # 1
       {
-        comment: 'should return the correct props',
+        comment: "should return the correct props",
         mock: {
           stateProps: {
             conversionRate: 280.45,
-            currentCurrency: 'usd',
-            nativeCurrency: 'ETH',
+            currentCurrency: "usd",
+            nativeCurrency: "ETH",
           },
           dispatchProps: {},
           ownProps: {},
         },
         expected: {
           conversionRate: 280.45,
-          currentCurrency: 'usd',
-          nativeCurrency: 'ETH',
+          currentCurrency: "usd",
+          nativeCurrency: "ETH",
           // useFiat: true,
-          nativeSuffix: 'ETH',
-          fiatSuffix: 'USD',
+          nativeSuffix: "ETH",
+          fiatSuffix: "USD",
         },
       },
       // Test # 1
       {
-        comment: 'should return the correct props when useFiat is true',
+        comment: "should return the correct props when useFiat is true",
         mock: {
           stateProps: {
             conversionRate: 280.45,
-            currentCurrency: 'usd',
-            nativeCurrency: 'ETH',
+            currentCurrency: "usd",
+            nativeCurrency: "ETH",
           },
           dispatchProps: {},
           ownProps: { useFiat: true },
         },
         expected: {
           conversionRate: 280.45,
-          currentCurrency: 'usd',
-          nativeCurrency: 'ETH',
+          currentCurrency: "usd",
+          nativeCurrency: "ETH",
           useFiat: true,
-          nativeSuffix: 'ETH',
-          fiatSuffix: 'USD',
+          nativeSuffix: "ETH",
+          fiatSuffix: "USD",
         },
       },
-    ]
+    ];
 
-    tests.forEach(({ mock: { stateProps, dispatchProps, ownProps }, expected, comment }) => {
-      it(comment, function () {
-        assert.deepEqual(mergeProps(stateProps, dispatchProps, ownProps), expected)
-      })
-    })
-  })
-})
+    tests.forEach(
+      ({
+        mock: { stateProps, dispatchProps, ownProps },
+        expected,
+        comment,
+      }) => {
+        it(comment, function () {
+          assert.deepEqual(
+            mergeProps(stateProps, dispatchProps, ownProps),
+            expected
+          );
+        });
+      }
+    );
+  });
+});

@@ -16,12 +16,8 @@ const fetch = fetchWithTimeout({
 
 export default class IncomingTransactionsController {
   constructor(opts = {}) {
-    const {
-      blockTracker,
-      networkController,
-      preferencesController,
-      web3,
-    } = opts;
+    const { blockTracker, networkController, preferencesController, web3 } =
+      opts;
     this.blockTracker = blockTracker;
     this.networkController = networkController;
     this.preferencesController = preferencesController;
@@ -303,7 +299,7 @@ export default class IncomingTransactionsController {
       ...txMeta,
       blockNumber: txMeta.block_hash,
       id: createId(),
-      metamaskNetworkId: currentNetworkID,
+      taquinNetworkId: currentNetworkID,
       status,
       time,
       txParams: {

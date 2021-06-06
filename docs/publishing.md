@@ -1,13 +1,12 @@
 # Publishing Guide
 
-When publishing a new version of MetaMask, we follow this procedure:
+When publishing a new version of Taquin, we follow this procedure:
 
 ## Overview
 
-The below diagram outlines our process for design, development, and release. Building MetaMask is a community affair, and many steps of the process invite participation from external contributors as indicated. All QA, code review, and release of new versions is done by members of the core MetaMask team.
+The below diagram outlines our process for design, development, and release. Building Taquin is a community affair, and many steps of the process invite participation from external contributors as indicated. All QA, code review, and release of new versions is done by members of the core Taquin team.
 
 <img width="664" alt="mm-dev-process" src="https://user-images.githubusercontent.com/1016190/56308059-36906000-60fb-11e9-8e61-6655bca0c54f.png">
-
 
 ## Preparation
 
@@ -38,9 +37,9 @@ With each pull request, the @MetaMaskBot will comment with a build of that new p
 
 1. Publish to chrome store.
 2. Visit [the chrome developer dashboard](https://chrome.google.com/webstore/developer/dashboard?authuser=2).
-3. Publish to [firefox addon marketplace](http://addons.mozilla.org/en-us/firefox/addon/ether-metamask).
-4. Publish to [Opera store](https://addons.opera.com/en/extensions/details/metamask/).
-5. Post on [Github releases](https://github.com/MetaMask/metamask-extension/releases) page.
+3. Publish to [firefox addon marketplace](http://addons.mozilla.org/en-us/firefox/addon/ether-taquin).
+4. Publish to [Opera store](https://addons.opera.com/en/extensions/details/taquin/).
+5. Post on [Github releases](https://github.com/Taquin/taquin-extension/releases) page.
 6. Run the `yarn announce` script, and post that announcement in our public places.
 
 ## Hotfix Differences
@@ -54,4 +53,3 @@ For this reason, when an urgent change is needed in production, its pull request
 - Should be proposed against the `master` branch.
 
 The version and changelog bump should then be made off the `master` branch, and then merged to `develop` to bring the two branches back into sync. Further time can be saved by incorporating the version/changelog bump into the PR against `master`, since we rely on @MetaMaskBot to run tests before merging.
-

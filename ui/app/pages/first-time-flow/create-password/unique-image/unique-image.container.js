@@ -1,12 +1,12 @@
-import { connect } from 'react-redux'
-import UniqueImage from './unique-image.component'
+import { connect } from "react-redux";
+import UniqueImage from "./unique-image.component";
 
-const mapStateToProps = ({ metamask }) => {
-  const { selectedAddress } = metamask
+const mapStateToProps = ({ taquin }) => {
+  const { selectedAddress } = taquin;
 
   return {
     address: selectedAddress,
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps)(UniqueImage)
+export default connect(mapStateToProps)(UniqueImage);

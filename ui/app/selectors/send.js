@@ -9,28 +9,28 @@ import {
 } from ".";
 
 export function getBlockGasLimit(state) {
-  return state.metamask.currentBlockGasLimit;
+  return state.taquin.currentBlockGasLimit;
 }
 
 export function getConversionRate(state) {
-  return state.metamask.conversionRate;
+  return state.taquin.conversionRate;
 }
 
 export function getNativeCurrency(state) {
-  return state.metamask.nativeCurrency;
+  return state.taquin.nativeCurrency;
 }
 
 export function getCurrentNetwork(state) {
-  return state.metamask.network;
+  return state.taquin.network;
 }
 
 export function getGasLimit(state) {
-  return state.metamask.send.tx.gas || 21000;
+  return state.taquin.send.tx.gas || 21000;
 }
 
 export function getGasPrice(state) {
   return (
-    state.metamask.send.tx.gas_price ||
+    state.taquin.send.tx.gas_price ||
     1 ||
     getAveragePriceEstimateInHexWEI(state)
   );
@@ -46,7 +46,7 @@ export function getPrimaryCurrency(state) {
 }
 
 export function getSendToken(state) {
-  return state.metamask.send.token;
+  return state.taquin.send.token;
 }
 
 export function getSendTokenAddress(state) {
@@ -61,19 +61,19 @@ export function getSendTokenContract(state) {
 }
 
 export function getSendAmount(state) {
-  return state.metamask.send.amount;
+  return state.taquin.send.amount;
 }
 
 export function getSendHexData(state) {
-  return state.metamask.send.data;
+  return state.taquin.send.data;
 }
 
 export function getSendHexDataFeatureFlagState(state) {
-  return state.metamask.featureFlags.sendHexData;
+  return state.taquin.featureFlags.sendHexData;
 }
 
 export function getSendEditingTransactionId(state) {
-  return state.metamask.send.editingTransactionId;
+  return state.taquin.send.editingTransactionId;
 }
 
 export function getSendErrors(state) {
@@ -85,7 +85,7 @@ export function sendAmountIsInError(state) {
 }
 
 export function getSendFrom(state) {
-  return state.metamask.send.from;
+  return state.taquin.send.from;
 }
 
 export function getSendFromBalance(state) {
@@ -101,22 +101,22 @@ export function getSendFromObject(state) {
 }
 
 export function getSendMaxModeState(state) {
-  return state.metamask.send.maxModeOn;
+  return state.taquin.send.maxModeOn;
 }
 
 export function getTolarTx(state) {
-  return state.metamask.send.tx;
+  return state.taquin.send.tx;
 }
 export function getTolarSignedTx(state) {
-  return state.metamask.send.signedTx;
+  return state.taquin.send.signedTx;
 }
 
 export function getSendTo(state) {
-  return state.metamask.send.to;
+  return state.taquin.send.to;
 }
 
 export function getSendToNickname(state) {
-  return state.metamask.send.toNickname;
+  return state.taquin.send.toNickname;
 }
 
 export function getSendToAccounts(state) {
@@ -125,19 +125,19 @@ export function getSendToAccounts(state) {
   return [...fromAccounts, ...addressBookAccounts];
 }
 export function getTokenBalance(state) {
-  return state.metamask.send.tokenBalance;
+  return state.taquin.send.tokenBalance;
 }
 
 export function getSendEnsResolution(state) {
-  return state.metamask.send.ensResolution;
+  return state.taquin.send.ensResolution;
 }
 
 export function getSendEnsResolutionError(state) {
-  return state.metamask.send.ensResolutionError;
+  return state.taquin.send.ensResolutionError;
 }
 
 export function getUnapprovedTxs(state) {
-  return state.metamask.unapprovedTxs;
+  return state.taquin.unapprovedTxs;
 }
 
 export function getQrCodeData(state) {

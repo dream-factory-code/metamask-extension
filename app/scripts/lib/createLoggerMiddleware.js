@@ -15,7 +15,7 @@ export default function createLoggerMiddleware(opts) {
       if (res.error) {
         log.error("Error in RPC response:\n", res, { request: req });
       }
-      if (req.isMetamaskInternal) {
+      if (req.isTaquinInternal) {
         return;
       }
       cb();

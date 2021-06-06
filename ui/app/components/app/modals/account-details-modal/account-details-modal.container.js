@@ -8,9 +8,9 @@ import AccountDetailsModal from "./account-details-modal.component";
 
 const mapStateToProps = (state) => {
   return {
-    network: state.metamask.network,
+    network: state.taquin.network,
     selectedIdentity: getSelectedIdentity(state),
-    keyrings: state.metamask.keyrings,
+    keyrings: state.taquin.keyrings,
     rpcPrefs: getRpcPrefsForCurrentProvider(state),
   };
 };

@@ -15,7 +15,7 @@ import Eth from "ethjs";
 import EthQuery from "eth-query";
 import StreamProvider from "web3-stream-provider";
 import log from "loglevel";
-import launchMetaMaskUi from "../../ui";
+import launchTaquinUi from "../../ui";
 import { setupMultiplex } from "./lib/stream-utils";
 // import setupSentry from "./lib/setupSentry";
 import ExtensionPlatform from "./platforms/extension";
@@ -65,7 +65,7 @@ async function start() {
       }
 
       const state = store.getState();
-      const { metamask: { completedOnboarding } = {} } = state;
+      const { taquin: { completedOnboarding } = {} } = state;
 
       if (!completedOnboarding && windowType !== ENVIRONMENT_TYPE_FULLSCREEN) {
         global.platform.openExtensionInBrowser();
@@ -105,7 +105,7 @@ function initializeUi(activeTab, container, connectionStream, cb) {
       return;
     }
 
-    launchMetaMaskUi(
+    launchTaquinUi(
       {
         activeTab,
         container,

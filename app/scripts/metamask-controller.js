@@ -46,7 +46,6 @@ import AppStateController from "./controllers/app-state";
 import CachedBalancesController from "./controllers/cached-balances";
 import AlertController from "./controllers/alert";
 import OnboardingController from "./controllers/onboarding";
-import ThreeBoxController from "./controllers/threebox";
 import IncomingTransactionsController from "./controllers/incoming-transactions";
 import MessageManager from "./lib/message-manager";
 import DecryptMessageManager from "./lib/decrypt-message-manager";
@@ -54,13 +53,11 @@ import EncryptionPublicKeyManager from "./lib/encryption-public-key-manager";
 import PersonalMessageManager from "./lib/personal-message-manager";
 import TypedMessageManager from "./lib/typed-message-manager";
 import TransactionController from "./controllers/transactions";
-// import TokenRatesController from "./controllers/token-rates";
 import DetectTokensController from "./controllers/detect-tokens";
 import { PermissionsController } from "./controllers/permissions";
 import getRestrictedMethods from "./controllers/permissions/restrictedMethods";
 import nodeify from "./lib/nodeify";
 import accountImporter from "./account-import-strategies";
-// import selectChainId from "./lib/select-chain-id";
 import seedPhraseVerifier from "./lib/seed-phrase-verifier";
 
 import backgroundMetaMetricsEvent from "./lib/background-metametrics";
@@ -71,7 +68,7 @@ import { TolarAddressBookController } from "./controllers/tolar-address-book/Tol
 
 import Web3 from "@dreamfactoryhr/web3t";
 
-export default class MetamaskController extends EventEmitter {
+export default class TaquinController extends EventEmitter {
   /**
    * @constructor
    * @param {Object} opts
@@ -122,8 +119,10 @@ export default class MetamaskController extends EventEmitter {
     this.phishingController = new PhishingController();
     // now we can initialize the RPC provider, which other controllers require
     this.initializeProvider();
-    this.provider = this.networkController.getProviderAndBlockTracker().provider;
-    this.blockTracker = this.networkController.getProviderAndBlockTracker().blockTracker;
+    this.provider =
+      this.networkController.getProviderAndBlockTracker().provider;
+    this.blockTracker =
+      this.networkController.getProviderAndBlockTracker().blockTracker;
     this.web3 = new Web3(this.provider);
     // token exchange rate tracker
     // this.tokenRatesController = new TokenRatesController({
@@ -240,16 +239,6 @@ export default class MetamaskController extends EventEmitter {
     });
 
     const version = this.platform.getVersion();
-    // this.threeBoxController = new ThreeBoxController({
-    //   preferencesController: this.preferencesController,
-    //   addressBookController: this.addressBookController,
-    //   keyringController: this.keyringController,
-    //   initState: initState.ThreeBoxController,
-    //   getKeyringControllerState: this.keyringController.memStore.getState.bind(
-    //     this.keyringController.memStore
-    //   ),
-    //   version,
-    // });
 
     this.txController = new TransactionController({
       initState:
@@ -320,7 +309,6 @@ export default class MetamaskController extends EventEmitter {
       IncomingTransactionsController: this.incomingTransactionsController.store,
       PermissionsController: this.permissionsController.permissions,
       PermissionsMetadata: this.permissionsController.store,
-      // ThreeBoxController: this.threeBoxController.store,
     });
 
     this.memStore = new ComposableObservableStore(null, {
@@ -374,7 +362,8 @@ export default class MetamaskController extends EventEmitter {
       // account mgmt
       getAccounts: async ({ origin }) => {
         if (origin === "metamask") {
-          const selectedAddress = this.preferencesController.getSelectedAddress();
+          const selectedAddress =
+            this.preferencesController.getSelectedAddress();
           return selectedAddress ? [selectedAddress] : [];
         } else if (this.isUnlocked()) {
           return await this.permissionsController.getAccounts(origin);
@@ -395,9 +384,8 @@ export default class MetamaskController extends EventEmitter {
       getPendingTransactionByHash: (hash) =>
         this.txController.getFilteredTxList({ hash, status: "submitted" })[0],
     };
-    const providerProxy = this.networkController.initializeProvider(
-      providerOpts
-    );
+    const providerProxy =
+      this.networkController.initializeProvider(providerOpts);
     return providerProxy;
   }
 
@@ -406,7 +394,6 @@ export default class MetamaskController extends EventEmitter {
    * This store is used to make some config info available to Dapps synchronously.
    */
   createPublicConfigStore() {
-    // subset of state for metamask inpage provider
     const publicConfigStore = new ObservableStore();
 
     // setup memStore subscription hooks
@@ -659,29 +646,6 @@ export default class MetamaskController extends EventEmitter {
         this.alertController
       ),
 
-      // 3Box
-      // setThreeBoxSyncingPermission: nodeify(
-      //   threeBoxController.setThreeBoxSyncingPermission,
-      //   threeBoxController
-      // ),
-      // restoreFromThreeBox: nodeify(
-      //   threeBoxController.restoreFromThreeBox,
-      //   threeBoxController
-      // ),
-      // setShowRestorePromptToFalse: nodeify(
-      //   threeBoxController.setShowRestorePromptToFalse,
-      //   threeBoxController
-      // ),
-      // getThreeBoxLastUpdated: nodeify(
-      //   threeBoxController.getLastUpdated,
-      //   threeBoxController
-      // ),
-      // turnThreeBoxSyncingOn: nodeify(
-      //   threeBoxController.turnThreeBoxSyncingOn,
-      //   threeBoxController
-      // ),
-      // initializeThreeBox: nodeify(this.initializeThreeBox, this),
-
       // permissions
       approvePermissionsRequest: nodeify(
         permissionsController.approvePermissionsRequest,
@@ -795,9 +759,8 @@ export default class MetamaskController extends EventEmitter {
         //this.web3
       );
       //const primaryKeyring = keyringController.getKeyringsByType('HD Key Tree')[0]
-      const primaryKeyring = keyringController.getKeyringsByType(
-        "Tolar Keyring"
-      )[0];
+      const primaryKeyring =
+        keyringController.getKeyringsByType("Tolar Keyring")[0];
 
       if (!primaryKeyring) {
         throw new Error("MetamaskController - No Tolar Keyring found");
@@ -877,9 +840,8 @@ export default class MetamaskController extends EventEmitter {
           networkType === "mainnet"
             ? accountTokens[address][networkType].filter(
                 ({ address: tokenAddress }) => {
-                  const checksumAddress = ethUtil.toChecksumAddress(
-                    tokenAddress
-                  );
+                  const checksumAddress =
+                    ethUtil.toChecksumAddress(tokenAddress);
                   return contractMap[checksumAddress]
                     ? contractMap[checksumAddress].erc20
                     : true;
@@ -899,15 +861,12 @@ export default class MetamaskController extends EventEmitter {
     };
 
     // Accounts
-    const tolarKeyring = this.keyringController.getKeyringsByType(
-      "Tolar Keyring"
-    )[0];
-    const hdKeyring = this.keyringController.getKeyringsByType(
-      "HD Key Tree"
-    )[0];
-    const simpleKeyPairKeyrings = this.keyringController.getKeyringsByType(
-      "Simple Key Pair"
-    );
+    const tolarKeyring =
+      this.keyringController.getKeyringsByType("Tolar Keyring")[0];
+    const hdKeyring =
+      this.keyringController.getKeyringsByType("HD Key Tree")[0];
+    const simpleKeyPairKeyrings =
+      this.keyringController.getKeyringsByType("Simple Key Pair");
     const tolarAccounts = await Promise.all(
       tolarKeyring.map((keyring) => keyring.getAccounts())
     );
@@ -1130,9 +1089,8 @@ export default class MetamaskController extends EventEmitter {
    */
   async addNewAccount() {
     //const primaryKeyring = this.keyringController.getKeyringsByType('HD Key Tree')[0]
-    const primaryKeyring = this.keyringController.getKeyringsByType(
-      "Tolar Keyring"
-    )[0];
+    const primaryKeyring =
+      this.keyringController.getKeyringsByType("Tolar Keyring")[0];
     if (!primaryKeyring) {
       throw new Error("MetamaskController - No HD Key Tree found");
     }
@@ -1165,9 +1123,8 @@ export default class MetamaskController extends EventEmitter {
    */
   async verifySeedPhrase() {
     //const primaryKeyring = this.keyringController.getKeyringsByType('HD Key Tree')[0]
-    const primaryKeyring = this.keyringController.getKeyringsByType(
-      "Tolar Keyring"
-    )[0];
+    const primaryKeyring =
+      this.keyringController.getKeyringsByType("Tolar Keyring")[0];
     if (!primaryKeyring) {
       throw new Error("MetamaskController - No HD Key Tree found");
     }
@@ -2066,10 +2023,8 @@ export default class MetamaskController extends EventEmitter {
    * @returns {Promise<number>}
    */
   async getPendingNonce(address) {
-    const {
-      nonceDetails,
-      releaseLock,
-    } = await this.txController.nonceTracker.getNonceLock(address);
+    const { nonceDetails, releaseLock } =
+      await this.txController.nonceTracker.getNonceLock(address);
     const pendingNonce = nonceDetails.params.highestSuggested;
 
     releaseLock();
@@ -2186,7 +2141,8 @@ export default class MetamaskController extends EventEmitter {
     nickname = "",
     rpcPrefs = {}
   ) {
-    const frequentRpcListDetail = this.preferencesController.getFrequentRpcListDetail();
+    const frequentRpcListDetail =
+      this.preferencesController.getFrequentRpcListDetail();
     const rpcSettings = frequentRpcListDetail.find(
       (rpc) => rpcTarget === rpc.rpcUrl
     );
@@ -2305,9 +2261,8 @@ export default class MetamaskController extends EventEmitter {
    */
   setParticipateInMetaMetrics(bool, cb) {
     try {
-      const metaMetricsId = this.preferencesController.setParticipateInMetaMetrics(
-        bool
-      );
+      const metaMetricsId =
+        this.preferencesController.setParticipateInMetaMetrics(bool);
       cb(null, metaMetricsId);
       return;
     } catch (err) {

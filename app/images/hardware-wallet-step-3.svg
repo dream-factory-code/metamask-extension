@@ -20,7 +20,7 @@
             <path d="M92.024 25.677h-2.367l-.41.318-.157 1.914h3.5l-.156-1.914zM94.59 18.125l-.98 2.099c-.079.17.079.354.258.3l3.337-1.001a.217.217 0 00.028-.405l-2.358-1.098a.215.215 0 00-.286.105M87.07 18.02l-2.355 1.097a.218.218 0 00.03.406l3.336 1.001a.217.217 0 00.257-.3l-.982-2.1a.216.216 0 00-.286-.104"/>
         </g>
         <text fill="#3098dc" font-family="RobotoMono-Bold, Roboto Mono" font-size="10" font-weight="bold" transform="translate(1 1)">
-            <tspan x="24.495" y="43">LOGIN WITH </tspan><tspan x="30.496" y="56">METAMASK</tspan>
+            <tspan x="24.495" y="43">LOGIN WITH </tspan><tspan x="30.496" y="56">TAQUIN</tspan>
         </text>
     </g>
 </svg>

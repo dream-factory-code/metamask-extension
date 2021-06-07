@@ -1,6 +1,6 @@
 # Using the TREZOR simulator
 
-You can install the TREZOR emulator and use it with Metamask. 
+You can install the TREZOR emulator and use it with Taquin.
 Here is how:
 
 ## 1 - Install the TREZOR Bridge
@@ -13,13 +13,13 @@ Follow this instructions: https://github.com/trezor/trezor-core/blob/master/docs
 
 ## 3 - Restart the bridge with emulator support (Mac OSx instructions)
 
-`
-    # stop any existing instance of trezord
-    killall trezord
+` # stop any existing instance of trezord
+killall trezord
 
     # start the bridge for the simulator
     /Applications/Utilities/TREZOR\ Bridge/trezord -e 21324 >> /dev/null 2>&1 &
 
     # launch the emulator
     ~/trezor-core/emu.sh
+
 `

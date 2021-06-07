@@ -76,7 +76,7 @@ export default class Routes extends Component {
     setLastActiveTime: PropTypes.func,
     history: PropTypes.object,
     location: PropTypes.object,
-    lockMetaMask: PropTypes.func,
+    lockTaquin: PropTypes.func,
     submittedPendingTransactions: PropTypes.array,
     isMouseUser: PropTypes.bool,
     setMouseUserState: PropTypes.func,
@@ -92,11 +92,8 @@ export default class Routes extends Component {
   };
 
   UNSAFE_componentWillMount() {
-    const {
-      currentCurrency,
-      pageChanged,
-      setCurrentCurrencyToUSD,
-    } = this.props;
+    const { currentCurrency, pageChanged, setCurrentCurrencyToUSD } =
+      this.props;
 
     if (!currentCurrency) {
       setCurrentCurrencyToUSD();
@@ -321,10 +318,10 @@ export default class Routes extends Component {
     );
   }
 
-  toggleMetamaskActive() {
+  toggleTaquinActive() {
     if (this.props.isUnlocked) {
       // currently active: deactivate
-      this.props.lockMetaMask();
+      this.props.lockTaquin();
     } else {
       // currently inactive: redirect to password box
       const passwordBox = document.querySelector("input[type=password]");

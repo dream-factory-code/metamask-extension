@@ -198,7 +198,7 @@ export default class PreferencesController {
    */
   async requestWatchAsset(req, res, next, end) {
     if (
-      req.method === "metamask_watchAsset" ||
+      req.method === "taquin_watchAsset" ||
       req.method === addInternalMethodPrefix("watchAsset")
     ) {
       const { type, options } = req.params;
@@ -699,11 +699,8 @@ export default class PreferencesController {
    *
    */
   _updateAccountTokens(tokens, assetImages) {
-    const {
-      accountTokens,
-      providerType,
-      selectedAddress,
-    } = this._getTokenRelatedStates();
+    const { accountTokens, providerType, selectedAddress } =
+      this._getTokenRelatedStates();
     accountTokens[selectedAddress][providerType] = tokens;
     this.store.updateState({ accountTokens, tokens, assetImages });
   }

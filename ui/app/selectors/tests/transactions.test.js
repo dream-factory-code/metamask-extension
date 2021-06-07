@@ -1,4 +1,4 @@
-import { strict as assert } from 'assert'
+import { strict as assert } from "assert";
 import {
   unapprovedMessagesSelector,
   transactionsSelector,
@@ -6,184 +6,174 @@ import {
   nonceSortedPendingTransactionsSelector,
   nonceSortedCompletedTransactionsSelector,
   submittedPendingTransactionsSelector,
-} from '../transactions'
+} from "../transactions";
 
-describe('Transaction Selectors', function () {
-
-  describe('unapprovedMessagesSelector', function () {
-
-    it('returns eth sign msg from unapprovedMsgs', function () {
-
+describe("Transaction Selectors", function () {
+  describe("unapprovedMessagesSelector", function () {
+    it("returns eth sign msg from unapprovedMsgs", function () {
       const msg = {
         id: 1,
         msgParams: {
-          from: '0xAddress',
-          data: '0xData',
-          origin: 'origin',
+          from: "0xAddress",
+          data: "0xData",
+          origin: "origin",
         },
         time: 1,
-        status: 'unapproved',
-        type: 'eth_sign',
-      }
+        status: "unapproved",
+        type: "eth_sign",
+      };
 
       const state = {
-        metamask: {
+        taquin: {
           unapprovedMsgs: {
             1: msg,
           },
         },
-      }
+      };
 
-      const msgSelector = unapprovedMessagesSelector(state)
+      const msgSelector = unapprovedMessagesSelector(state);
 
-      assert(Array.isArray(msgSelector))
-      assert.deepEqual(msgSelector, [msg])
-    })
+      assert(Array.isArray(msgSelector));
+      assert.deepEqual(msgSelector, [msg]);
+    });
 
-    it('returns personal sign from unapprovedPersonalMsgsSelector', function () {
-
+    it("returns personal sign from unapprovedPersonalMsgsSelector", function () {
       const msg = {
         id: 1,
         msgParams: {
-          from: '0xAddress',
-          data: '0xData',
-          origin: 'origin',
+          from: "0xAddress",
+          data: "0xData",
+          origin: "origin",
         },
         time: 1,
-        status: 'unapproved',
-        type: 'personal_sign',
-      }
+        status: "unapproved",
+        type: "personal_sign",
+      };
 
       const state = {
-        metamask: {
+        taquin: {
           unapprovedPersonalMsgs: {
             1: msg,
           },
         },
-      }
+      };
 
-      const msgSelector = unapprovedMessagesSelector(state)
+      const msgSelector = unapprovedMessagesSelector(state);
 
-      assert(Array.isArray(msgSelector))
-      assert.deepEqual(msgSelector, [msg])
-    })
+      assert(Array.isArray(msgSelector));
+      assert.deepEqual(msgSelector, [msg]);
+    });
 
-    it('returns typed message from unapprovedTypedMessagesSelector', function () {
-
+    it("returns typed message from unapprovedTypedMessagesSelector", function () {
       const msg = {
         id: 1,
         msgParams: {
-          data: '0xData',
-          from: '0xAddress',
-          version: 'V3',
-          origin: 'origin',
+          data: "0xData",
+          from: "0xAddress",
+          version: "V3",
+          origin: "origin",
         },
         time: 1,
-        status: 'unapproved',
-        type: 'eth_signTypedData',
-      }
+        status: "unapproved",
+        type: "eth_signTypedData",
+      };
 
       const state = {
-        metamask: {
+        taquin: {
           unapprovedTypedMessages: {
             1: msg,
           },
         },
-      }
+      };
 
-      const msgSelector = unapprovedMessagesSelector(state)
+      const msgSelector = unapprovedMessagesSelector(state);
 
-      assert(Array.isArray(msgSelector))
-      assert.deepEqual(msgSelector, [msg])
-    })
-  })
+      assert(Array.isArray(msgSelector));
+      assert.deepEqual(msgSelector, [msg]);
+    });
+  });
 
-  describe('transactionsSelector', function () {
-
-    it('selects the currentNetworkTxList', function () {
-
+  describe("transactionsSelector", function () {
+    it("selects the currentNetworkTxList", function () {
       const state = {
-        metamask: {
+        taquin: {
           provider: {
-            nickname: 'mainnet',
+            nickname: "mainnet",
           },
           featureFlags: {
             showIncomingTransactions: false,
           },
-          selectedAddress: '0xAddress',
+          selectedAddress: "0xAddress",
           currentNetworkTxList: [
             {
               id: 0,
               time: 0,
               txParams: {
-                from: '0xAddress',
-                to: '0xRecipient',
+                from: "0xAddress",
+                to: "0xRecipient",
               },
             },
             {
               id: 1,
               time: 1,
               txParams: {
-                from: '0xAddress',
-                to: '0xRecipient',
+                from: "0xAddress",
+                to: "0xRecipient",
               },
             },
           ],
         },
-      }
+      };
 
-      const orderedTxList = state.metamask.currentNetworkTxList.sort((a, b) => b.time - a.time)
+      const orderedTxList = state.taquin.currentNetworkTxList.sort(
+        (a, b) => b.time - a.time
+      );
 
-      const selectedTx = transactionsSelector(state)
+      const selectedTx = transactionsSelector(state);
 
-      assert(Array.isArray(selectedTx))
-      assert.deepEqual(selectedTx, orderedTxList)
-    })
-  })
+      assert(Array.isArray(selectedTx));
+      assert.deepEqual(selectedTx, orderedTxList);
+    });
+  });
 
-  describe('nonceSortedTransactionsSelector', function () {
-
-    it('returns transaction group nonce sorted tx from from selectedTxList wit', function () {
-
+  describe("nonceSortedTransactionsSelector", function () {
+    it("returns transaction group nonce sorted tx from from selectedTxList wit", function () {
       const tx1 = {
         id: 0,
         time: 0,
         txParams: {
-          from: '0xAddress',
-          to: '0xRecipient',
-          nonce: '0x0',
+          from: "0xAddress",
+          to: "0xRecipient",
+          nonce: "0x0",
         },
-      }
+      };
 
       const tx2 = {
         id: 1,
         time: 1,
         txParams: {
-          from: '0xAddress',
-          to: '0xRecipient',
-          nonce: '0x1',
+          from: "0xAddress",
+          to: "0xRecipient",
+          nonce: "0x1",
         },
-      }
+      };
 
       const state = {
-        metamask: {
+        taquin: {
           provider: {
-            nickname: 'mainnet',
+            nickname: "mainnet",
           },
-          selectedAddress: '0xAddress',
+          selectedAddress: "0xAddress",
           featureFlags: {
             showIncomingTransactions: false,
           },
-          currentNetworkTxList: [
-            tx1,
-            tx2,
-          ],
+          currentNetworkTxList: [tx1, tx2],
         },
-      }
+      };
 
       const expectedResult = [
         {
-          nonce: '0x0',
+          nonce: "0x0",
           transactions: [tx1],
           initialTransaction: tx1,
           primaryTransaction: tx1,
@@ -191,71 +181,70 @@ describe('Transaction Selectors', function () {
           hasCancelled: false,
         },
         {
-          nonce: '0x1',
+          nonce: "0x1",
           transactions: [tx2],
           initialTransaction: tx2,
           primaryTransaction: tx2,
           hasRetried: false,
           hasCancelled: false,
         },
-      ]
+      ];
 
-      assert.deepEqual(nonceSortedTransactionsSelector(state), expectedResult)
-    })
-  })
+      assert.deepEqual(nonceSortedTransactionsSelector(state), expectedResult);
+    });
+  });
 
-  describe('Sorting Transactions Selectors', function () {
-
+  describe("Sorting Transactions Selectors", function () {
     const submittedTx = {
       id: 0,
       time: 0,
       txParams: {
-        from: '0xAddress',
-        to: '0xRecipient',
-        nonce: '0x0',
+        from: "0xAddress",
+        to: "0xRecipient",
+        nonce: "0x0",
       },
-      status: 'submitted',
-    }
+      status: "submitted",
+    };
 
     const unapprovedTx = {
       id: 1,
       time: 1,
       txParams: {
-        from: '0xAddress',
-        to: '0xRecipient',
-        nonce: '0x1',
+        from: "0xAddress",
+        to: "0xRecipient",
+        nonce: "0x1",
       },
-      status: 'unapproved',
-    }
+      status: "unapproved",
+    };
 
     const approvedTx = {
       id: 2,
       time: 2,
       txParams: {
-        from: '0xAddress',
-        to: '0xRecipient',
-        nonce: '0x2',
+        from: "0xAddress",
+        to: "0xRecipient",
+        nonce: "0x2",
       },
-      status: 'approved',
-    }
+      status: "approved",
+    };
 
     const confirmedTx = {
       id: 3,
       time: 3,
       txParams: {
-        from: '0xAddress',
-        to: '0xRecipient',
-        nonce: '0x3',
+        from: "0xAddress",
+        to: "0xRecipient",
+        nonce: "0x3",
       },
-      status: 'confirmed',
-    }
+      status: "confirmed",
+    };
 
     const state = {
-      metamask: {
+      taquin: {
         provider: {
-          nickname: 'mainnet',
+          nickname: "mainnet",
         },
-        selectedAddress: '0xAddress',
+        selectedAddress: "0xAddress",
         featureFlags: {
           showIncomingTransactions: false,
         },
@@ -266,10 +255,9 @@ describe('Transaction Selectors', function () {
           confirmedTx,
         ],
       },
-    }
+    };
 
-    it('nonceSortedPendingTransactionsSelector', function () {
-
+    it("nonceSortedPendingTransactionsSelector", function () {
       const expectedResult = [
         {
           nonce: submittedTx.txParams.nonce,
@@ -295,13 +283,15 @@ describe('Transaction Selectors', function () {
           hasRetried: false,
           hasCancelled: false,
         },
-      ]
+      ];
 
-      assert.deepEqual(nonceSortedPendingTransactionsSelector(state), expectedResult)
-    })
+      assert.deepEqual(
+        nonceSortedPendingTransactionsSelector(state),
+        expectedResult
+      );
+    });
 
-    it('nonceSortedCompletedTransactionsSelector', function () {
-
+    it("nonceSortedCompletedTransactionsSelector", function () {
       const expectedResult = [
         {
           nonce: confirmedTx.txParams.nonce,
@@ -311,15 +301,20 @@ describe('Transaction Selectors', function () {
           hasRetried: false,
           hasCancelled: false,
         },
-      ]
+      ];
 
-      assert.deepEqual(nonceSortedCompletedTransactionsSelector(state), expectedResult)
-    })
+      assert.deepEqual(
+        nonceSortedCompletedTransactionsSelector(state),
+        expectedResult
+      );
+    });
 
-    it('submittedPendingTransactionsSelector', function () {
-
-      const expectedResult = [submittedTx]
-      assert.deepEqual(submittedPendingTransactionsSelector(state), expectedResult)
-    })
-  })
-})
+    it("submittedPendingTransactionsSelector", function () {
+      const expectedResult = [submittedTx];
+      assert.deepEqual(
+        submittedPendingTransactionsSelector(state),
+        expectedResult
+      );
+    });
+  });
+});

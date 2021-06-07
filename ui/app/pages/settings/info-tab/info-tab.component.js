@@ -20,7 +20,7 @@ export default class InfoTab extends PureComponent {
         {/* <div className="info-tab__link-item">
           <Button
             type="link"
-            href="https://metamask.io/privacy.html"
+            href="https://taquin.io/privacy.html"
             target="_blank"
             rel="noopener noreferrer"
             className="info-tab__link-text"
@@ -31,7 +31,7 @@ export default class InfoTab extends PureComponent {
         <div className="info-tab__link-item">
           <Button
             type="link"
-            href="https://metamask.io/terms.html"
+            href="https://taquin.io/terms.html"
             target="_blank"
             rel="noopener noreferrer"
             className="info-tab__link-text"
@@ -42,7 +42,7 @@ export default class InfoTab extends PureComponent {
         <div className="info-tab__link-item">
           <Button
             type="link"
-            href="https://metamask.io/attributions.html"
+            href="https://taquin.io/attributions.html"
             target="_blank"
             rel="noopener noreferrer"
             className="info-tab__link-text"
@@ -54,7 +54,7 @@ export default class InfoTab extends PureComponent {
         <div className="info-tab__link-item">
           <Button
             type="link"
-            href="https://support.metamask.io"
+            href="https://support.taquin.io"
             target="_blank"
             rel="noopener noreferrer"
             className="info-tab__link-text"

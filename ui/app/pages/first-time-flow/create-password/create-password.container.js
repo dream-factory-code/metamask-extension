@@ -1,12 +1,14 @@
-import { connect } from 'react-redux'
-import CreatePassword from './create-password.component'
+import { connect } from "react-redux";
+import CreatePassword from "./create-password.component";
 
 const mapStateToProps = (state) => {
-  const { metamask: { isInitialized } } = state
+  const {
+    taquin: { isInitialized },
+  } = state;
 
   return {
     isInitialized,
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps)(CreatePassword)
+export default connect(mapStateToProps)(CreatePassword);

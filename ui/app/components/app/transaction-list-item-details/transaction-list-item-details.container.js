@@ -8,8 +8,8 @@ import {
 import TransactionListItemDetails from "./transaction-list-item-details.component";
 
 const mapStateToProps = (state, ownProps) => {
-  const { metamask } = state;
-  const { ensResolutionsByAddress } = metamask;
+  const { taquin } = state;
+  const { ensResolutionsByAddress } = taquin;
   const { recipientAddress, senderAddress } = ownProps;
   let recipientEns;
   // if (recipientAddress) {

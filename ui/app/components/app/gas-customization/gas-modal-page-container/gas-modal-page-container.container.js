@@ -63,7 +63,7 @@ import { calcMaxAmount } from "../../../../pages/send/send-content/send-amount-r
 import GasModalPageContainer from "./gas-modal-page-container.component";
 
 const mapStateToProps = (state, ownProps) => {
-  const { currentNetworkTxList, send } = state.metamask;
+  const { currentNetworkTxList, send } = state.taquin;
   const { modalState: { props: modalProps } = {} } = state.appState.modal || {};
   const { txData = {} } = modalProps || {};
   const { transaction = {} } = ownProps;

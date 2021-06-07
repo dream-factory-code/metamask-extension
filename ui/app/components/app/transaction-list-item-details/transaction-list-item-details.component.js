@@ -50,7 +50,7 @@ export default class TransactionListItemDetails extends PureComponent {
       transactionGroup: { primaryTransaction },
       // rpcPrefs,
     } = this.props;
-    const { hash, metamaskNetworkId } = primaryTransaction;
+    const { hash, taquinNetworkId } = primaryTransaction;
 
     this.context.metricsEvent({
       eventOpts: {
@@ -61,7 +61,7 @@ export default class TransactionListItemDetails extends PureComponent {
     });
 
     global.platform.openTab({
-      url: getBlockExplorerUrlForTx(metamaskNetworkId, hash, rpcPrefs),
+      url: getBlockExplorerUrlForTx(taquinNetworkId, hash, rpcPrefs),
     });
   };
 

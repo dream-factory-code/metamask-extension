@@ -1,12 +1,12 @@
-import EventEmitter from 'events'
-import ObservableStore from 'obs-store'
-import ethUtil from 'ethereumjs-util'
-import { ethErrors } from 'eth-json-rpc-errors'
-import log from 'loglevel'
-import createId from './random-id'
-import { MESSAGE_TYPE } from './enums'
+import EventEmitter from "events";
+import ObservableStore from "obs-store";
+import ethUtil from "ethereumjs-util";
+import { ethErrors } from "eth-json-rpc-errors";
+import log from "loglevel";
+import createId from "./random-id";
+import { MESSAGE_TYPE } from "./enums";
 
-const hexRe = /^[0-9A-Fa-f]+$/ug
+const hexRe = /^[0-9A-Fa-f]+$/gu;
 
 /**
  * Represents, and contains data about, an 'personal_sign' type signature request. These are created when a
@@ -18,7 +18,7 @@ const hexRe = /^[0-9A-Fa-f]+$/ug
  * @property {number} id An id to track and identify the message object
  * @property {Object} msgParams The parameters to pass to the personal_sign method once the signature request is
  * approved.
- * @property {Object} msgParams.metamaskId Added to msgParams for tracking and identification within MetaMask.
+ * @property {Object} msgParams.taquinId Added to msgParams for tracking and identification within Taquin.
  * @property {string} msgParams.data A hex string conversion of the raw buffer data of the signature request
  * @property {number} time The epoch time at which the this message was created
  * @property {string} status Indicates whether the signature request is 'unapproved', 'approved', 'signed' or 'rejected'
@@ -28,7 +28,6 @@ const hexRe = /^[0-9A-Fa-f]+$/ug
  */
 
 export default class PersonalMessageManager extends EventEmitter {
-
   /**
    * Controller in charge of managing - storing, adding, removing, updating - PersonalMessage.
    *
@@ -40,13 +39,13 @@ export default class PersonalMessageManager extends EventEmitter {
    * @property {array} messages Holds all messages that have been created by this PersonalMessageManager
    *
    */
-  constructor () {
-    super()
+  constructor() {
+    super();
     this.memStore = new ObservableStore({
       unapprovedPersonalMsgs: {},
       unapprovedPersonalMsgCount: 0,
-    })
-    this.messages = []
+    });
+    this.messages = [];
   }
 
   /**
@@ -55,8 +54,8 @@ export default class PersonalMessageManager extends EventEmitter {
    * @returns {number} - The number of 'unapproved' PersonalMessages in this.messages
    *
    */
-  get unapprovedPersonalMsgCount () {
-    return Object.keys(this.getUnapprovedMsgs()).length
+  get unapprovedPersonalMsgCount() {
+    return Object.keys(this.getUnapprovedMsgs()).length;
   }
 
   /**
@@ -66,12 +65,13 @@ export default class PersonalMessageManager extends EventEmitter {
    * this.messages
    *
    */
-  getUnapprovedMsgs () {
-    return this.messages.filter((msg) => msg.status === 'unapproved')
+  getUnapprovedMsgs() {
+    return this.messages
+      .filter((msg) => msg.status === "unapproved")
       .reduce((result, msg) => {
-        result[msg.id] = msg
-        return result
-      }, {})
+        result[msg.id] = msg;
+        return result;
+      }, {});
   }
 
   /**
@@ -84,26 +84,36 @@ export default class PersonalMessageManager extends EventEmitter {
    * @returns {promise} - When the message has been signed or rejected
    *
    */
-  addUnapprovedMessageAsync (msgParams, req) {
+  addUnapprovedMessageAsync(msgParams, req) {
     return new Promise((resolve, reject) => {
       if (!msgParams.from) {
-        reject(new Error('MetaMask Message Signature: from field is required.'))
-        return
+        reject(new Error("Taquin Message Signature: from field is required."));
+        return;
       }
-      const msgId = this.addUnapprovedMessage(msgParams, req)
+      const msgId = this.addUnapprovedMessage(msgParams, req);
       this.once(`${msgId}:finished`, (data) => {
         switch (data.status) {
-          case 'signed':
-            resolve(data.rawSig)
-            return
-          case 'rejected':
-            reject(ethErrors.provider.userRejectedRequest('MetaMask Message Signature: User denied message signature.'))
-            return
+          case "signed":
+            resolve(data.rawSig);
+            return;
+          case "rejected":
+            reject(
+              ethErrors.provider.userRejectedRequest(
+                "Taquin Message Signature: User denied message signature."
+              )
+            );
+            return;
           default:
-            reject(new Error(`MetaMask Message Signature: Unknown problem: ${JSON.stringify(msgParams)}`))
+            reject(
+              new Error(
+                `Taquin Message Signature: Unknown problem: ${JSON.stringify(
+                  msgParams
+                )}`
+              )
+            );
         }
-      })
-    })
+      });
+    });
   }
 
   /**
@@ -116,28 +126,32 @@ export default class PersonalMessageManager extends EventEmitter {
    * @returns {number} - The id of the newly created PersonalMessage.
    *
    */
-  addUnapprovedMessage (msgParams, req) {
-    log.debug(`PersonalMessageManager addUnapprovedMessage: ${JSON.stringify(msgParams)}`)
+  addUnapprovedMessage(msgParams, req) {
+    log.debug(
+      `PersonalMessageManager addUnapprovedMessage: ${JSON.stringify(
+        msgParams
+      )}`
+    );
     // add origin from request
     if (req) {
-      msgParams.origin = req.origin
+      msgParams.origin = req.origin;
     }
-    msgParams.data = this.normalizeMsgData(msgParams.data)
+    msgParams.data = this.normalizeMsgData(msgParams.data);
     // create txData obj with parameters and meta data
-    const time = (new Date()).getTime()
-    const msgId = createId()
+    const time = new Date().getTime();
+    const msgId = createId();
     const msgData = {
       id: msgId,
       msgParams,
       time,
-      status: 'unapproved',
+      status: "unapproved",
       type: MESSAGE_TYPE.PERSONAL_SIGN,
-    }
-    this.addMsg(msgData)
+    };
+    this.addMsg(msgData);
 
     // signal update
-    this.emit('update')
-    return msgId
+    this.emit("update");
+    return msgId;
   }
 
   /**
@@ -147,9 +161,9 @@ export default class PersonalMessageManager extends EventEmitter {
    * @param {Message} msg - The PersonalMessage to add to this.messages
    *
    */
-  addMsg (msg) {
-    this.messages.push(msg)
-    this._saveMsgList()
+  addMsg(msg) {
+    this.messages.push(msg);
+    this._saveMsgList();
   }
 
   /**
@@ -160,22 +174,22 @@ export default class PersonalMessageManager extends EventEmitter {
    * if no PersonalMessage has that id.
    *
    */
-  getMsg (msgId) {
-    return this.messages.find((msg) => msg.id === msgId)
+  getMsg(msgId) {
+    return this.messages.find((msg) => msg.id === msgId);
   }
 
   /**
    * Approves a PersonalMessage. Sets the message status via a call to this.setMsgStatusApproved, and returns a promise
    * with any the message params modified for proper signing.
    *
-   * @param {Object} msgParams - The msgParams to be used when eth_sign is called, plus data added by MetaMask.
-   * @param {Object} msgParams.metamaskId Added to msgParams for tracking and identification within MetaMask.
-   * @returns {Promise<object>} - Promises the msgParams object with metamaskId removed.
+   * @param {Object} msgParams - The msgParams to be used when eth_sign is called, plus data added by Taquin.
+   * @param {Object} msgParams.taquinId Added to msgParams for tracking and identification within Taquin.
+   * @returns {Promise<object>} - Promises the msgParams object with taquinId removed.
    *
    */
-  approveMessage (msgParams) {
-    this.setMsgStatusApproved(msgParams.metamaskId)
-    return this.prepMsgForSigning(msgParams)
+  approveMessage(msgParams) {
+    this.setMsgStatusApproved(msgParams.taquinId);
+    return this.prepMsgForSigning(msgParams);
   }
 
   /**
@@ -184,8 +198,8 @@ export default class PersonalMessageManager extends EventEmitter {
    * @param {number} msgId - The id of the PersonalMessage to approve.
    *
    */
-  setMsgStatusApproved (msgId) {
-    this._setMsgStatus(msgId, 'approved')
+  setMsgStatusApproved(msgId) {
+    this._setMsgStatus(msgId, "approved");
   }
 
   /**
@@ -196,23 +210,23 @@ export default class PersonalMessageManager extends EventEmitter {
    * @param {buffer} rawSig - The raw data of the signature request
    *
    */
-  setMsgStatusSigned (msgId, rawSig) {
-    const msg = this.getMsg(msgId)
-    msg.rawSig = rawSig
-    this._updateMsg(msg)
-    this._setMsgStatus(msgId, 'signed')
+  setMsgStatusSigned(msgId, rawSig) {
+    const msg = this.getMsg(msgId);
+    msg.rawSig = rawSig;
+    this._updateMsg(msg);
+    this._setMsgStatus(msgId, "signed");
   }
 
   /**
-   * Removes the metamaskId property from passed msgParams and returns a promise which resolves the updated msgParams
+   * Removes the taquinId property from passed msgParams and returns a promise which resolves the updated msgParams
    *
    * @param {Object} msgParams - The msgParams to modify
-   * @returns {Promise<object>} - Promises the msgParams with the metamaskId property removed
+   * @returns {Promise<object>} - Promises the msgParams with the taquinId property removed
    *
    */
-  prepMsgForSigning (msgParams) {
-    delete msgParams.metamaskId
-    return Promise.resolve(msgParams)
+  prepMsgForSigning(msgParams) {
+    delete msgParams.taquinId;
+    return Promise.resolve(msgParams);
   }
 
   /**
@@ -221,8 +235,8 @@ export default class PersonalMessageManager extends EventEmitter {
    * @param {number} msgId - The id of the PersonalMessage to reject.
    *
    */
-  rejectMsg (msgId) {
-    this._setMsgStatus(msgId, 'rejected')
+  rejectMsg(msgId) {
+    this._setMsgStatus(msgId, "rejected");
   }
 
   /**
@@ -238,16 +252,18 @@ export default class PersonalMessageManager extends EventEmitter {
    * with the PersonalMessage
    *
    */
-  _setMsgStatus (msgId, status) {
-    const msg = this.getMsg(msgId)
+  _setMsgStatus(msgId, status) {
+    const msg = this.getMsg(msgId);
     if (!msg) {
-      throw new Error(`PersonalMessageManager - Message not found for id: "${msgId}".`)
+      throw new Error(
+        `PersonalMessageManager - Message not found for id: "${msgId}".`
+      );
     }
-    msg.status = status
-    this._updateMsg(msg)
-    this.emit(`${msgId}:${status}`, msg)
-    if (status === 'rejected' || status === 'signed') {
-      this.emit(`${msgId}:finished`, msg)
+    msg.status = status;
+    this._updateMsg(msg);
+    this.emit(`${msgId}:${status}`, msg);
+    if (status === "rejected" || status === "signed") {
+      this.emit(`${msgId}:finished`, msg);
     }
   }
 
@@ -260,12 +276,12 @@ export default class PersonalMessageManager extends EventEmitter {
    * id) in this.messages
    *
    */
-  _updateMsg (msg) {
-    const index = this.messages.findIndex((message) => message.id === msg.id)
+  _updateMsg(msg) {
+    const index = this.messages.findIndex((message) => message.id === msg.id);
     if (index !== -1) {
-      this.messages[index] = msg
+      this.messages[index] = msg;
     }
-    this._saveMsgList()
+    this._saveMsgList();
   }
 
   /**
@@ -275,11 +291,16 @@ export default class PersonalMessageManager extends EventEmitter {
    * @fires 'updateBadge'
    *
    */
-  _saveMsgList () {
-    const unapprovedPersonalMsgs = this.getUnapprovedMsgs()
-    const unapprovedPersonalMsgCount = Object.keys(unapprovedPersonalMsgs).length
-    this.memStore.updateState({ unapprovedPersonalMsgs, unapprovedPersonalMsgCount })
-    this.emit('updateBadge')
+  _saveMsgList() {
+    const unapprovedPersonalMsgs = this.getUnapprovedMsgs();
+    const unapprovedPersonalMsgCount = Object.keys(
+      unapprovedPersonalMsgs
+    ).length;
+    this.memStore.updateState({
+      unapprovedPersonalMsgs,
+      unapprovedPersonalMsgCount,
+    });
+    this.emit("updateBadge");
   }
 
   /**
@@ -289,17 +310,16 @@ export default class PersonalMessageManager extends EventEmitter {
    * @returns {string} - A hex string conversion of the buffer data
    *
    */
-  normalizeMsgData (data) {
+  normalizeMsgData(data) {
     try {
-      const stripped = ethUtil.stripHexPrefix(data)
+      const stripped = ethUtil.stripHexPrefix(data);
       if (stripped.match(hexRe)) {
-        return ethUtil.addHexPrefix(stripped)
+        return ethUtil.addHexPrefix(stripped);
       }
     } catch (e) {
-      log.debug(`Message was not hex encoded, interpreting as utf8.`)
+      log.debug(`Message was not hex encoded, interpreting as utf8.`);
     }
 
-    return ethUtil.bufferToHex(Buffer.from(data, 'utf8'))
+    return ethUtil.bufferToHex(Buffer.from(data, "utf8"));
   }
-
 }

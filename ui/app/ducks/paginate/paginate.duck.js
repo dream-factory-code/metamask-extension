@@ -1,5 +1,5 @@
 // Actions
-const PAGINATE = "metamask/transactionPagination/TX_PAGE_CHANGE";
+const PAGINATE = "taquin/transactionPagination/TX_PAGE_CHANGE";
 
 const initState = {
   transactionPagination: {

@@ -37,7 +37,7 @@ const MAX_MEMSTORE_TX_LIST_SIZE = 100; // Number of transactions (by unique nonc
 
 /**
   Transaction Controller is an aggregate of sub-controllers and trackers
-  composing them in a way to be exposed to the metamask controller
+  composing them in a way to be exposed to the taquin controller
     <br>- txStateManager
       responsible for the state of a transaction and
       storing the transaction
@@ -100,9 +100,8 @@ export default class TransactionController extends EventEmitter {
       getPendingTransactions: this.txStateManager.getPendingTransactions.bind(
         this.txStateManager
       ),
-      getConfirmedTransactions: this.txStateManager.getConfirmedTransactions.bind(
-        this.txStateManager
-      ),
+      getConfirmedTransactions:
+        this.txStateManager.getConfirmedTransactions.bind(this.txStateManager),
       web3: this.web3,
     });
 
@@ -116,9 +115,8 @@ export default class TransactionController extends EventEmitter {
         return [...pending, ...approved];
       },
       approveTransaction: this.sendSignedTx.bind(this), // this.approveTransaction.bind(this),
-      getCompletedTransactions: this.txStateManager.getConfirmedTransactions.bind(
-        this.txStateManager
-      ),
+      getCompletedTransactions:
+        this.txStateManager.getConfirmedTransactions.bind(this.txStateManager),
     });
 
     this.txStateManager.store.subscribe(() => this.emit("update:badge"));
@@ -177,7 +175,7 @@ export default class TransactionController extends EventEmitter {
    */
   async newUnapprovedTransaction(txParams, opts = {}) {
     log.debug(
-      `MetaMaskController newUnapprovedTransaction ${JSON.stringify(txParams)}`
+      `TaquinController newUnapprovedTransaction ${JSON.stringify(txParams)}`
     );
     const initialTxMeta = await this.addUnapprovedTransaction(
       txParams,
@@ -196,7 +194,7 @@ export default class TransactionController extends EventEmitter {
               return reject(
                 cleanErrorStack(
                   ethErrors.provider.userRejectedRequest(
-                    "MetaMask Tx Signature: User denied transaction signature."
+                    "Taquin Tx Signature: User denied transaction signature."
                   )
                 )
               );
@@ -210,7 +208,7 @@ export default class TransactionController extends EventEmitter {
               return reject(
                 cleanErrorStack(
                   ethErrors.rpc.internal(
-                    `MetaMask Tx Signature: Unknown problem: ${JSON.stringify(
+                    `Taquin Tx Signature: Unknown problem: ${JSON.stringify(
                       finishedTxMeta.txParams
                     )}`
                   )
@@ -245,7 +243,7 @@ export default class TransactionController extends EventEmitter {
       type: TRANSACTION_TYPE_STANDARD,
     });
 
-    // if (origin === "metamask") {
+    // if (origin === "taquin") {
     //   // Assert the from address is the selected address
     //   if (normalizedTxParams.from !== this.getSelectedAddress()) {
     //     throw ethErrors.rpc.internal({
@@ -268,10 +266,8 @@ export default class TransactionController extends EventEmitter {
 
     txMeta.origin = origin;
 
-    const {
-      transactionCategory,
-      getCodeResponse,
-    } = await this._determineTransactionCategory(txParams);
+    const { transactionCategory, getCodeResponse } =
+      await this._determineTransactionCategory(txParams);
     txMeta.transactionCategory = transactionCategory;
 
     // ensure value
@@ -365,11 +361,8 @@ export default class TransactionController extends EventEmitter {
       return { gasLimit: SIMPLE_GAS_COST };
     }
 
-    const {
-      blockGasLimit,
-      estimatedGasHex,
-      simulationFails,
-    } = await this.txGasUtil.analyzeGasUsage(txMeta);
+    const { blockGasLimit, estimatedGasHex, simulationFails } =
+      await this.txGasUtil.analyzeGasUsage(txMeta);
 
     // add additional gas buffer to our estimation for safety
     const gasLimit = this.txGasUtil.addGasBuffer(
@@ -599,7 +592,7 @@ export default class TransactionController extends EventEmitter {
     const fromAddress = txParams.from;
     const ethTx = new Transaction(txParams);
     await this.signEthTx(ethTx, fromAddress);
-    // add r,s,v values for provider request purposes see createMetamaskMiddleware
+    // add r,s,v values for provider request purposes see createTaquinMiddleware
     // and JSON rpc standard for further explanation
     txMeta.r = ethUtil.bufferToHex(ethTx.r);
     txMeta.s = ethUtil.bufferToHex(ethTx.s);

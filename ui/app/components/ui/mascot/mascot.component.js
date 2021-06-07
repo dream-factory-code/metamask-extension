@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { createRef, Component } from "react";
-import MetaMaskLogo from "@metamask/logo";
+import TaquinLogo from "@metamask/logo";
 import { debounce } from "lodash";
 
 const directionTargetGenerator = ({ top, left, height, width }) => {
@@ -38,7 +38,7 @@ export default class Mascot extends Component {
 
     const { width, height, followMouse } = props;
 
-    // this.logo = MetaMaskLogo({
+    // this.logo = TaquinLogo({
     //   followMouse,
     //   pxNotRatio: true,
     //   width,

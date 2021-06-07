@@ -259,7 +259,7 @@ export default class AccountTracker {
     ethContract.balances(addresses, ethBalance, (error, result) => {
       if (error) {
         log.warn(
-          `MetaMask - Account Tracker single call balance fetch failed`,
+          `Taquin - Account Tracker single call balance fetch failed`,
           error
         );
         Promise.all(addresses.map(this._updateAccount.bind(this)));

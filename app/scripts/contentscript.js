@@ -21,7 +21,7 @@ const inpageBundle = inpageContent + inpageSuffix;
 //
 // But for now that is only Firefox
 // If we create a FireFox-only code path using that API,
-// MetaMask will be much faster loading and performant on Firefox.
+// Taquin will be much faster loading and performant on Firefox.
 
 if (shouldInjectProvider()) {
   injectScript(inpageBundle);
@@ -77,10 +77,10 @@ async function setupStreams() {
   extensionMux.setMaxListeners(25);
 
   pump(pageMux, pageStream, pageMux, (err) =>
-    logStreamDisconnectWarning("MetaMask Inpage Multiplex", err)
+    logStreamDisconnectWarning("Taquin Inpage Multiplex", err)
   );
   pump(extensionMux, extensionStream, extensionMux, (err) =>
-    logStreamDisconnectWarning("MetaMask Background Multiplex", err)
+    logStreamDisconnectWarning("Taquin Background Multiplex", err)
   );
 
   // forward communication across inpage-background for these channels only
@@ -97,7 +97,7 @@ function forwardTrafficBetweenMuxers(channelName, muxA, muxB) {
   const channelB = muxB.createStream(channelName);
   pump(channelA, channelB, channelA, (err) =>
     logStreamDisconnectWarning(
-      `MetaMask muxed traffic for channel "${channelName}" failed.`,
+      `Taquin muxed traffic for channel "${channelName}" failed.`,
       err
     )
   );
@@ -110,7 +110,7 @@ function forwardTrafficBetweenMuxers(channelName, muxA, muxB) {
  * @param {Error} err - Stream connection error
  */
 function logStreamDisconnectWarning(remoteLabel, err) {
-  let warningMsg = `MetamaskContentscript - lost connection to ${remoteLabel}`;
+  let warningMsg = `TaquinContentscript - lost connection to ${remoteLabel}`;
   if (err) {
     warningMsg += `\n${err.stack}`;
   }

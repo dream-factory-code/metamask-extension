@@ -22,11 +22,8 @@ export default class EndOfFlowScreen extends PureComponent {
   };
 
   onComplete = async () => {
-    const {
-      history,
-      completionMetaMetricsName,
-      onboardingInitiator,
-    } = this.props;
+    const { history, completionMetaMetricsName, onboardingInitiator } =
+      this.props;
 
     this.context.metricsEvent({
       eventOpts: {
@@ -75,7 +72,7 @@ export default class EndOfFlowScreen extends PureComponent {
         {/* <div className="first-time-flow__text-block end-of-flow__text-4">
           { `*${t('endOfFlowMessage8')}` }&nbsp;
           <a
-            href="https://metamask.zendesk.com/hc/en-us/articles/360015489591-Basic-Safety-Tips"
+            href="https://taquin.zendesk.com/hc/en-us/articles/360015489591-Basic-Safety-Tips"
             target="_blank"
             rel="noopener noreferrer"
           >

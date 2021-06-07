@@ -36,7 +36,7 @@ import {
 } from "../../store/actions";
 import { resetSendState, updateSendErrors } from "../../ducks/send/send.duck";
 import { fetchBasicGasEstimates } from "../../ducks/gas/gas.duck";
-import { getTokens } from "../../ducks/metamask/metamask";
+import { getTokens } from "../../ducks/taquin/taquin";
 import { isValidDomainName } from "../../helpers/utils/util";
 import { calcGasTotal } from "./send.utils";
 import SendEther from "./send.component";

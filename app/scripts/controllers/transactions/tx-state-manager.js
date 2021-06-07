@@ -47,14 +47,14 @@ export default class TransactionStateManager extends EventEmitter {
   generateTxMeta(opts) {
     const netId = this.getNetwork();
     if (netId === "loading") {
-      throw new Error("MetaMask is having trouble connecting to the network");
+      throw new Error("Taquin is having trouble connecting to the network");
     }
     const body = opts.body;
     return {
       id: createId(),
       time: new Date().getTime(),
       status: "unapproved",
-      metamaskNetworkId: netId,
+      taquinNetworkId: netId,
       loadingDefaults: true,
       ...opts,
       ...body,
@@ -77,7 +77,7 @@ export default class TransactionStateManager extends EventEmitter {
     const txs = [];
     for (let i = fullTxList.length - 1; i > -1; i--) {
       const txMeta = fullTxList[i];
-      if (txMeta.metamaskNetworkId !== network) {
+      if (txMeta.taquinNetworkId !== network) {
         continue;
       }
 
@@ -440,7 +440,7 @@ export default class TransactionStateManager extends EventEmitter {
     @param {erroObject} err - error object
   */
   setTxStatusFailed(txId, err) {
-    const error = err || new Error("Internal metamask failure");
+    const error = err || new Error("Internal taquin failure");
     let message;
     try {
       message = JSON.parse(err.message.replace(/[^{]*/, "")).error.message;
@@ -472,8 +472,7 @@ export default class TransactionStateManager extends EventEmitter {
     const otherAccountTxs = txs.filter(
       (txMeta) =>
         !(
-          txMeta.txParams.from === address &&
-          txMeta.metamaskNetworkId === network
+          txMeta.txParams.from === address && txMeta.taquinNetworkId === network
         )
     );
 

@@ -1,6 +1,6 @@
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import {
   displayWarning,
   setFeatureFlag,
@@ -11,24 +11,23 @@ import {
   turnThreeBoxSyncingOnAndInitialize,
   setUseNonceField,
   setIpfsGateway,
-} from '../../../store/actions'
-import { getPreferences } from '../../../selectors'
-import AdvancedTab from './advanced-tab.component'
+} from "../../../store/actions";
+import { getPreferences } from "../../../selectors";
+import AdvancedTab from "./advanced-tab.component";
 
 export const mapStateToProps = (state) => {
-  const { appState: { warning }, metamask } = state
   const {
-    featureFlags: {
-      sendHexData,
-      transactionTime,
-      advancedInlineGas,
-    } = {},
+    appState: { warning },
+    taquin,
+  } = state;
+  const {
+    featureFlags: { sendHexData, transactionTime, advancedInlineGas } = {},
     threeBoxSyncingAllowed,
     threeBoxDisabled,
     useNonceField,
     ipfsGateway,
-  } = metamask
-  const { showFiatInTestnets, autoLockTimeLimit } = getPreferences(state)
+  } = taquin;
+  const { showFiatInTestnets, autoLockTimeLimit } = getPreferences(state);
 
   return {
     warning,
@@ -41,37 +40,41 @@ export const mapStateToProps = (state) => {
     threeBoxDisabled,
     useNonceField,
     ipfsGateway,
-  }
-}
+  };
+};
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    setHexDataFeatureFlag: (shouldShow) => dispatch(setFeatureFlag('sendHexData', shouldShow)),
+    setHexDataFeatureFlag: (shouldShow) =>
+      dispatch(setFeatureFlag("sendHexData", shouldShow)),
     displayWarning: (warning) => dispatch(displayWarning(warning)),
-    showResetAccountConfirmationModal: () => dispatch(showModal({ name: 'CONFIRM_RESET_ACCOUNT' })),
-    setAdvancedInlineGasFeatureFlag: (shouldShow) => dispatch(setFeatureFlag('advancedInlineGas', shouldShow)),
-    setTransactionTimeFeatureFlag: (shouldShow) => dispatch(setFeatureFlag('transactionTime', shouldShow)),
+    showResetAccountConfirmationModal: () =>
+      dispatch(showModal({ name: "CONFIRM_RESET_ACCOUNT" })),
+    setAdvancedInlineGasFeatureFlag: (shouldShow) =>
+      dispatch(setFeatureFlag("advancedInlineGas", shouldShow)),
+    setTransactionTimeFeatureFlag: (shouldShow) =>
+      dispatch(setFeatureFlag("transactionTime", shouldShow)),
     setUseNonceField: (value) => dispatch(setUseNonceField(value)),
     setShowFiatConversionOnTestnetsPreference: (value) => {
-      return dispatch(setShowFiatConversionOnTestnetsPreference(value))
+      return dispatch(setShowFiatConversionOnTestnetsPreference(value));
     },
     setAutoLockTimeLimit: (value) => {
-      return dispatch(setAutoLockTimeLimit(value))
+      return dispatch(setAutoLockTimeLimit(value));
     },
     setThreeBoxSyncingPermission: (newThreeBoxSyncingState) => {
       if (newThreeBoxSyncingState) {
-        dispatch(turnThreeBoxSyncingOnAndInitialize())
+        dispatch(turnThreeBoxSyncingOnAndInitialize());
       } else {
-        dispatch(setThreeBoxSyncingPermission(newThreeBoxSyncingState))
+        dispatch(setThreeBoxSyncingPermission(newThreeBoxSyncingState));
       }
     },
     setIpfsGateway: (value) => {
-      return dispatch(setIpfsGateway(value))
+      return dispatch(setIpfsGateway(value));
     },
-  }
-}
+  };
+};
 
 export default compose(
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
-)(AdvancedTab)
+  connect(mapStateToProps, mapDispatchToProps)
+)(AdvancedTab);

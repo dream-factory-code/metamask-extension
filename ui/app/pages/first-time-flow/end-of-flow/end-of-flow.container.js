@@ -1,19 +1,21 @@
-import { connect } from 'react-redux'
-import { getOnboardingInitiator } from '../../../selectors'
-import EndOfFlow from './end-of-flow.component'
+import { connect } from "react-redux";
+import { getOnboardingInitiator } from "../../../selectors";
+import EndOfFlow from "./end-of-flow.component";
 
 const firstTimeFlowTypeNameMap = {
-  create: 'New Wallet Created',
-  'import': 'New Wallet Imported',
-}
+  create: "New Wallet Created",
+  import: "New Wallet Imported",
+};
 
 const mapStateToProps = (state) => {
-  const { metamask: { firstTimeFlowType } } = state
+  const {
+    taquin: { firstTimeFlowType },
+  } = state;
 
   return {
     completionMetaMetricsName: firstTimeFlowTypeNameMap[firstTimeFlowType],
     onboardingInitiator: getOnboardingInitiator(state),
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps)(EndOfFlow)
+export default connect(mapStateToProps)(EndOfFlow);

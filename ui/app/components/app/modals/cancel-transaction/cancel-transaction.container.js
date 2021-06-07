@@ -8,9 +8,9 @@ import { getHexGasTotal } from "../../../../helpers/utils/confirm-tx.util";
 import CancelTransaction from "./cancel-transaction.component";
 
 const mapStateToProps = (state, ownProps) => {
-  const { metamask } = state;
+  const { taquin } = state;
   const { transactionId, originalGasPrice } = ownProps;
-  const { currentNetworkTxList } = metamask;
+  const { currentNetworkTxList } = taquin;
   const transaction = currentNetworkTxList.find(
     ({ id }) => id === transactionId
   );

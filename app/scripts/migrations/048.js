@@ -3,7 +3,7 @@ import { cloneDeep } from "lodash";
 const version = 47;
 
 /**
- * Stringify the `metamaskNetworkId` property of all transactions
+ * Stringify the `taquinNetworkId` property of all transactions
  */
 export default {
   version,
